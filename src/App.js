@@ -1,26 +1,86 @@
 import React from 'react';
-import logo from './logo.svg';
+import {BrowserRouter as Router} from 'react-router-dom';
+import Axios from 'axios';
+import LandingPage from './components/LandingPage';
+import LoginForm from './components/LoginForm';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+	state = {
+		isAuthorized: false,
+		authorizationError: false,
+	};
+
+	handleLogIn = (email, phone, password) => {
+
+		const loginData = {
+			email,
+			phone,
+			password,
+		};
+
+		const loginUrl = (window.location.hostname === 'localhost')
+		                 ? 'http://localhost:8080/auth/login'
+		                 : 'https://bailfire.herokuapp.com/auth/login';
+		Axios.post(loginUrl, loginData, {withCredentials: true})
+		.then(response => {
+			console.log(response);
+
+			this.setState({
+				isAuthorized: true,
+				authorizationError: false,
+			});
+		})
+		.catch(error => {
+			this.setState({
+				isAuthorized: false,
+				authorizationError: true,
+			});
+		});
+	};
+
+	handleLogOut = () => {
+
+		const logoutUrl = (window.location.hostname === 'localhost')
+		                 ? 'http://localhost:8080/auth/logout'
+										 : 'https://bailfire.herokuapp.com/auth/logout';
+
+		Axios.post(logoutUrl, {}, {withCredentials: true})
+		.then(response => {
+			console.log(response);
+
+			this.setState({
+				isAuthorized: false,
+				authorizationError: false,
+			});
+		})
+		.catch(error => {
+			this.setState({
+				isAuthorized: this.state.isAuthorized,
+				authorizationError: true,
+			});
+		});
+	};
+
+	getView = () => {
+		if (this.state.isAuthorized) {
+			return <LandingPage handleLogOut={this.handleLogOut} />;
+		}
+		else {
+			return <LoginForm handleLogIn={this.handleLogIn} />;
+		}
+	};
+
+	render () {
+		return (
+			<div className="App">
+				<Router exact path="/">
+					{this.getView()}
+				</Router>
+			</div>
+		);
+	}
 }
 
 export default App;
