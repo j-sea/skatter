@@ -1,4 +1,5 @@
 import React from 'react';
+import GeneralButton from '../GeneralButton';
 import './style.css';
 
 class LoginForm extends React.Component {
@@ -23,6 +24,8 @@ class LoginForm extends React.Component {
 
 	render () {
 		return (
+			<>
+			<GeneralButton/>
 			<form onSubmit={this.handleSubmit}>
 				<h2>Log In</h2>
 				<input name="email" type="email" placeholder="E-mail Address" onChange={this.handleFormChange} /> or
@@ -30,6 +33,7 @@ class LoginForm extends React.Component {
 				<input name="password" type="password" placeholder="Password" onChange={this.handleFormChange} /> <br />
 				<button type="submit">Log In</button>
 			</form>
+			</>
 		);
 	}
 }
