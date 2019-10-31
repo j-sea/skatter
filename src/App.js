@@ -1,5 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
+import ApiUrl from './utils/ApiUrlResolver';
 import Axios from 'axios';
 import LandingPage from './components/LandingPage';
 import LoginForm from './components/LoginForm';
@@ -21,9 +22,8 @@ class App extends React.Component {
 			password,
 		};
 
-		const loginUrl = (window.location.hostname === 'localhost')
-		                 ? 'http://localhost:8080/auth/login'
-		                 : 'https://bailfire.herokuapp.com/auth/login';
+		const loginUrl = ApiUrl + '/auth/login';
+		console.log(loginUrl);
 		Axios.post(loginUrl, loginData, {withCredentials: true})
 		.then(response => {
 			console.log(response);
@@ -43,9 +43,7 @@ class App extends React.Component {
 
 	handleLogOut = () => {
 
-		const logoutUrl = (window.location.hostname === 'localhost')
-		                 ? 'http://localhost:8080/auth/logout'
-										 : 'https://bailfire.herokuapp.com/auth/logout';
+		const logoutUrl = ApiUrl + '/auth/logout';
 
 		Axios.post(logoutUrl, {}, {withCredentials: true})
 		.then(response => {
