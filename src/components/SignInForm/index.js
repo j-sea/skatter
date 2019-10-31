@@ -8,9 +8,33 @@ class SignInForm extends React.Component {
 		password: '',
 	};
 
-	handleSubmit = submitEvent => {
+	handleLogIn = (submitEvent) => {
 		submitEvent.preventDefault();
-		this.props.handleLogIn(this.state.email, this.state.phone, this.state.password);
+
+		const loginData = {
+			email: this.state.email, 
+			phone: this.state.phone,
+			password: this.state.password,
+		};
+
+		const loginUrl = (window.location.hostname === 'localhost')
+		                 ? 'http://localhost:8080/auth/login'
+		                 : 'https://bailfire.herokuapp.com/auth/login';
+		Axios.post(loginUrl, loginData, {withCredentials: true})
+		.then(response => {
+			console.log(response);
+
+			this.setState({
+				isAuthorized: true,
+				authorizationError: false,
+			});
+		})
+		.catch(error => {
+			this.setState({
+				isAuthorized: false,
+				authorizationError: true,
+			});
+		});
 	};
 
 	handleFormChange = changeEvent => {
@@ -23,7 +47,7 @@ class SignInForm extends React.Component {
 
 	render () {
 		return (
-			<form onSubmit={this.handleSubmit}>
+			<form onSubmit={this.handleLogIn}>
 				<h2>Sign In</h2>
 				<input name="email" type="email" placeholder="E-mail Address" onChange={this.handleFormChange} /> or
 				<input name="phone" type="phone" placeholder="Phone Number (SMS)" onChange={this.handleFormChange} /> <br />
