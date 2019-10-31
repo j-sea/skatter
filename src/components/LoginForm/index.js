@@ -1,4 +1,6 @@
 import React from 'react';
+import SquareButton from '../SquareButton';
+import RoundedButton from '../RoundedButton';
 import './style.css';
 
 class LoginForm extends React.Component {
@@ -23,6 +25,10 @@ class LoginForm extends React.Component {
 
 	render () {
 		return (
+			<>
+			<RoundedButton/>
+			<SquareButton/>
+
 			<form onSubmit={this.handleSubmit}>
 				<h2>Log In</h2>
 				<input name="email" type="email" placeholder="E-mail Address" onChange={this.handleFormChange} /> or
@@ -30,6 +36,7 @@ class LoginForm extends React.Component {
 				<input name="password" type="password" placeholder="Password" onChange={this.handleFormChange} /> <br />
 				<button type="submit">Log In</button>
 			</form>
+			</>
 		);
 	}
 }
