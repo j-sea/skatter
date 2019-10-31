@@ -1,5 +1,6 @@
 import React from 'react';
-import GeneralButton from '../GeneralButton';
+import SquareButton from '../SquareButton';
+import RoundedButton from '../RoundedButton';
 import './style.css';
 
 class LoginForm extends React.Component {
@@ -25,7 +26,9 @@ class LoginForm extends React.Component {
 	render () {
 		return (
 			<>
-			<GeneralButton/>
+			<RoundedButton/>
+			<SquareButton/>
+
 			<form onSubmit={this.handleSubmit}>
 				<h2>Log In</h2>
 				<input name="email" type="email" placeholder="E-mail Address" onChange={this.handleFormChange} /> or
