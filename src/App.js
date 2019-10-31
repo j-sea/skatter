@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router} from 'react-router-dom';
 import Axios from 'axios';
 import LandingPage from './components/LandingPage';
-import LoginForm from './components/LoginForm';
+import SignInForm from './components/SignInForm';
 import './App.css';
 
 class App extends React.Component {
@@ -68,7 +68,7 @@ class App extends React.Component {
 			return <LandingPage handleLogOut={this.handleLogOut} />;
 		}
 		else {
-			return <LoginForm handleLogIn={this.handleLogIn} />;
+			return <SignInForm handleLogIn={this.handleLogIn} />;
 		}
 	};
 
