@@ -1,0 +1,24 @@
+.custom-ft {
+    position:fixed;
+    bottom:0;
+    /* left:0; */
+    width:90%;
+    background-color: #F000FF69;
+    border: solid #1890F0;
+    border-radius: 0.3rem;
+    margin-bottom: 0.5%;
+    height: 22px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.test {
+    font-size: 0.8em;
+}
+
+footer {
+display: flex;
+justify-content: center;
+}  
+

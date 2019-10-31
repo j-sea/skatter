@@ -1,6 +1,7 @@
 import React from 'react';
 import SquareButton from '../SquareButton';
 import RoundedButton from '../RoundedButton';
+import Footer from '../Footer';
 import './style.css';
 
 class LoginForm extends React.Component {
@@ -36,6 +37,7 @@ class LoginForm extends React.Component {
 				<input name="password" type="password" placeholder="Password" onChange={this.handleFormChange} /> <br />
 				<button type="submit">Log In</button>
 			</form>
+			<Footer/>
 			</>
 		);
 	}

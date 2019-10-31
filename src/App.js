@@ -4,7 +4,7 @@ import Axios from 'axios';
 import LandingPage from './components/LandingPage';
 import LoginForm from './components/LoginForm';
 import './App.css';
-import generalButton from './components/SquareButton';
+
 
 class App extends React.Component {
 
