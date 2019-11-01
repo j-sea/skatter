@@ -1,6 +1,8 @@
 import React from 'react';
 import './style.css';
 
+const Axios = require('axios');
+
 class SignInForm extends React.Component {
 	state = {
 		email: '',
