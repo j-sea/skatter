@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Axios from 'axios';
 import LandingPage from './components/LandingPage';
 import LoginForm from './components/LoginForm';
+import Footer from './components/Footer';
 import './App.css';
 
 
@@ -82,6 +83,7 @@ class App extends React.Component {
 						{this.getView()}
 					</Route>
 				</Router>
+				<Footer/>
 			</div>
 		);
 	}

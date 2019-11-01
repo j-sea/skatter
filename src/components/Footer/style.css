@@ -13,8 +13,9 @@
     align-items: center;
 }
 
-.test {
+.footer-text {
     font-size: 0.8em;
+    color: white;
 }
 
 footer {

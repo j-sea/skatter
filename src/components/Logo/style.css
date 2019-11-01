@@ -1,0 +1,42 @@
+.logo-wrapper {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.logo-circle {
+    height: 225px;
+    width: 225px;
+    background-color: #F000FFD4;
+    border-radius: 50%;
+    border: solid #1890F0;
+    display: inline-block;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-text {
+    /* justify-content: center; */
+    /* display: flex; */
+    /* align-items: center; */
+    height: 65px;
+    width: 200px;
+  }
+
+  
+  @media screen and (max-width: 576px){
+
+  }
+
+  @media screen and (max-width: 768px){
+
+  }
+
+  @media screen and (max-width: 992px){
+
+  }
+
+  @media screen and (max-width: 1200px){
+
+  }
