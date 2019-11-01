@@ -5,7 +5,7 @@ function Footer() {
     return (
         <footer>
         <nav className="navbar-light custom-ft">
-            <a className="text-center test" href="#">&copy; Copyright 2019</a>
+            <a className="text-center footer-text" href="#">&copy; Copyright 2019</a>
         </nav>
         </footer>
     )

@@ -20,3 +20,9 @@
 .App-link {
   color: #09d3ac;
 }
+
+body {
+  background-image: url("/images/splat-dark.jpg");
+  background-size: cover;
+  background-repeat: repeat;
+}
