@@ -1,9 +1,11 @@
 import React from 'react';
-import {BrowserRouter as Router} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Axios from 'axios';
 import LandingPage from './components/LandingPage';
 import SignInForm from './components/SignInForm';
+import Footer from './components/Footer';
 import './App.css';
+
 
 class App extends React.Component {
 
@@ -75,9 +77,13 @@ class App extends React.Component {
 	render () {
 		return (
 			<div className="App">
-				<Router exact path="/">
-					{this.getView()}
+				<Router>
+					
+					<Route exact path="/">
+						{this.getView()}
+					</Route>
 				</Router>
+				<Footer/>
 			</div>
 		);
 	}
