@@ -5,7 +5,9 @@ import LandingPage from './components/LandingPage';
 import GroupPage from './components/GroupPage';
 import LoginForm from './components/LoginForm';
 import TwilioForm from './components/TwilioForm';
+import Footer from './components/Footer';
 import './App.css';
+
 
 class App extends React.Component {
 
@@ -88,6 +90,7 @@ class App extends React.Component {
 						<GroupPage />
 					</Route>
 				</Router>
+				<Footer/>
 			</div>
 		);
 	}
