@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
-
+import Header from '../Header'
+import Logo from '../Logo'
 
 class LoginForm extends React.Component {
 	state = {
@@ -25,8 +26,8 @@ class LoginForm extends React.Component {
 	render () {
 		return (
 			<>
-			
-			
+			<Header/>
+			<Logo/>
 			<form onSubmit={this.handleSubmit}>
 				<h2>Log In</h2>
 				<input name="email" type="email" placeholder="E-mail Address" onChange={this.handleFormChange} /> or

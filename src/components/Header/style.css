@@ -1,0 +1,27 @@
+.custom-hd {
+    /* position:fixed; */
+    /* bottom:0; */
+    width:90%;
+    background-color: #F000FF;
+    border: solid #F0F030;
+    border-radius: 0.3rem;
+    margin-bottom: 5%;
+    margin-top: 2%;
+    height: 50px;
+    /* justify-content: center; */
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    display: flex;
+    justify-content: end;
+    margin-left: 8%;
+    height: 32px;
+    width: 125px;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    }  
