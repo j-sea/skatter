@@ -4,6 +4,7 @@ import Axios from 'axios';
 import LandingPage from './components/LandingPage';
 import LoginForm from './components/LoginForm';
 import Footer from './components/Footer';
+import GroupMap from './components/GroupMap';
 import './App.css';
 
 
@@ -78,9 +79,11 @@ class App extends React.Component {
 		return (
 			<div className="App">
 				<Router>
-					
 					<Route exact path="/">
 						{this.getView()}
+					</Route>
+					<Route exact path="/map">
+						<GroupMap />
 					</Route>
 				</Router>
 				<Footer/>
