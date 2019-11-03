@@ -15,90 +15,86 @@ class GroupMap extends React.Component {
 	infoStyle = {
 		display: 'none'
 	};
-	positionStyle = new Style({
-		image: new CircleStyle({
-			radius: 6,
-			fill: new Fill({
-				color: '#3399CC'
-			}),
-			stroke: new Stroke({
-				color: '#fff',
-				width: 2
-			})
-		})
-	});
-
-	setTracking = () => this.geolocation.setTracking(this.checked);
-	displayGeolocationUpdate = () => {
-		document.getElementById('accuracy').innerText = this.geolocation.getAccuracy() + ' [m]';
-		document.getElementById('altitude').innerText = this.geolocation.getAltitude() + ' [m]';
-		document.getElementById('altitudeAccuracy').innerText = this.geolocation.getAltitudeAccuracy() + ' [m]';
-		document.getElementById('heading').innerText = this.geolocation.getHeading() + ' [rad]';
-		document.getElementById('speed').innerText = this.geolocation.getSpeed() + ' [m/s]';
-	};
-	displayGeolocationError = error => {
-		var info = document.getElementById('info');
-		info.innerHTML = error.message;
-		info.style.display = '';
-	};
-	updateAccuracy = () => this.accuracyFeature.setGeometry(this.geolocation.getAccuracyGeometry());
-	updatePosition = () => {
-		var coordinates = this.geolocation.getPosition();
-		this.positionFeature.setGeometry(
-			coordinates
-			? new Point(coordinates)
-			: null
-		);
-	};
 
 	componentDidMount () {
-		this.view = new View({
+		var view = new View({
 			center: [0, 0],
 			zoom: 2
 		});
 		
-		this.map = new Map({
+		var map = new Map({
 			layers: [
 				new TileLayer({
 					source: new OSM()
 				})
 			],
 			target: 'map',
-			view: this.view
+			view: view
 		});
 		
-		this.geolocation = new Geolocation({
+		var geolocation = new Geolocation({
 			// enableHighAccuracy must be set to true to have the heading value.
 			trackingOptions: {
 				enableHighAccuracy: true
 			},
-			projection: this.view.getProjection()
+			projection: view.getProjection()
 		});
 		
-		this.accuracyFeature = new Feature();
-		this.positionFeature = new Feature();
-		this.positionFeature.setStyle(this.positionStyle);
-
-		document.getElementById('track').addEventListener('change', this.setTracking);
-		this.geolocation.on('change', this.displayGeolocationUpdate);
-		this.geolocation.on('error', this.displayGeolocationError);
-		this.geolocation.on('change:accuracyGeometry', this.updateAccuracy);
-		this.geolocation.on('change:position', this.updatePosition);
+		function el(id) {
+			return document.getElementById(id);
+		}
+		
+		el('track').addEventListener('change', function() {
+			geolocation.setTracking(this.checked);
+		});
+		
+		// update the HTML page when the position changes.
+		geolocation.on('change', function() {
+			el('accuracy').innerText = geolocation.getAccuracy() + ' [m]';
+			el('altitude').innerText = geolocation.getAltitude() + ' [m]';
+			el('altitudeAccuracy').innerText = geolocation.getAltitudeAccuracy() + ' [m]';
+			el('heading').innerText = geolocation.getHeading() + ' [rad]';
+			el('speed').innerText = geolocation.getSpeed() + ' [m/s]';
+		});
+		
+		// handle geolocation error.
+		geolocation.on('error', function(error) {
+			var info = document.getElementById('info');
+			info.innerHTML = error.message;
+			info.style.display = '';
+		});
+		
+		var accuracyFeature = new Feature();
+		geolocation.on('change:accuracyGeometry', function() {
+			accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+		});
+		
+		var positionFeature = new Feature();
+		positionFeature.setStyle(new Style({
+			image: new CircleStyle({
+				radius: 6,
+				fill: new Fill({
+					color: '#3399CC'
+				}),
+				stroke: new Stroke({
+					color: '#fff',
+					width: 2
+				})
+			})
+		}));
+		
+		geolocation.on('change:position', function() {
+			var coordinates = geolocation.getPosition();
+			positionFeature.setGeometry(coordinates ?
+				new Point(coordinates) : null);
+		});
 		
 		new VectorLayer({
-			map: this.map,
+			map: map,
 			source: new VectorSource({
-				features: [this.accuracyFeature, this.positionFeature]
+				features: [accuracyFeature, positionFeature]
 			})
 		});
-	}
-
-	componentWillUnmount () {
-		this.geolocation.un('change:position', this.updatePosition);
-		this.geolocation.un('change:accuracyGeometry', this.updateAccuracy);
-		this.geolocation.un('error', this.displayGeolocationError);
-		this.geolocation.un('change', this.displayGeolocationUpdate);
-		document.getElementById('track').removeEventListener('change', this.setTracking);
 	}
 
 	render () {
