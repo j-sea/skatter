@@ -1,0 +1,51 @@
+.custom-hd {
+    /* position:fixed; */
+    /* bottom:0; */
+    width:100%;
+    background-color: #F000FF;
+    border: solid #F0F030;
+    border-radius: 0.3rem;
+    margin-bottom: 5%;
+    margin-top: 2%;
+    height: 65px;
+    /* justify-content: center; */
+    /* display: flex; */
+    align-items: center;
+}
+
+.header-logo {
+    height: 32px;
+    width: 125px;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+}  
+
+.header-div {
+    /* display: flex; */
+    justify-items: flex-end;
+    /* align-items: center;  */
+    text-align: right;
+}
+
+.test {
+    border-radius: 0.8rem;
+}
+
+@media screen and (max-width: 576px){
+
+}
+
+@media screen and (max-width: 768px){
+
+}
+
+@media screen and (max-width: 992px){
+   
+}
+
+@media screen and (max-width: 1200px){
+
+}
