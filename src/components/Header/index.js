@@ -3,6 +3,7 @@ import './style.css';
 
 function Header() {
     return (
+
         <header className="container">
             <nav className="navbar-light custom-hd row">
 
@@ -17,7 +18,6 @@ function Header() {
                     <button type="button" className="btn btn-primary btn-sm test" > <i class="material-icons">dehaze</i></button>
                 </div>
             </nav>
-
         </header>
     )
 }
