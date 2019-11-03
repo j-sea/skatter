@@ -15,35 +15,20 @@ class GroupMap extends React.Component {
 	infoStyle = {
 		display: 'none'
 	};
-
-	view = new View({
-		center: [0, 0],
-		zoom: 2
-	});
-
-	map = new Map({
-		layers: [
-			new TileLayer({
-				source: new OSM()
+	positionStyle = new Style({
+		image: new CircleStyle({
+			radius: 6,
+			fill: new Fill({
+				color: '#3399CC'
+			}),
+			stroke: new Stroke({
+				color: '#fff',
+				width: 2
 			})
-		],
-		target: 'map',
-		view: this.view
+		})
 	});
-
-	geolocation = new Geolocation({
-		// enableHighAccuracy must be set to true to have the heading value.
-		trackingOptions: {
-			enableHighAccuracy: true
-		},
-		projection: this.view.getProjection()
-	});
-
-	accuracyFeature = new Feature();
-	positionFeature = new Feature();
 
 	setTracking = () => this.geolocation.setTracking(this.checked);
-
 	displayGeolocationUpdate = () => {
 		document.getElementById('accuracy').innerText = this.geolocation.getAccuracy() + ' [m]';
 		document.getElementById('altitude').innerText = this.geolocation.getAltitude() + ' [m]';
@@ -51,42 +36,55 @@ class GroupMap extends React.Component {
 		document.getElementById('heading').innerText = this.geolocation.getHeading() + ' [rad]';
 		document.getElementById('speed').innerText = this.geolocation.getSpeed() + ' [m/s]';
 	};
-
 	displayGeolocationError = error => {
 		var info = document.getElementById('info');
 		info.innerHTML = error.message;
 		info.style.display = '';
 	};
-
 	updateAccuracy = () => this.accuracyFeature.setGeometry(this.geolocation.getAccuracyGeometry());
 	updatePosition = () => {
 		var coordinates = this.geolocation.getPosition();
-		this.positionFeature.setGeometry(coordinates
+		this.positionFeature.setGeometry(
+			coordinates
 			? new Point(coordinates)
-			: null);
+			: null
+		);
 	};
 
 	componentDidMount () {
+		this.view = new View({
+			center: [0, 0],
+			zoom: 2
+		});
+		
+		this.map = new Map({
+			layers: [
+				new TileLayer({
+					source: new OSM()
+				})
+			],
+			target: 'map',
+			view: this.view
+		});
+		
+		this.geolocation = new Geolocation({
+			// enableHighAccuracy must be set to true to have the heading value.
+			trackingOptions: {
+				enableHighAccuracy: true
+			},
+			projection: this.view.getProjection()
+		});
+		
+		this.accuracyFeature = new Feature();
+		this.positionFeature = new Feature();
+		this.positionFeature.setStyle(this.positionStyle);
+
 		document.getElementById('track').addEventListener('change', this.setTracking);
 		this.geolocation.on('change', this.displayGeolocationUpdate);
 		this.geolocation.on('error', this.displayGeolocationError);
 		this.geolocation.on('change:accuracyGeometry', this.updateAccuracy);
-		
-		this.positionFeature.setStyle(new Style({
-			image: new CircleStyle({
-				radius: 6,
-				fill: new Fill({
-					color: '#3399CC'
-				}),
-				stroke: new Stroke({
-					color: '#fff',
-					width: 2
-				})
-			})
-		}));
-
 		this.geolocation.on('change:position', this.updatePosition);
-
+		
 		new VectorLayer({
 			map: this.map,
 			source: new VectorSource({
@@ -106,9 +104,9 @@ class GroupMap extends React.Component {
 	render () {
 		return (
 			<>
-				<div id="map" class="map"></div>
+				<div id="map" className="map"></div>
 				<div id="info" style={this.infoStyle}></div>
-				<label for="track">
+				<label htmlFor="track">
 					track position
 					<input id="track" type="checkbox"/>
 				</label>
