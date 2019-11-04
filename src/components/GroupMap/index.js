@@ -6,70 +6,141 @@ import Feature from 'ol/Feature';
 import Geolocation from 'ol/Geolocation';
 import Map from 'ol/Map';
 import View from 'ol/View';
+import Overlay from 'ol/Overlay';
 import Point from 'ol/geom/Point';
+import {toLonLat} from 'ol/proj';
 import {defaults as defaultControls, ScaleLine, ZoomSlider} from 'ol/control';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {OSM, Vector as VectorSource} from 'ol/source';
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from 'ol/style';
 import {defaults as defaultInteractions, Select} from 'ol/interaction';
 
-class GroupMap extends React.Component {
-	firstPositionSet = false;
+const progressBar = {
+	htmlElement: null,
+	loading: 0,
+	loaded: 0,
+	reset: () => {
+		progressBar.htmlElement = document.getElementById('map-progress');
+		progressBar.loading = progressBar.loaded = 0;
+	},
+	addLoading: () => {
+		if (progressBar.loading === 0) {
+			progressBar.show();
+		}
+		++progressBar.loading;
+		progressBar.update();
+	},
+	addLoaded: () => {
+		setTimeout(() => {
+			++progressBar.loaded;
+			progressBar.update();
+		}, 100);
+	},
+	update: () => {
+		var width = (progressBar.loaded / progressBar.loading * 100).toFixed(1) + '%';
+		progressBar.htmlElement.style.width = width;
+		if (progressBar.loading === progressBar.loaded) {
+			progressBar.loading = 0;
+			progressBar.loaded = 0;
+			setTimeout(() => {
+				progressBar.hide();
+			}, 500);
+		}
+	},
+	show: () => {
+		progressBar.htmlElement.style.display = 'block';
+	},
+	hide: () => {
+		if (progressBar.loading === progressBar.loaded) {
+			progressBar.htmlElement.style.display = 'none';
+			progressBar.htmlElement.style.width = 0;
+		}
+	},
+};
 
-	infoStyle = {
-		display: 'none'
-	};
+const overlayPopup = {
+	olData: null,
+	contentElement: null,
+	closerElement: null,
+	reset: () => {
+		overlayPopup.olData = new Overlay({
+			element: document.getElementById('map-popup'),
+			autoPan: true,
+			autoPanAnimation: {
+				duration: 250,
+			},
+		});
+		overlayPopup.contentElement = document.getElementById('map-popup-content');
+		// overlayPopup.closerElement = document.getElementById('map-popup-closer');
+	},
+	attachClick: () => {
+		overlayPopup.closerElement.addEventListener('click', overlayPopup.clickClose);
+	},
+	detachClick: () => {
+		overlayPopup.closerElement.removeEventListener('click', overlayPopup.clickClose);
+	},
+	clickClose: e => {
+		overlayPopup.olData.setPosition(undefined);
+		overlayPopup.closerElement.blur();
+		return false;
+	},
+}
 
-	positionStyle = new Style({
-		image: new CircleStyle({
-			radius: 6,
-			fill: new Fill({
-				color: '#3399CC'
-			}),
-			stroke: new Stroke({
-				color: '#fff',
-				width: 2
-			})
+const createIconStyle = (src, img) => {
+	return new Style({
+		image: new Icon({
+			anchor: [0.5, 0.96],
+			crossOrigin: 'anonymous',
+			src: src,
+			img: img,
+			imgSize: img ? [img.width, img.height] : undefined
 		})
 	});
+};
+const iconStyles = {
+	userDefault: createIconStyle('/images/map-icon.png'),
+	userSelected: createIconStyle('/images/map-icon-selected.png'),
+};
 
-	progressBar = {
-		el: null,
-		loading: 0,
-		loaded: 0,
-		addLoading: () => {
-			if (this.progressBar.loading === 0) {
-				this.progressBar.show();
-			}
-			++this.progressBar.loading;
-			this.progressBar.update();
-		},
-		addLoaded: () => {
-			setTimeout(() => {
-				++this.progressBar.loaded;
-				this.progressBar.update();
-			}, 100);
-		},
-		update: () => {
-			var width = (this.progressBar.loaded / this.progressBar.loading * 100).toFixed(1) + '%';
-			this.progressBar.el.style.width = width;
-			if (this.progressBar.loading === this.progressBar.loaded) {
-				this.progressBar.loading = 0;
-				this.progressBar.loaded = 0;
-				setTimeout(() => {
-					this.progressBar.hide();
-				}, 500);
-			}
-		},
-		show: () => {
-			this.progressBar.el.style.display = 'block';
-		},
-		hide: () => {
-			if (this.progressBar.loading === this.progressBar.loaded) {
-				this.progressBar.el.style.display = 'none';
-				this.progressBar.el.style.width = 0;
-			}
-		},
+const circleIconStyles = {};
+const getCircleIconStyle = (fillColor, strokeColor) => {
+	fillColor = typeof fillColor !== 'undefined' ? fillColor : '#3399CC';
+	strokeColor = typeof strokeColor !== 'undefined' ? strokeColor : '#fff';
+
+	if (!circleIconStyles.hasOwnProperty(fillColor + strokeColor)) {
+		circleIconStyles[fillColor + strokeColor] = new Style({
+			image: new CircleStyle({
+				radius: 6,
+				fill: new Fill({
+					color: fillColor,
+				}),
+				stroke: new Stroke({
+					color: strokeColor,
+					width: 2
+				})
+			})
+		});
+	}
+
+	return circleIconStyles[fillColor + strokeColor];
+};
+
+const createPersonIcon = (name, userUUID, position, fillColor) => {
+	const newFeature = new Feature({
+		geometry: new Point(position),
+		uuid: userUUID,
+		name: name,
+		featureType: 'person',
+		clickable: true,
+		selectedStyle: getCircleIconStyle(fillColor, '#f0f'),
+	});
+	newFeature.setStyle(getCircleIconStyle(fillColor));
+	return newFeature;
+}
+
+class GroupMap extends React.Component {
+	infoStyle = {
+		display: 'none'
 	};
 
 	/*
@@ -102,23 +173,6 @@ class GroupMap extends React.Component {
 	maxZoomLevel = 20;
 	minZoomLevel = 1;
 
-	createIconStyle = (src, img) => {
-		return new Style({
-			image: new Icon({
-				anchor: [0.5, 0.96],
-				crossOrigin: 'anonymous',
-				src: src,
-				img: img,
-				imgSize: img ? [img.width, img.height] : undefined
-			})
-		});
-	};
-
-	iconStyles = {
-		userDefault: this.createIconStyle('/images/map-icon.png'),
-		userSelected: this.createIconStyle('/images/map-icon-selected.png'),
-	}
-
 	setTracker = e => this.geolocation.setTracking(e.target.checked);
 
 	displayGeolocationUpdate = () => {
@@ -135,22 +189,25 @@ class GroupMap extends React.Component {
 		info.style.display = '';
 	};
 
-	setAccuracyGeometry = () => {
-		this.userAccuracyFeature.setGeometry(this.geolocation.getAccuracyGeometry());
-	}
+	setAccuracyGeometry = () => this.userAccuracyFeature.setGeometry(this.geolocation.getAccuracyGeometry());
 
 	setPosition = () => {
 		const coordinates = this.geolocation.getPosition();
 		if (coordinates) {
 			this.userPositionFeature.setGeometry(new Point(coordinates));
 			this.userIconFeature.setGeometry(new Point(coordinates));
-
-			const animations = [{center: coordinates}];
-			if (!this.firstPositionSet) {
-				animations.push({zoom: this.defaultZoomLevel});
-				this.firstPositionSet = true;
+			if (this.featuresSource.getFeatureById('userIcon') === null) {
+				this.featuresSource.addFeature(this.userIconFeature);
 			}
-			this.view.animate(...animations);
+
+			if (this.followingUser) {
+				const animations = [{center: coordinates}];
+				if (!this.firstPositionSet) {
+					animations.push({zoom: this.defaultZoomLevel});
+					this.firstPositionSet = true;
+				}
+				this.view.animate(...animations);
+			}
 		}
 		else {
 			this.userPositionFeature.setGeometry(null);
@@ -158,12 +215,85 @@ class GroupMap extends React.Component {
 		}
 	};
 
-	updateCursor = e => this.map.getTargetElement().style.cursor = this.map.hasFeatureAtPixel(e.pixel) && this.map.getFeaturesAtPixel(e.pixel)[0].get('clickable') ? 'pointer' : '';
+	updateCursor = e => {
+		if (this.map.hasFeatureAtPixel(e.pixel) && this.map.getFeaturesAtPixel(e.pixel)[0].get('clickable')) {
+			this.map.getTargetElement().style.cursor = 'pointer';
+		}
+		else {
+			this.map.getTargetElement().style.cursor = '';
+		}
+	};
+
+	queryGroupUsers = groupUUID => {
+		if (this.featuresSource.getFeatures().length === 3) {
+			const userLocation = this.geolocation.getPosition();
+			if (typeof userLocation !== 'undefined') {
+				this.updateGroupUsers({
+					'a': { user_name: 'Joe', user_uuid: 'a', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#00f'},
+					'b': { user_name: 'Samantha', user_uuid: 'b', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#f00'},
+					'c': { user_name: 'Barbara', user_uuid: 'c', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#0ff'},
+					'd': { user_name: 'Jeb', user_uuid: 'd', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#ff0'},
+					'e': { user_name: 'Marley', user_uuid: 'e', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#c48'},
+				});
+			}
+		}
+	};
+
+	updateGroupUsers = newUsersSnapshot => {
+		this.featuresSource.forEachFeature(feature => {
+			if (feature.get('clickable') && feature.get('featureType') === 'person') {
+				const featureUUID = feature.get('uuid');
+				if (featureUUID in newUsersSnapshot) {
+					// Update the feature
+					feature.setGeometry(new Point(newUsersSnapshot[featureUUID].longitude, newUsersSnapshot[featureUUID].latitude));
+					feature.set('name', newUsersSnapshot[featureUUID].user_name);
+					feature.set('selectedStyle', getCircleIconStyle(newUsersSnapshot[featureUUID].color, '#f0f'));
+					feature.setStyle(getCircleIconStyle(newUsersSnapshot[featureUUID].color));
+					feature.changed();
+
+					// Remove the updated feature from the new snapshot
+					delete newUsersSnapshot[featureUUID];
+				}
+				else {
+					// Remove the feature from the current snapshot
+					this.featuresSource.removeFeature(feature);
+				}
+			}
+		});
+
+		// Now add all the remaining new snapshot users
+		for (const newUserUUID in newUsersSnapshot) {
+			this.featuresSource.addFeature(
+				createPersonIcon(
+					newUsersSnapshot[newUserUUID].user_name,
+					newUsersSnapshot[newUserUUID].user_uuid,
+					[newUsersSnapshot[newUserUUID].longitude, newUsersSnapshot[newUserUUID].latitude],
+					newUsersSnapshot[newUserUUID].color
+				)
+			);
+		}
+	};
+
+	currentInterestPointsSnapshot = [];
+	queryGroupInterestPoints = groupUUID => {
+
+	};
+
+	updateGroupInterestPoints = newInterestPointsSnapshot => {
+
+	};
 
 	componentDidMount () {
-		this.firstPositionSet = false;
+		progressBar.reset();
+		overlayPopup.reset();
 
-		this.progressBar.el = document.getElementById('map-progress');
+		this.firstPositionSet = false;
+		this.followingUser = true;
+
+		this.updateInterval = setInterval(() => {
+			this.queryGroupUsers('groupUUID');
+			this.queryGroupInterestPoints('groupUUID');
+		}, 10000);
 
 		this.view = new View({
 			center: [0, 0],
@@ -174,21 +304,43 @@ class GroupMap extends React.Component {
 		
 		this.userAccuracyFeature = new Feature({
 			name: 'userAccuracy',
+			featureType: 'accuracy',
 			clickable: false,
 		});
 		this.userPositionFeature = new Feature({
 			name: 'userPosition',
+			featureType: 'person',
 			clickable: false,
 		});
 		this.userIconFeature = new Feature({
 			geometry: new Point([0, 0]),
 			name: 'userIcon',
+			featureType: 'person',
 			clickable: true,
+			selectedStyle: iconStyles.userSelected,
 		});
-		
-		this.userPositionFeature.setStyle(this.positionStyle);
-		this.userIconFeature.setStyle(this.iconStyles.userDefault);
+		this.userIconFeature.setId('userIcon');
+
+		this.featuresSource = new VectorSource({
+			features: [this.userAccuracyFeature, this.userPositionFeature]
+		});
+
+		this.userAccuracyFeature.setStyle(new Style({
+			stroke: new Stroke({
+				color: '#ffffff',
+				width: 1.25,
+			}),
+			fill: new Fill({
+				color: '#ffffff80',
+			})
+		}));
+		this.userPositionFeature.setStyle(getCircleIconStyle());
+		this.userIconFeature.setStyle(iconStyles.userDefault);
 		this.osm = new OSM();
+		this.selectInteraction = new Select({
+			filter: feature => feature.get('clickable'),
+			style: feature => feature.get('selectedStyle'),
+		});
 		this.map = new Map({
 			controls: defaultControls().extend([
 				new ScaleLine({
@@ -201,28 +353,21 @@ class GroupMap extends React.Component {
 				new ZoomSlider(),
 			]),
 			interactions: defaultInteractions().extend([
-				new Select({
-					filter: (feature, layer) => {
-						console.log(feature.get('clickable'));
-						return feature.get('clickable');
-					},
-					style: feature => this.iconStyles.userSelected,
-				}),
+				this.selectInteraction,
 			]),
 			layers: [
 				new TileLayer({
 					source: this.osm,
 				}),
 				new VectorLayer({
-					source: new VectorSource({
-						features: [this.userAccuracyFeature, this.userPositionFeature, this.userIconFeature]
-					})
+					source: this.featuresSource,
 				})
 			],
+			overlays: [overlayPopup.olData],
 			target: 'map',
-			view: this.view
+			view: this.view,
 		});
-		
+
 		this.geolocation = new Geolocation({
 			// enableHighAccuracy must be set to true to have the heading value.
 			trackingOptions: {
@@ -232,26 +377,39 @@ class GroupMap extends React.Component {
 		});
 
 		document.getElementById('track').addEventListener('change', this.setTracker);
-		this.osm.on('tileloadstart', this.progressBar.addLoading);
-		this.osm.on('tileloadend', this.progressBar.addLoaded);
-		this.osm.on('tileloaderror', this.progressBar.addLoaded);
+		this.osm.on('tileloadstart', progressBar.addLoading);
+		this.osm.on('tileloadend', progressBar.addLoaded);
+		this.osm.on('tileloaderror', progressBar.addLoaded);
 		this.geolocation.on('change', this.displayGeolocationUpdate);
 		this.geolocation.on('error', this.displayGeolocationError);
 		this.geolocation.on('change:accuracyGeometry', this.setAccuracyGeometry);
 		this.geolocation.on('change:position', this.setPosition);
+		this.selectInteraction.on('select', selectEvent => {
+			if (selectEvent.selected.length === 0) {
+				overlayPopup.clickClose();
+			}
+			else {
+				overlayPopup.olData.setPosition(selectEvent.mapBrowserEvent.coordinate);
+			}
+			console.log(selectEvent.deselected.length, selectEvent.selected.length);
+		})
+		overlayPopup.closerElement = document.getElementById('map-popup-closer');
+		overlayPopup.attachClick();
 		this.map.on('pointermove', this.updateCursor);
 	}
-	
+
 	componentWillUnmount () {
 		this.map.un('pointermove', this.updateCursor);
+		document.getElementById('map-popup-closer').removeEventListener('click', overlayPopup.clickClose);
 		this.geolocation.un('change:position', this.setPosition);
 		this.geolocation.un('change:accuracyGeometry', this.setAccuracyGeometry);
 		this.geolocation.un('error', this.displayGeolocationError);
 		this.geolocation.un('change', this.displayGeolocationUpdate);
-		this.osm.un('tileloaderror', this.progressBar.addLoaded);
-		this.osm.un('tileloadend', this.progressBar.addLoaded);
-		this.osm.un('tileloadstart', this.progressBar.addLoading);
-		document.getElementById('track').removeEventListener('change', this.setTracker);
+		this.osm.un('tileloaderror', progressBar.addLoaded);
+		this.osm.un('tileloadend', progressBar.addLoaded);
+		this.osm.un('tileloadstart', progressBar.addLoading);
+		overlayPopup.detachClick();
+		clearInterval(this.updateInterval);
 	}
 
 	render () {
@@ -261,6 +419,10 @@ class GroupMap extends React.Component {
 					<div id="map" className="map"></div>
 					<div id="map-progress"></div>
 					<div id="info" style={this.infoStyle}></div>
+					<div id="map-popup">
+						<a id="map-popup-closer" href="#close">✖</a>
+						<div id="map-popup-content"></div>
+					</div>
 				</div>
 				<label htmlFor="track">
 					track position
