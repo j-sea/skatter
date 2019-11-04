@@ -70,8 +70,6 @@ const overlayPopup = {
 				duration: 250,
 			},
 		});
-		overlayPopup.contentElement = document.getElementById('map-popup-content');
-		// overlayPopup.closerElement = document.getElementById('map-popup-closer');
 	},
 	attachClick: () => {
 		overlayPopup.closerElement.addEventListener('click', overlayPopup.clickClose);
@@ -314,7 +312,7 @@ class GroupMap extends React.Component {
 		});
 		this.userIconFeature = new Feature({
 			geometry: new Point([0, 0]),
-			name: 'userIcon',
+			name: 'UW Continuing Education Building',
 			featureType: 'person',
 			clickable: true,
 			selectedStyle: iconStyles.userSelected,
@@ -389,10 +387,12 @@ class GroupMap extends React.Component {
 				overlayPopup.clickClose();
 			}
 			else {
+				overlayPopup.contentElement.textContent = selectEvent.selected[0].get('name');
 				overlayPopup.olData.setPosition(selectEvent.mapBrowserEvent.coordinate);
 			}
 			console.log(selectEvent.deselected.length, selectEvent.selected.length);
-		})
+		});
+		overlayPopup.contentElement = document.getElementById('map-popup-content');
 		overlayPopup.closerElement = document.getElementById('map-popup-closer');
 		overlayPopup.attachClick();
 		this.map.on('pointermove', this.updateCursor);
