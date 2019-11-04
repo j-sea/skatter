@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Axios from 'axios';
 import LandingPage from './components/LandingPage';
 import LoginForm from './components/LoginForm';
@@ -70,7 +70,10 @@ class App extends React.Component {
 					<Route exact path="/">
 						{
 							(this.state.loggedInUser)
-							? <LandingPage handleLogOut={this.handleLogOut} />
+							? <div>
+									<Link to="/map">Group Map</Link>
+									<LandingPage handleLogOut={this.handleLogOut} />
+								</div>
 							: <LoginForm handleLogIn={this.handleLogIn} />
 						}
 					</Route>
