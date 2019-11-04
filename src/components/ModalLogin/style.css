@@ -1,0 +1,10 @@
+.modal-button {
+    background-color: #481848;
+    border: solid #1890F0;
+    color: #1890F0;
+    border-radius: 30rem;
+}
+
+.modal-background {
+    background-color: #F000FF33;
+}
