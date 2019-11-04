@@ -11,8 +11,7 @@ import './App.css';
 class App extends React.Component {
 
 	state = {
-		isAuthorized: false,
-		authorizationError: false,
+		loggedInUser: false,
 	};
 
 	handleLogIn = (email, phone, password) => {
@@ -31,14 +30,12 @@ class App extends React.Component {
 			console.log(response);
 
 			this.setState({
-				isAuthorized: true,
-				authorizationError: false,
+				loggedInUser: response.data.user,
 			});
 		})
 		.catch(error => {
 			this.setState({
-				isAuthorized: false,
-				authorizationError: true,
+				loggedInUser: false,
 			});
 		});
 	};
@@ -66,24 +63,23 @@ class App extends React.Component {
 		});
 	};
 
-	getView = () => {
-		if (this.state.isAuthorized) {
-			return <LandingPage handleLogOut={this.handleLogOut} />;
-		}
-		else {
-			return <LoginForm handleLogIn={this.handleLogIn} />;
-		}
-	};
-
 	render () {
 		return (
 			<div className="App">
 				<Router>
 					<Route exact path="/">
-						{this.getView()}
+						{
+							(this.state.loggedInUser)
+							? <LandingPage handleLogOut={this.handleLogOut} />
+							: <LoginForm handleLogIn={this.handleLogIn} />
+						}
 					</Route>
 					<Route exact path="/map">
-						<GroupMap />
+						{
+							(this.state.loggedInUser)
+							? <GroupMap />
+							: <div>Not Logged In</div>
+						}
 					</Route>
 				</Router>
 				<Footer/>
