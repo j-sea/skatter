@@ -7,9 +7,11 @@ import Geolocation from 'ol/Geolocation';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Point from 'ol/geom/Point';
+import {ZoomSlider} from 'ol/control';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {OSM, Vector as VectorSource} from 'ol/source';
-import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
+import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from 'ol/style';
+import {Select} from 'ol/interaction';
 
 class GroupMap extends React.Component {
 	firstPositionSet = false;
@@ -30,6 +32,45 @@ class GroupMap extends React.Component {
 			})
 		})
 	});
+
+	progressBar = {
+		el: null,
+		loading: 0,
+		loaded: 0,
+		addLoading: () => {
+			if (this.progressBar.loading === 0) {
+				this.progressBar.show();
+			}
+			++this.progressBar.loading;
+			this.progressBar.update();
+		},
+		addLoaded: () => {
+			setTimeout(() => {
+				++this.progressBar.loaded;
+				this.progressBar.update();
+			}, 100);
+		},
+		update: () => {
+			var width = (this.progressBar.loaded / this.progressBar.loading * 100).toFixed(1) + '%';
+			this.progressBar.el.style.width = width;
+			if (this.progressBar.loading === this.progressBar.loaded) {
+				this.progressBar.loading = 0;
+				this.progressBar.loaded = 0;
+				setTimeout(() => {
+					this.progressBar.hide();
+				}, 500);
+			}
+		},
+		show: () => {
+			this.progressBar.el.style.visibility = 'visible';
+		},
+		hide: () => {
+			if (this.progressBar.loading === this.progressBar.loaded) {
+				this.progressBar.el.style.visibility = 'hidden';
+				this.progressBar.el.style.width = 0;
+			}
+		},
+	};
 
 	/*
 	Zoom  |                   | Tile width        | m / pixel    | ~ Scale        | Examples of
@@ -58,8 +99,20 @@ class GroupMap extends React.Component {
 	   20 | 1,099,511,627,776 |           0.00025 |        0.149 |   1:5 hundred  | A mid-sized building 
 	*/
 	defaultZoomLevel = 17;
-	maxZoomLevel = 19;
+	maxZoomLevel = 20;
 	minZoomLevel = 1;
+
+	createIconStyle = (src, img) => {
+		return new Style({
+			image: new Icon({
+				anchor: [0.5, 0.96],
+				crossOrigin: 'anonymous',
+				src: src,
+				img: img,
+				imgSize: img ? [img.width, img.height] : undefined
+			})
+		});
+	};
 
 	setTracker = e => this.geolocation.setTracking(e.target.checked);
 
@@ -77,12 +130,15 @@ class GroupMap extends React.Component {
 		info.style.display = '';
 	};
 
-	setAccuracyGeometry = () => this.accuracyFeature.setGeometry(this.geolocation.getAccuracyGeometry());
+	setAccuracyGeometry = () => {
+		this.userAccuracyFeature.setGeometry(this.geolocation.getAccuracyGeometry());
+	}
 
 	setPosition = () => {
 		const coordinates = this.geolocation.getPosition();
 		if (coordinates) {
-			this.positionFeature.setGeometry(new Point(coordinates));
+			this.userPositionFeature.setGeometry(new Point(coordinates));
+			this.userIconFeature.setGeometry(new Point(coordinates));
 
 			const animations = [{center: coordinates}];
 			if (!this.firstPositionSet) {
@@ -92,12 +148,17 @@ class GroupMap extends React.Component {
 			this.view.animate(...animations);
 		}
 		else {
-			this.positionFeature.setGeometry(null);
+			this.userPositionFeature.setGeometry(null);
+			this.userIconFeature.setGeometry(null);
 		}
 	};
 
+	updateCursor = e => this.map.getTargetElement().style.cursor = this.map.hasFeatureAtPixel(e.pixel) ? 'pointer' : '';
+
 	componentDidMount () {
 		this.firstPositionSet = false;
+
+		this.progressBar.el = document.getElementById('map-progress');
 
 		this.view = new View({
 			center: [0, 0],
@@ -106,10 +167,40 @@ class GroupMap extends React.Component {
 			minZoom: this.minZoomLevel,
 		});
 		
+		this.userAccuracyFeature = new Feature({
+			name: 'userAccuracy',
+			clickable: false,
+		});
+		this.userPositionFeature = new Feature({
+			name: 'userPosition',
+			clickable: false,
+		});
+		this.userIconFeature = new Feature({
+			geometry: new Point([0, 0]),
+			name: 'userIcon',
+			clickable: true,
+		});
+		
+		// this.userAccuracyFeature.set('style', this.accuracyStyle);
+		this.userPositionFeature.set('style', this.positionStyle);
+		this.userIconFeature.set('style', this.createIconStyle('/images/map-icon.png'));
+		this.osm = new OSM();
+		this.osm.on('tileloadstart', this.progressBar.addLoading);
+		this.osm.on('tileloadend', this.progressBar.addLoaded);
+		this.osm.on('tileloaderror', this.progressBar.addLoaded);
 		this.map = new Map({
 			layers: [
 				new TileLayer({
-					source: new OSM()
+					source: this.osm,
+				}),
+				new VectorLayer({
+					style: function(feature) {
+						console.log(feature);
+						return feature.get('style');
+					},
+					source: new VectorSource({
+						features: [this.userAccuracyFeature, this.userPositionFeature, this.userIconFeature]
+					})
 				})
 			],
 			target: 'map',
@@ -124,37 +215,63 @@ class GroupMap extends React.Component {
 			projection: this.view.getProjection()
 		});
 
-		this.accuracyFeature = new Feature();
-		this.positionFeature = new Feature();
-		this.positionFeature.setStyle(this.positionStyle);
-
-		document.getElementById('track').addEventListener('change', this.setTracker);
-		this.geolocation.on('change', this.displayGeolocationUpdate);
-		this.geolocation.on('error', this.displayGeolocationError);
-		this.geolocation.on('change:accuracyGeometry', this.setAccuracyGeometry);
-		this.geolocation.on('change:position', this.setPosition);
-		
-		new VectorLayer({
-			map: this.map,
-			source: new VectorSource({
-				features: [this.accuracyFeature, this.positionFeature]
-			})
+		var selectStyle = {};
+		var select = new Select({
+			filter: (feature, layer) => {
+				console.log(feature.get('clickable'));
+				return feature.get('clickable');
+			},
+			style: feature => {
+				var image = feature.get('style').getImage().getImage();
+				if (!selectStyle[image.src]) {
+					var canvas = document.createElement('canvas');
+					var context = canvas.getContext('2d');
+					canvas.width = image.width;
+					canvas.height = image.height;
+					context.drawImage(image, 0, 0, image.width, image.height);
+					var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+					var data = imageData.data;
+					for (var i = 0, ii = data.length; i < ii; i = i + (i % 4 === 2 ? 2 : 1)) {
+						data[i] = 255 - data[i];
+					}
+					context.putImageData(imageData, 0, 0);
+					selectStyle[image.src] = this.createIconStyle(undefined, canvas);
+				}
+				return selectStyle[image.src];
+			}
 		});
-	}
 
-	componentWillUnmount () {
-		this.geolocation.on('change:position', this.setPosition);
-		this.geolocation.on('change:accuracyGeometry', this.setAccuracyGeometry);
-		this.geolocation.on('error', this.displayGeolocationError);
-		this.geolocation.on('change', this.displayGeolocationUpdate);
+		this.map.addControl(new ZoomSlider());
+		this.map.addInteraction(select);
+		
 		document.getElementById('track').addEventListener('change', this.setTracker);
+		this.geolocation.on('change', this.displayGeolocationUpdate);
+		this.geolocation.on('error', this.displayGeolocationError);
+		this.geolocation.on('change:accuracyGeometry', this.setAccuracyGeometry);
+		this.geolocation.on('change:position', this.setPosition);
+		this.map.on('pointermove', this.updateCursor);
+	}
+	
+	componentWillUnmount () {
+		this.map.un('pointermove', this.updateCursor);
+		this.geolocation.un('change:position', this.setPosition);
+		this.geolocation.un('change:accuracyGeometry', this.setAccuracyGeometry);
+		this.geolocation.un('error', this.displayGeolocationError);
+		this.geolocation.un('change', this.displayGeolocationUpdate);
+		document.getElementById('track').removeEventListener('change', this.setTracker);
+		this.osm.un('tileloaderror', this.progressBar.addLoaded);
+		this.osm.un('tileloadend', this.progressBar.addLoaded);
+		this.osm.un('tileloadstart', this.progressBar.addLoading);
 	}
 
 	render () {
 		return (
 			<>
-				<div id="map" className="map"></div>
-				<div id="info" style={this.infoStyle}></div>
+				<div id="map-wrapper">
+					<div id="map" className="map"></div>
+					<div id="map-progress"></div>
+					<div id="info" style={this.infoStyle}></div>
+				</div>
 				<label htmlFor="track">
 					track position
 					<input id="track" type="checkbox"/>
