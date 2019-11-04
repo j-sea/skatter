@@ -1,4 +1,4 @@
-.modal-button {
+.external-modal-button {
     background-color: #481848;
     border: solid #1890F0;
     color: #1890F0;
@@ -7,4 +7,10 @@
 
 .modal-background {
     background-color: #F000FF33;
+}
+
+.internal-modal-button {
+    color: #1890F0;
+    border: solid #1890F0;
+    background-color: #481848;
 }

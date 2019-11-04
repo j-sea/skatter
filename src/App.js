@@ -84,6 +84,7 @@ class App extends React.Component {
 					<Route exact path="/">
 						{/* {this.getView()} */}
 						<Logo/>
+						<ModalLogin/>
 						{/* <ModalLogin handleLogIn={this.handleLogIn}/> */}
 					</Route>
 					
