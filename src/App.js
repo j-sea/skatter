@@ -51,15 +51,11 @@ class App extends React.Component {
 			console.log(response);
 
 			this.setState({
-				isAuthorized: false,
-				authorizationError: false,
+				loggedInUser: false,
 			});
 		})
 		.catch(error => {
-			this.setState({
-				isAuthorized: this.state.isAuthorized,
-				authorizationError: true,
-			});
+			console.log(error);
 		});
 	};
 
