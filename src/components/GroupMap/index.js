@@ -7,11 +7,11 @@ import Geolocation from 'ol/Geolocation';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Point from 'ol/geom/Point';
-import {ZoomSlider} from 'ol/control';
+import {defaults as defaultControls, ScaleLine, ZoomSlider} from 'ol/control';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {OSM, Vector as VectorSource} from 'ol/source';
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from 'ol/style';
-import {Select} from 'ol/interaction';
+import {defaults as defaultInteractions, Select} from 'ol/interaction';
 
 class GroupMap extends React.Component {
 	firstPositionSet = false;
@@ -62,19 +62,19 @@ class GroupMap extends React.Component {
 			}
 		},
 		show: () => {
-			this.progressBar.el.style.visibility = 'visible';
+			this.progressBar.el.style.display = 'block';
 		},
 		hide: () => {
 			if (this.progressBar.loading === this.progressBar.loaded) {
-				this.progressBar.el.style.visibility = 'hidden';
+				this.progressBar.el.style.display = 'none';
 				this.progressBar.el.style.width = 0;
 			}
 		},
 	};
 
 	/*
-	Zoom  |                   | Tile width        | m / pixel    | ~ Scale        | Examples of
-	Level | # Tiles           | (° of longitudes) | (on Equator) | (on screen)    | areas to represent
+	Zoom  | # Tiles to cover  | Tile width        | m / pixel    | ~ Scale        | Examples of
+	Level | the entire world  | (° of longitudes) | (on Equator) | (on screen)    | areas to represent
 	------|-------------------|-------------------|-------------------------------|-----------------
 	    0 |                 1 |         360.0     |  156,412.0   | 1:500 million  | whole world
 	    1 |                 4 |         180.0     |   78,206.0   | 1:250 million  |
@@ -113,6 +113,11 @@ class GroupMap extends React.Component {
 			})
 		});
 	};
+
+	iconStyles = {
+		userDefault: this.createIconStyle('/images/map-icon.png'),
+		userSelected: this.createIconStyle('/images/map-icon-selected.png'),
+	}
 
 	setTracker = e => this.geolocation.setTracking(e.target.checked);
 
@@ -153,7 +158,7 @@ class GroupMap extends React.Component {
 		}
 	};
 
-	updateCursor = e => this.map.getTargetElement().style.cursor = this.map.hasFeatureAtPixel(e.pixel) ? 'pointer' : '';
+	updateCursor = e => this.map.getTargetElement().style.cursor = this.map.hasFeatureAtPixel(e.pixel) && this.map.getFeaturesAtPixel(e.pixel)[0].get('clickable') ? 'pointer' : '';
 
 	componentDidMount () {
 		this.firstPositionSet = false;
@@ -181,23 +186,34 @@ class GroupMap extends React.Component {
 			clickable: true,
 		});
 		
-		// this.userAccuracyFeature.set('style', this.accuracyStyle);
-		this.userPositionFeature.set('style', this.positionStyle);
-		this.userIconFeature.set('style', this.createIconStyle('/images/map-icon.png'));
+		this.userPositionFeature.setStyle(this.positionStyle);
+		this.userIconFeature.setStyle(this.iconStyles.userDefault);
 		this.osm = new OSM();
-		this.osm.on('tileloadstart', this.progressBar.addLoading);
-		this.osm.on('tileloadend', this.progressBar.addLoaded);
-		this.osm.on('tileloaderror', this.progressBar.addLoaded);
 		this.map = new Map({
+			controls: defaultControls().extend([
+				new ScaleLine({
+					units: 'us',
+					bar: true,
+					steps: 4,
+					text: false,
+					minWidth: 140
+				}),
+				new ZoomSlider(),
+			]),
+			interactions: defaultInteractions().extend([
+				new Select({
+					filter: (feature, layer) => {
+						console.log(feature.get('clickable'));
+						return feature.get('clickable');
+					},
+					style: feature => this.iconStyles.userSelected,
+				}),
+			]),
 			layers: [
 				new TileLayer({
 					source: this.osm,
 				}),
 				new VectorLayer({
-					style: function(feature) {
-						console.log(feature);
-						return feature.get('style');
-					},
 					source: new VectorSource({
 						features: [this.userAccuracyFeature, this.userPositionFeature, this.userIconFeature]
 					})
@@ -215,36 +231,10 @@ class GroupMap extends React.Component {
 			projection: this.view.getProjection()
 		});
 
-		var selectStyle = {};
-		var select = new Select({
-			filter: (feature, layer) => {
-				console.log(feature.get('clickable'));
-				return feature.get('clickable');
-			},
-			style: feature => {
-				var image = feature.get('style').getImage().getImage();
-				if (!selectStyle[image.src]) {
-					var canvas = document.createElement('canvas');
-					var context = canvas.getContext('2d');
-					canvas.width = image.width;
-					canvas.height = image.height;
-					context.drawImage(image, 0, 0, image.width, image.height);
-					var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-					var data = imageData.data;
-					for (var i = 0, ii = data.length; i < ii; i = i + (i % 4 === 2 ? 2 : 1)) {
-						data[i] = 255 - data[i];
-					}
-					context.putImageData(imageData, 0, 0);
-					selectStyle[image.src] = this.createIconStyle(undefined, canvas);
-				}
-				return selectStyle[image.src];
-			}
-		});
-
-		this.map.addControl(new ZoomSlider());
-		this.map.addInteraction(select);
-		
 		document.getElementById('track').addEventListener('change', this.setTracker);
+		this.osm.on('tileloadstart', this.progressBar.addLoading);
+		this.osm.on('tileloadend', this.progressBar.addLoaded);
+		this.osm.on('tileloaderror', this.progressBar.addLoaded);
 		this.geolocation.on('change', this.displayGeolocationUpdate);
 		this.geolocation.on('error', this.displayGeolocationError);
 		this.geolocation.on('change:accuracyGeometry', this.setAccuracyGeometry);
@@ -258,10 +248,10 @@ class GroupMap extends React.Component {
 		this.geolocation.un('change:accuracyGeometry', this.setAccuracyGeometry);
 		this.geolocation.un('error', this.displayGeolocationError);
 		this.geolocation.un('change', this.displayGeolocationUpdate);
-		document.getElementById('track').removeEventListener('change', this.setTracker);
 		this.osm.un('tileloaderror', this.progressBar.addLoaded);
 		this.osm.un('tileloadend', this.progressBar.addLoaded);
 		this.osm.un('tileloadstart', this.progressBar.addLoading);
+		document.getElementById('track').removeEventListener('change', this.setTracker);
 	}
 
 	render () {
