@@ -1,7 +1,9 @@
 .logo-wrapper {
+    margin-top: 5%;
     justify-content: center;
     display: flex;
     align-items: center;
+    margin-bottom: 3%;
 }
 
 .logo-circle {

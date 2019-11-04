@@ -5,6 +5,8 @@ import LandingPage from './components/LandingPage';
 import LoginForm from './components/LoginForm';
 import Footer from './components/Footer';
 import './App.css';
+import ModalLogin from './components/ModalLogin';
+import Logo from './components/Logo'
 
 
 class App extends React.Component {
@@ -65,14 +67,14 @@ class App extends React.Component {
 		});
 	};
 
-	getView = () => {
-		if (this.state.isAuthorized) {
-			return <LandingPage handleLogOut={this.handleLogOut} />;
-		}
-		else {
-			return <LoginForm handleLogIn={this.handleLogIn} />;
-		}
-	};
+	// getView = () => {
+	// 	if (this.state.isAuthorized) {
+	// 		return <LandingPage handleLogOut={this.handleLogOut} />;
+	// 	}
+	// 	else {
+	// 		return <LoginForm handleLogIn={this.handleLogIn} />;
+	// 	}
+	// };
 
 	render () {
 		return (
@@ -80,8 +82,12 @@ class App extends React.Component {
 				<Router>
 					
 					<Route exact path="/">
-						{this.getView()}
+						{/* {this.getView()} */}
+						<Logo/>
+						<ModalLogin/>
+						{/* <ModalLogin handleLogIn={this.handleLogIn}/> */}
 					</Route>
+					
 				</Router>
 				<Footer/>
 			</div>
