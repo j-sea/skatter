@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import './App.css';
 import ModalLogin from './components/ModalLogin';
 import Logo from './components/Logo'
+import Layout from './components/Layout'
 
 
 class App extends React.Component {
@@ -82,10 +83,8 @@ class App extends React.Component {
 				<Router>
 					
 					<Route exact path="/">
-						{/* {this.getView()} */}
 						<Logo/>
 						<ModalLogin/>
-						{/* <ModalLogin handleLogIn={this.handleLogIn}/> */}
 					</Route>
 					
 				</Router>

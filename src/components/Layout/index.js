@@ -1,14 +1,14 @@
 import React from 'react';
 // import './style.css';
-import Header from './src/components/Header';
-import Footer from './src/components/Footer';
+import Header from '../Header';
+import Footer from '../Footer';
 
-function Layout() {
+function Layout(props) {
     return(
        <div>
           <Header />
-             { this.props.children }
-             /* anything else you want to appear on every page that uses this layout */
+             <div>{ props.children }</div>
+           
           <Footer />
        </div>
     );
