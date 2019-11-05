@@ -9,6 +9,8 @@ import './App.css';
 import ModalLogin from './components/ModalLogin';
 import Logo from './components/Logo'
 import Layout from './components/Layout'
+import ModalDelete from './components/ModalDelete'
+import GroupMgmtPage from './components/GroupMgmtPage';
 
 class App extends React.Component {
 
@@ -18,7 +20,7 @@ class App extends React.Component {
 
 	handleLogIn = (email, phone, password) => {
 		console.log('logging in');
-		
+
 		const loginData = {
 			email,
 			phone,
@@ -86,6 +88,9 @@ class App extends React.Component {
 							? <GroupMap />
 							: <div>Not Logged In</div>
 						*/}
+					</Route>
+					<Route exact path="/group">
+						<GroupMgmtPage/>
 					</Route>
 					
 				</Router>

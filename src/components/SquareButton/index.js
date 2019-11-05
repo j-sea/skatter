@@ -1,10 +1,10 @@
 import React from 'react';
 import './style.css';
 
-function squareButton() {
+function SquareButton(props) {
     return (
-    <button type="button" className="btn btn-primary skatter-btn-sq">Login</button>
+    <button type="button" className="btn btn-primary skatter-btn-sq" onClick={props.onClick}>{props.buttonTitle}</button>
     )
 }
 
-export default squareButton;
+export default SquareButton;
