@@ -10,7 +10,6 @@ import ModalLogin from './components/ModalLogin';
 import Logo from './components/Logo'
 import Layout from './components/Layout'
 
-
 class App extends React.Component {
 
 	state = {
@@ -81,11 +80,12 @@ class App extends React.Component {
 						}
 					</Route>
 					<Route exact path="/map">
-						{
+						<GroupMap />
+						{/*
 							(this.state.loggedInUser)
 							? <GroupMap />
 							: <div>Not Logged In</div>
-						}
+						*/}
 					</Route>
 					
 				</Router>
