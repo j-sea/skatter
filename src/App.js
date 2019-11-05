@@ -8,6 +8,7 @@ import './App.css';
 import ModalLogin from './components/ModalLogin';
 import Logo from './components/Logo'
 import Layout from './components/Layout'
+import ModalDelete from './components/ModalDelete'
 
 
 class App extends React.Component {
@@ -85,6 +86,7 @@ class App extends React.Component {
 					<Route exact path="/">
 						<Logo/>
 						<ModalLogin/>
+						<ModalDelete/>
 					</Route>
 					
 				</Router>
