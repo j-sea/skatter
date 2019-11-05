@@ -2,7 +2,7 @@
     position:fixed;
     bottom:0;
     /* left:0; */
-    width:90%;
+    width:75%;
     background-color: #F000FF69;
     border: solid #1890F0;
     border-radius: 0.3rem;
@@ -11,11 +11,11 @@
     justify-content: center;
     display: flex;
     align-items: center;
+    color: white;
 }
 
 .footer-text {
     font-size: 0.8em;
-    color: white;
 }
 
 footer {

@@ -6,6 +6,9 @@ import LoginForm from './components/LoginForm';
 import Footer from './components/Footer';
 import GroupMap from './components/GroupMap';
 import './App.css';
+import ModalLogin from './components/ModalLogin';
+import Logo from './components/Logo'
+import Layout from './components/Layout'
 
 
 class App extends React.Component {
@@ -70,7 +73,10 @@ class App extends React.Component {
 									<Link to="/map">Group Map</Link>
 									<LandingPage handleLogOut={this.handleLogOut} />
 								</div>
-							: <LoginForm handleLogIn={this.handleLogIn} />
+							: <>
+									<Logo/>
+									<ModalLogin/>
+								</>
 						}
 					</Route>
 					<Route exact path="/map">
@@ -80,6 +86,7 @@ class App extends React.Component {
 							: <div>Not Logged In</div>
 						}
 					</Route>
+					
 				</Router>
 				<Footer/>
 			</div>

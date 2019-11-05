@@ -6,7 +6,7 @@ function Logo() {
         <div className="logo-wrapper">
             <div className="logo-img logo-circle" >
                 
-                <img className='logo-text' src="./images/p3-logo3.png"/>
+                <img className='logo-text' src="./images/p3-logo3.png" alt="scatter" />
             
             </div>
         </div>
