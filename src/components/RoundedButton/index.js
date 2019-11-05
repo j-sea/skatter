@@ -1,10 +1,10 @@
 import React from 'react';
 import './style.css';
 
-function roundedButton() {
+function RoundedButton(props) {
     return (
-    <button type="button" className="btn btn-primary skatter-btn-rnd">Bite of Seattle</button>
+    <button type="button" className="btn btn-primary skatter-btn-rnd" onClick={props.onClick}>{props.buttonTitle}</button>
     )
 }
 
-export default roundedButton;
+export default RoundedButton;
