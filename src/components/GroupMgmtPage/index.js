@@ -18,24 +18,24 @@ class GroupMgmtPage extends React.Component {
             <div>
                 <Header />
                 <br />
-                <SquareButton />
+                <SquareButton buttonTitle="Create Group"/>
                 <br /> <br />
                 <Banner bannerTitle="Existing Groups"/>
                 <div className="content-box-style">
                     <div className="level1-btns">
-                        <RoundedButton />
+                        <RoundedButton buttonTitle="Bite of Seattle" />
                         <ModalDelete />
                     </div>
                     <div className="level1-btns">
-                        <RoundedButton />
+                        <RoundedButton buttonTitle="Taste of Tacoma" />
                         <ModalDelete />
                     </div>
                     <div className="level1-btns">
-                        <RoundedButton />
+                        <RoundedButton buttonTitle="Saturday Movie" />
                         <ModalDelete />
                     </div>
                     <div className="level1-btns">
-                        <RoundedButton />
+                        <RoundedButton buttonTitle="Fair Day!" />
                         <ModalDelete />
                     </div>
                 </div>
