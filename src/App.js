@@ -1,9 +1,10 @@
 import React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Axios from 'axios';
 import LandingPage from './components/LandingPage';
 import LoginForm from './components/LoginForm';
 import Footer from './components/Footer';
+import GroupMap from './components/GroupMap';
 import './App.css';
 import ModalLogin from './components/ModalLogin';
 import Logo from './components/Logo'
@@ -13,12 +14,12 @@ import Layout from './components/Layout'
 class App extends React.Component {
 
 	state = {
-		isAuthorized: false,
-		authorizationError: false,
+		loggedInUser: false,
 	};
 
 	handleLogIn = (email, phone, password) => {
-
+		console.log('logging in');
+		
 		const loginData = {
 			email,
 			phone,
@@ -33,14 +34,12 @@ class App extends React.Component {
 			console.log(response);
 
 			this.setState({
-				isAuthorized: true,
-				authorizationError: false,
+				loggedInUser: response.data.user,
 			});
 		})
 		.catch(error => {
 			this.setState({
-				isAuthorized: false,
-				authorizationError: true,
+				loggedInUser: false,
 			});
 		});
 	};
@@ -56,35 +55,37 @@ class App extends React.Component {
 			console.log(response);
 
 			this.setState({
-				isAuthorized: false,
-				authorizationError: false,
+				loggedInUser: false,
 			});
 		})
 		.catch(error => {
-			this.setState({
-				isAuthorized: this.state.isAuthorized,
-				authorizationError: true,
-			});
+			console.log(error);
 		});
 	};
-
-	// getView = () => {
-	// 	if (this.state.isAuthorized) {
-	// 		return <LandingPage handleLogOut={this.handleLogOut} />;
-	// 	}
-	// 	else {
-	// 		return <LoginForm handleLogIn={this.handleLogIn} />;
-	// 	}
-	// };
 
 	render () {
 		return (
 			<div className="App">
 				<Router>
-					
 					<Route exact path="/">
-						<Logo/>
-						<ModalLogin/>
+						{
+							(this.state.loggedInUser)
+							? <div>
+									<Link to="/map">Group Map</Link>
+									<LandingPage handleLogOut={this.handleLogOut} />
+								</div>
+							: <>
+									<Logo/>
+									<ModalLogin handleLogIn={this.handleLogIn}/>
+								</>
+						}
+					</Route>
+					<Route exact path="/map">
+						{
+							(this.state.loggedInUser)
+							? <GroupMap />
+							: <div>Not Logged In</div>
+						}
 					</Route>
 					
 				</Router>
