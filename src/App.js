@@ -18,7 +18,8 @@ class App extends React.Component {
 	};
 
 	handleLogIn = (email, phone, password) => {
-
+		console.log('logging in');
+		
 		const loginData = {
 			email,
 			phone,
@@ -75,7 +76,7 @@ class App extends React.Component {
 								</div>
 							: <>
 									<Logo/>
-									<ModalLogin/>
+									<ModalLogin handleLogIn={this.handleLogIn}/>
 								</>
 						}
 					</Route>

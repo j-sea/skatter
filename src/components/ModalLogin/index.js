@@ -25,7 +25,7 @@ function ModalLogin (props) {
       <Button className="external-modal-button" onClick={toggle}>{buttonLabel}Login</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader className="modal-background" toggle={toggle}>Login</ModalHeader>
-        <ModalBody className="modal-background">
+        <ModalBody id="loginForm" className="modal-background">
           <Form onSubmit={handleSubmit}>
             <div className="form-group">
               <Label htmlFor="formGroupExampleInput2"></Label>
@@ -37,11 +37,12 @@ function ModalLogin (props) {
               <Label htmlFor="formGroupExampleInput2"></Label>
               <Input type="password" className="form-control form-border" id="formGroupExampleInput2" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
 
+              <Input type="submit" style={{position: 'absolute', left: -1000, top: -1000, visibility: 'hidden'}}/>
             </div>
           </Form>
         </ModalBody>
         <ModalFooter className="modal-background">
-          <Button className="internal-modal-button" onClick={toggle}>Submit</Button>{' '}
+          <Button className="internal-modal-button" onClick={handleSubmit}>Submit</Button>{' '}
           <Button className="internal-modal-button" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
