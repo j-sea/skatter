@@ -14,15 +14,15 @@ const ModalDelete = (props) => {
 
   return (
     <div>
-      <Button className="test" onClick={toggle}>{buttonLabel}X</Button>
+      <Button className="external-delete-button" onClick={toggle}>{buttonLabel}X</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader className="modal-background" toggle={toggle}>Confirm Delete</ModalHeader>
         <ModalBody className="modal-background">
             Are you sure you want to delete this?
         </ModalBody>
         <ModalFooter className="modal-background">
-          <Button className="internal-modal-button" onClick={toggle}>Yes</Button>{' '}
-          <Button className="delete-button" onClick={toggle}>No</Button>
+          <Button className="confirm-delete-button" onClick={toggle}>Yes</Button>{' '}
+          <Button className="cancel-delete-button" onClick={toggle}>No</Button>
         </ModalFooter>
       </Modal>
     </div>

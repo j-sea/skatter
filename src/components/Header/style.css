@@ -30,8 +30,11 @@ header {
     text-align: right;
 }
 
-.test {
+.header-test {
     border-radius: 0.8rem;
+    color: #1890F0;
+    border: solid #1890F0;
+    background-color: #481848;
 }
 
 @media screen and (max-width: 576px){

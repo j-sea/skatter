@@ -1,4 +1,4 @@
-.test {
+.external-delete-button {
     background-color: #481848;
     border: solid #1890F0;
     color: #ff0000;
@@ -9,13 +9,13 @@
     background-color: #F000FF33;
 }
 
-.internal-modal-button {
+.confirm-delete-button {
     color: #1890F0;
     border: solid #1890F0;
     background-color: #481848;
 }
 
-.delete-button {
+.cancel-delete-button {
     color: red;
     border: solid #1890F0;
     background-color: #481848;

@@ -15,7 +15,7 @@ function Header() {
                 <i class="material-icons">person</i>
                 </div>
                 <div className="header-div col-3">
-                    <button type="button" className="btn btn-primary btn-sm test" > <i class="material-icons">dehaze</i></button>
+                    <button type="button" className="btn btn-primary btn-sm header-test" > <i class="material-icons">dehaze</i></button>
                 </div>
             </nav>
         </header>
