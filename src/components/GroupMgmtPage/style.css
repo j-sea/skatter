@@ -1,0 +1,15 @@
+.level1-btns {
+    display: flex;
+    justify-content: center;
+    
+}
+
+.content-box-style {
+    width: 90%;
+    height: 75%;
+    margin: 0 auto;
+    border: solid thin #1890F0;
+    background-color: #F0309099;
+    /* display: flex; */
+    /* justify-content: center; */
+}
