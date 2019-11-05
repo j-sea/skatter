@@ -1,0 +1,9 @@
+.banner-style {
+    border: solid thin #F0F030;
+    background-color: #F000FFBD;
+    width: 75%;
+    height: 30px;
+    margin: 0 auto;
+    border-radius: 0.3rem;
+    margin-bottom: 2%;
+}

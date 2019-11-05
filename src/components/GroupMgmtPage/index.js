@@ -5,6 +5,7 @@ import Footer from '../Footer'
 import SquareButton from '../SquareButton';
 import RoundedButton from '../RoundedButton';
 import ModalDelete from '../ModalDelete';
+import Banner from '../Banner'
 
 class GroupMgmtPage extends React.Component {
     // handleSubmit = submitEvent => {
@@ -19,6 +20,7 @@ class GroupMgmtPage extends React.Component {
                 <br />
                 <SquareButton />
                 <br /> <br />
+                <Banner/>
                 <div className="content-box-style">
                     <div className="level1-btns">
                         <RoundedButton />
