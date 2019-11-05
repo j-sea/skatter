@@ -4,7 +4,7 @@ import './style.css';
 function Banner(props) {
     return (
        <div className="banner-style">
-           <p>{props.bannerTitle}</p>
+           <p className="banner-text">{props.bannerTitle}</p>
        </div>
     )
 }

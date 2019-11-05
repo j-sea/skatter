@@ -20,7 +20,7 @@ class GroupMgmtPage extends React.Component {
                 <br />
                 <SquareButton />
                 <br /> <br />
-                <Banner/>
+                <Banner bannerTitle="Existing Groups"/>
                 <div className="content-box-style">
                     <div className="level1-btns">
                         <RoundedButton />
