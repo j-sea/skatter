@@ -64,7 +64,7 @@ class App extends React.Component {
 
 	recoverSessionLogin = () => {
 
-		const recoverSessionUrl = APIURL('/api/recover-session');
+		const recoverSessionUrl = APIURL('/auth/recover-session');
 		Axios.get(recoverSessionUrl, {withCredentials: true})
 		.then(response => {
 			this.setState({
