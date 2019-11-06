@@ -12,8 +12,10 @@ import Layout from './components/Layout'
 import ModalDelete from './components/ModalDelete'
 import GroupMgmtPage from './components/GroupMgmtPage';
 import CreateGroupPage from './components/CreateGroupPage';
+import ModalAdd from './components/ModalAddPerson';
 
 import APIURL from './utils/APIURL';
+
 
 class App extends React.Component {
 
@@ -95,6 +97,7 @@ class App extends React.Component {
 								</div>
 							: <>
 									<Logo/>
+									<ModalAdd/>
 									<ModalLogin handleLogIn={this.handleLogIn}/>
 								</>
 						}
