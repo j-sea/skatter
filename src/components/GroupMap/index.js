@@ -8,7 +8,10 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import Overlay from 'ol/Overlay';
 import Point from 'ol/geom/Point';
-import {toLonLat} from 'ol/proj';
+import {unByKey} from 'ol/Observable';
+import {easeOut} from 'ol/easing';
+import {toLonLat, fromLonLat} from 'ol/proj';
+import {getVectorContext} from 'ol/render';
 import {defaults as defaultControls, ScaleLine, ZoomSlider} from 'ol/control';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {OSM, Vector as VectorSource} from 'ol/source';
@@ -63,6 +66,8 @@ const overlayPopup = {
 	contentElement: null,
 	closerElement: null,
 	reset: () => {
+		overlayPopup.contentElement = document.getElementById('map-popup-content');
+		overlayPopup.closerElement = document.getElementById('map-popup-closer');
 		overlayPopup.olData = new Overlay({
 			element: document.getElementById('map-popup'),
 			autoPan: true,
@@ -84,7 +89,7 @@ const overlayPopup = {
 	},
 }
 
-const createIconStyle = (src, img) => {
+const createImageIconStyle = (src, img) => {
 	return new Style({
 		image: new Icon({
 			anchor: [0.5, 0.96],
@@ -96,8 +101,8 @@ const createIconStyle = (src, img) => {
 	});
 };
 const iconStyles = {
-	userDefault: createIconStyle('/images/map-icon.png'),
-	userSelected: createIconStyle('/images/map-icon-selected.png'),
+	interestPointDefault: createImageIconStyle('/images/map-icon.png'),
+	interestPointSelected: createImageIconStyle('/images/map-icon-selected.png'),
 };
 
 const circleIconStyles = {};
@@ -123,10 +128,11 @@ const getCircleIconStyle = (fillColor, strokeColor) => {
 	return circleIconStyles[fillColor + strokeColor];
 };
 
-const createPersonIcon = (name, userUUID, position, fillColor) => {
+const createPersonIcon = (name, description, userUUID, position, fillColor) => {
 	const newFeature = new Feature({
 		geometry: new Point(position),
 		uuid: userUUID,
+		description: description,
 		name: name,
 		featureType: 'person',
 		clickable: true,
@@ -134,7 +140,21 @@ const createPersonIcon = (name, userUUID, position, fillColor) => {
 	});
 	newFeature.setStyle(getCircleIconStyle(fillColor));
 	return newFeature;
-}
+};
+
+const createInterestPointIcon = (name, description, id, position, fillColor) => {
+	const newFeature = new Feature({
+		geometry: new Point(position),
+		id: id,
+		description: description,
+		name: name,
+		featureType: 'interestPoint',
+		clickable: true,
+		selectedStyle: iconStyles.interestPointSelected,
+	});
+	newFeature.setStyle(iconStyles.interestPointDefault);
+	return newFeature;
+};
 
 class GroupMap extends React.Component {
 	infoStyle = {
@@ -193,10 +213,6 @@ class GroupMap extends React.Component {
 		const coordinates = this.geolocation.getPosition();
 		if (coordinates) {
 			this.userPositionFeature.setGeometry(new Point(coordinates));
-			this.userIconFeature.setGeometry(new Point(coordinates));
-			if (this.featuresSource.getFeatureById('userIcon') === null) {
-				this.featuresSource.addFeature(this.userIconFeature);
-			}
 
 			if (this.followingUser) {
 				const animations = [{center: coordinates}];
@@ -209,7 +225,6 @@ class GroupMap extends React.Component {
 		}
 		else {
 			this.userPositionFeature.setGeometry(null);
-			this.userIconFeature.setGeometry(null);
 		}
 	};
 
@@ -222,19 +237,64 @@ class GroupMap extends React.Component {
 		}
 	};
 
-	queryGroupUsers = groupUUID => {
-		// if (this.featuresSource.getFeatures().length === 3) {
-			const userLocation = this.geolocation.getPosition();
-			if (typeof userLocation !== 'undefined') {
-				this.updateGroupUsers({
-					'a': { user_name: 'Joe', user_uuid: 'a', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#00f'},
-					'b': { user_name: 'Samantha', user_uuid: 'b', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#f00'},
-					'c': { user_name: 'Barbara', user_uuid: 'c', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#0ff'},
-					'd': { user_name: 'Jeb', user_uuid: 'd', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#ff0'},
-					'e': { user_name: 'Marley', user_uuid: 'e', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#c48'},
-				});
+	selectIcon = selectEvent => {
+		if (selectEvent.selected.length === 0) {
+			overlayPopup.clickClose();
+		}
+		else {
+			overlayPopup.contentElement.textContent = `${selectEvent.selected[0].get('name')} - ${selectEvent.selected[0].get('description')}`;
+			overlayPopup.olData.setPosition(selectEvent.mapBrowserEvent.coordinate);
+		}
+		console.log(selectEvent.deselected.length, selectEvent.selected.length);
+	};
+
+	flashIconOut = e => {
+		const duration = 3000;
+		const feature = e.feature;
+		const start = new Date().getTime();
+	
+		const listenerKey = this.featuresLayer.on('postrender', event => {
+			const vectorContext = getVectorContext(event);
+			const frameState = event.frameState;
+			const flashGeom = feature.getGeometry().clone();
+			const elapsed = frameState.time - start;
+			const elapsedRatio = elapsed / duration;
+			// radius will be 5 at start and 30 at end.
+			const radius = easeOut(elapsedRatio) * 25 + 5;
+			const opacity = easeOut(1 - elapsedRatio);
+	
+			const style = new Style({
+				image: new CircleStyle({
+					radius: radius,
+					stroke: new Stroke({
+						color: 'rgba(255, 0, 0, ' + opacity + ')',
+						width: 0.25 + opacity,
+					})
+				})
+			});
+	
+			vectorContext.setStyle(style);
+			vectorContext.drawGeometry(flashGeom);
+			if (elapsed > duration) {
+				unByKey(listenerKey);
+				return;
 			}
-		// }
+			// tell OpenLayers to continue postrender animation
+			this.map.render();
+		});
+	};
+
+	queryGroupUsers = groupUUID => {
+		const userLocation = this.geolocation.getPosition();
+		if (typeof userLocation !== 'undefined') {
+			this.updateGroupUsers({
+				'a': { user_name: 'Joe', description: 'I like spinach. It\'s the best lunch snack.', user_uuid: 'a', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#00f'},
+				'b': { user_name: 'Samantha', description: 'You know me.', user_uuid: 'b', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#f00'},
+				'c': { user_name: 'Barbara', description: 'I\'m here to make sure Jeb stays sober. I also would like to go see the live band happening at 3pm if anyone wants to join me.', user_uuid: 'c', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#0ff'},
+				'd': { user_name: 'Jeb', description: 'I\'m the designated driver for this outing! (I gladly accept bribes for front passenger seat!)', user_uuid: 'd', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#ff0'},
+				'e': { user_name: 'Marley', description: 'Shhh. I\'m hiding!', user_uuid: 'e', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#c48'},
+			});
+		}
 	};
 
 	updateGroupUsers = newUsersSnapshot => {
@@ -242,27 +302,11 @@ class GroupMap extends React.Component {
 			if (feature.get('clickable') && feature.get('featureType') === 'person') {
 				const featureUUID = feature.get('uuid');
 				if (featureUUID in newUsersSnapshot) {
-					// (() => {
-						// const featureCopy = feature;
-						// const userCopy = {...newUsersSnapshot[featureUUID]};
-						// this.featuresLayer.once('postrender', e => {
-							// Update the feature
-							// console.log(userCopy);
-							// console.log(featureCopy);
-							// featureCopy.setGeometry(new Point(userCopy.longitude, userCopy.latitude));
-							// featureCopy.set('name', userCopy.user_name);
-							// featureCopy.set('selectedStyle', getCircleIconStyle(userCopy.color, '#f0f'));
-							// featureCopy.setStyle(getCircleIconStyle(userCopy.color));
-							// featureCopy.changed();
-
-					// 		this.map.render();
-					// 	})
-					// })();
-
 					this.featuresSource.removeFeature(feature);
 					this.featuresSource.addFeature(
 						createPersonIcon(
 							newUsersSnapshot[featureUUID].user_name,
+							newUsersSnapshot[featureUUID].description,
 							newUsersSnapshot[featureUUID].user_uuid,
 							[newUsersSnapshot[featureUUID].longitude, newUsersSnapshot[featureUUID].latitude],
 							newUsersSnapshot[featureUUID].color
@@ -279,31 +323,81 @@ class GroupMap extends React.Component {
 			}
 		});
 
-		// this.featuresSource.clear();
-		// this.featuresSource.refresh({force: true});
-
 		// Now add all the remaining new snapshot users
 		for (const newUserUUID in newUsersSnapshot) {
 			this.featuresSource.addFeature(
 				createPersonIcon(
 					newUsersSnapshot[newUserUUID].user_name,
+					newUsersSnapshot[newUserUUID].description,
 					newUsersSnapshot[newUserUUID].user_uuid,
 					[newUsersSnapshot[newUserUUID].longitude, newUsersSnapshot[newUserUUID].latitude],
 					newUsersSnapshot[newUserUUID].color
 				)
 			);
 		}
-
-		this.map.render();
 	};
 
-	currentInterestPointsSnapshot = [];
 	queryGroupInterestPoints = groupUUID => {
-
+		const userLocation = this.geolocation.getPosition();
+		if (typeof userLocation !== 'undefined') {
+			const newInterestPointData = {};
+			if (Math.floor(Math.random() * 2)) {
+				newInterestPointData['a'] = { name: 'Hot Dog Stand', description: 'Really good hot dogs. Free condiments. Cheap lemonade.', id: 'a', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#c0c'};
+			}
+			if (Math.floor(Math.random() * 2)) {
+				newInterestPointData['b'] = { name: 'Bathroom', description: 'Not great, but also a family bathroom available.', id: 'b', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#cd8'};
+			}
+			if (Math.floor(Math.random() * 2)) {
+				newInterestPointData['c'] = { name: 'Cool Bags!', description: 'We found some really cool handmade backpacks and messenger bags here! Decent price! Nice staff!', id: 'c', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#1a0'};
+			}
+			if (Math.floor(Math.random() * 2)) {
+				newInterestPointData['d'] = { name: 'Jeb\'s Truck', description: 'This is where Jeb parked.', id: 'd', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#f06'};
+			}
+			if (Math.floor(Math.random() * 2)) {
+				newInterestPointData['e'] = { name: 'Petting Zoo', description: 'We saw goats!', id: 'e', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#692'};
+			}
+			this.updateGroupInterestPoints(newInterestPointData);
+		}
 	};
 
 	updateGroupInterestPoints = newInterestPointsSnapshot => {
+		this.featuresSource.forEachFeature(feature => {
+			if (feature.get('clickable') && feature.get('featureType') === 'interestPoint') {
+				const featureID = feature.get('id');
+				if (featureID in newInterestPointsSnapshot) {
+					this.featuresSource.removeFeature(feature);
+					this.featuresSource.addFeature(
+						createInterestPointIcon(
+							newInterestPointsSnapshot[featureID].name,
+							newInterestPointsSnapshot[featureID].description,
+							newInterestPointsSnapshot[featureID].id,
+							[newInterestPointsSnapshot[featureID].longitude, newInterestPointsSnapshot[featureID].latitude],
+							newInterestPointsSnapshot[featureID].color
+						)
+					);
 
+					// Remove the updated feature from the new snapshot
+					delete newInterestPointsSnapshot[featureID];
+				}
+				else {
+					// Remove the feature from the current snapshot
+					this.featuresSource.removeFeature(feature);
+				}
+			}
+		});
+
+		// Now add all the remaining new snapshot interest points
+		for (const featureID in newInterestPointsSnapshot) {
+			this.featuresSource.addFeature(
+				createInterestPointIcon(
+					newInterestPointsSnapshot[featureID].name,
+					newInterestPointsSnapshot[featureID].description,
+					newInterestPointsSnapshot[featureID].id,
+					[newInterestPointsSnapshot[featureID].longitude, newInterestPointsSnapshot[featureID].latitude],
+					newInterestPointsSnapshot[featureID].color
+				)
+			);
+		}
 	};
 
 	componentDidMount () {
@@ -335,22 +429,6 @@ class GroupMap extends React.Component {
 			featureType: 'person',
 			clickable: false,
 		});
-		this.userIconFeature = new Feature({
-			geometry: new Point([0, 0]),
-			name: 'UW Continuing Education Building',
-			featureType: 'interestPoint',
-			clickable: true,
-			selectedStyle: iconStyles.userSelected,
-		});
-		this.userIconFeature.setId('userIcon');
-
-		this.featuresSource = new VectorSource({
-			features: [this.userAccuracyFeature, this.userPositionFeature]
-		});
-		this.featuresLayer = new VectorLayer({
-			source: this.featuresSource,
-		});
-
 		this.userAccuracyFeature.setStyle(new Style({
 			stroke: new Stroke({
 				color: '#ffffff',
@@ -361,12 +439,22 @@ class GroupMap extends React.Component {
 			})
 		}));
 		this.userPositionFeature.setStyle(getCircleIconStyle());
-		this.userIconFeature.setStyle(iconStyles.userDefault);
-		this.osm = new OSM();
 		this.selectInteraction = new Select({
 			filter: feature => feature.get('clickable'),
 			style: feature => feature.get('selectedStyle'),
 		});
+
+		this.featuresSource = new VectorSource({
+			features: [this.userAccuracyFeature, this.userPositionFeature]
+		});
+		this.featuresLayer = new VectorLayer({
+			source: this.featuresSource,
+		});
+		this.osm = new OSM();
+		this.tileLayer = new TileLayer({
+			source: this.osm,
+		});
+
 		this.map = new Map({
 			controls: defaultControls().extend([
 				new ScaleLine({
@@ -382,9 +470,7 @@ class GroupMap extends React.Component {
 				this.selectInteraction,
 			]),
 			layers: [
-				new TileLayer({
-					source: this.osm,
-				}),
+				this.tileLayer,
 				this.featuresLayer,
 			],
 			overlays: [overlayPopup.olData],
@@ -408,25 +494,17 @@ class GroupMap extends React.Component {
 		this.geolocation.on('error', this.displayGeolocationError);
 		this.geolocation.on('change:accuracyGeometry', this.setAccuracyGeometry);
 		this.geolocation.on('change:position', this.setPosition);
-		this.selectInteraction.on('select', selectEvent => {
-			if (selectEvent.selected.length === 0) {
-				overlayPopup.clickClose();
-			}
-			else {
-				overlayPopup.contentElement.textContent = selectEvent.selected[0].get('name');
-				overlayPopup.olData.setPosition(selectEvent.mapBrowserEvent.coordinate);
-			}
-			console.log(selectEvent.deselected.length, selectEvent.selected.length);
-		});
-		overlayPopup.contentElement = document.getElementById('map-popup-content');
-		overlayPopup.closerElement = document.getElementById('map-popup-closer');
+		this.selectInteraction.on('select', this.selectIcon);
 		overlayPopup.attachClick();
+		this.featuresSource.on('addfeature', this.flashIconOut)
 		this.map.on('pointermove', this.updateCursor);
 	}
-
+	
 	componentWillUnmount () {
 		this.map.un('pointermove', this.updateCursor);
-		document.getElementById('map-popup-closer').removeEventListener('click', overlayPopup.clickClose);
+		this.featuresSource.un('addfeature', this.flashIconOut)
+		overlayPopup.detachClick();
+		this.selectInteraction.un('select', this.selectIcon);
 		this.geolocation.un('change:position', this.setPosition);
 		this.geolocation.un('change:accuracyGeometry', this.setAccuracyGeometry);
 		this.geolocation.un('error', this.displayGeolocationError);
@@ -434,7 +512,6 @@ class GroupMap extends React.Component {
 		this.osm.un('tileloaderror', progressBar.addLoaded);
 		this.osm.un('tileloadend', progressBar.addLoaded);
 		this.osm.un('tileloadstart', progressBar.addLoading);
-		overlayPopup.detachClick();
 		clearInterval(this.updateInterval);
 	}
 
