@@ -5,7 +5,9 @@ import Footer from '../Footer'
 import SquareButton from '../SquareButton';
 import RoundedButton from '../RoundedButton';
 // import ModalDelete from '../ModalDelete';
+import ModalAddPerson from '../ModalAddPerson'
 import Banner from '../Banner'
+import ModalAdd from '../ModalAddPerson';
 
 class CreateGroupPage extends React.Component {
     // handleSubmit = submitEvent => {
@@ -18,12 +20,12 @@ class CreateGroupPage extends React.Component {
             <div>
                 <Header />
                 <br />
-                <Banner bannerTitle="" />
+                <Banner bannerTitle="" canEdit={true}/>
                 <br />
 
 
                 {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
-                <RoundedButton />
+                <ModalAdd/>
 
                 <br />
 
