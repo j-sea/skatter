@@ -223,7 +223,7 @@ class GroupMap extends React.Component {
 	};
 
 	queryGroupUsers = groupUUID => {
-		if (this.featuresSource.getFeatures().length === 3) {
+		// if (this.featuresSource.getFeatures().length === 3) {
 			const userLocation = this.geolocation.getPosition();
 			if (typeof userLocation !== 'undefined') {
 				this.updateGroupUsers({
@@ -234,7 +234,7 @@ class GroupMap extends React.Component {
 					'e': { user_name: 'Marley', user_uuid: 'e', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#c48'},
 				});
 			}
-		}
+		// }
 	};
 
 	updateGroupUsers = newUsersSnapshot => {
@@ -242,12 +242,32 @@ class GroupMap extends React.Component {
 			if (feature.get('clickable') && feature.get('featureType') === 'person') {
 				const featureUUID = feature.get('uuid');
 				if (featureUUID in newUsersSnapshot) {
-					// Update the feature
-					feature.setGeometry(new Point(newUsersSnapshot[featureUUID].longitude, newUsersSnapshot[featureUUID].latitude));
-					feature.set('name', newUsersSnapshot[featureUUID].user_name);
-					feature.set('selectedStyle', getCircleIconStyle(newUsersSnapshot[featureUUID].color, '#f0f'));
-					feature.setStyle(getCircleIconStyle(newUsersSnapshot[featureUUID].color));
-					feature.changed();
+					// (() => {
+						// const featureCopy = feature;
+						// const userCopy = {...newUsersSnapshot[featureUUID]};
+						// this.featuresLayer.once('postrender', e => {
+							// Update the feature
+							// console.log(userCopy);
+							// console.log(featureCopy);
+							// featureCopy.setGeometry(new Point(userCopy.longitude, userCopy.latitude));
+							// featureCopy.set('name', userCopy.user_name);
+							// featureCopy.set('selectedStyle', getCircleIconStyle(userCopy.color, '#f0f'));
+							// featureCopy.setStyle(getCircleIconStyle(userCopy.color));
+							// featureCopy.changed();
+
+					// 		this.map.render();
+					// 	})
+					// })();
+
+					this.featuresSource.removeFeature(feature);
+					this.featuresSource.addFeature(
+						createPersonIcon(
+							newUsersSnapshot[featureUUID].user_name,
+							newUsersSnapshot[featureUUID].user_uuid,
+							[newUsersSnapshot[featureUUID].longitude, newUsersSnapshot[featureUUID].latitude],
+							newUsersSnapshot[featureUUID].color
+						)
+					);
 
 					// Remove the updated feature from the new snapshot
 					delete newUsersSnapshot[featureUUID];
@@ -258,6 +278,9 @@ class GroupMap extends React.Component {
 				}
 			}
 		});
+
+		// this.featuresSource.clear();
+		// this.featuresSource.refresh({force: true});
 
 		// Now add all the remaining new snapshot users
 		for (const newUserUUID in newUsersSnapshot) {
@@ -270,6 +293,8 @@ class GroupMap extends React.Component {
 				)
 			);
 		}
+
+		this.map.render();
 	};
 
 	currentInterestPointsSnapshot = [];
@@ -313,7 +338,7 @@ class GroupMap extends React.Component {
 		this.userIconFeature = new Feature({
 			geometry: new Point([0, 0]),
 			name: 'UW Continuing Education Building',
-			featureType: 'person',
+			featureType: 'interestPoint',
 			clickable: true,
 			selectedStyle: iconStyles.userSelected,
 		});
@@ -321,6 +346,9 @@ class GroupMap extends React.Component {
 
 		this.featuresSource = new VectorSource({
 			features: [this.userAccuracyFeature, this.userPositionFeature]
+		});
+		this.featuresLayer = new VectorLayer({
+			source: this.featuresSource,
 		});
 
 		this.userAccuracyFeature.setStyle(new Style({
@@ -357,9 +385,7 @@ class GroupMap extends React.Component {
 				new TileLayer({
 					source: this.osm,
 				}),
-				new VectorLayer({
-					source: this.featuresSource,
-				})
+				this.featuresLayer,
 			],
 			overlays: [overlayPopup.olData],
 			target: 'map',

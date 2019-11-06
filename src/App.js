@@ -11,7 +11,7 @@ import Logo from './components/Logo'
 import Layout from './components/Layout'
 import ModalDelete from './components/ModalDelete'
 import GroupMgmtPage from './components/GroupMgmtPage';
-
+import APIURL from './utils/APIURL';
 
 class App extends React.Component {
 
@@ -28,9 +28,7 @@ class App extends React.Component {
 			password,
 		};
 
-		const loginUrl = (window.location.hostname === 'localhost')
-		                 ? 'http://localhost:8080/auth/login'
-		                 : 'https://bailfire.herokuapp.com/auth/login';
+		const loginUrl = APIURL('/auth/login');
 		Axios.post(loginUrl, loginData, {withCredentials: true})
 		.then(response => {
 			console.log(response);
@@ -48,10 +46,7 @@ class App extends React.Component {
 
 	handleLogOut = () => {
 
-		const logoutUrl = (window.location.hostname === 'localhost')
-		                 ? 'http://localhost:8080/auth/logout'
-										 : 'https://bailfire.herokuapp.com/auth/logout';
-
+		const logoutUrl = APIURL('/auth/logout');
 		Axios.post(logoutUrl, {}, {withCredentials: true})
 		.then(response => {
 			console.log(response);
@@ -64,6 +59,26 @@ class App extends React.Component {
 			console.log(error);
 		});
 	};
+
+	recoverSessionLogin = () => {
+
+		const recoverSessionUrl = APIURL('/api/recover-session');
+		Axios.get(recoverSessionUrl, {withCredentials: true})
+		.then(response => {
+			this.setState({
+				loggedInUser: response.data,
+			})
+		})
+		.catch(error => {
+			this.setState({
+				loggedInUser: false,
+			})
+		});
+	};
+
+	componentDidMount () {
+		this.recoverSessionLogin();
+	}
 
 	render () {
 		return (
@@ -83,11 +98,12 @@ class App extends React.Component {
 						}
 					</Route>
 					<Route exact path="/map">
-						{
+						<GroupMap />
+						{/*
 							(this.state.loggedInUser)
 							? <GroupMap />
 							: <div>Not Logged In</div>
-						}
+						*/}
 					</Route>
 					<Route exact path="/group">
 						<GroupMgmtPage/>
