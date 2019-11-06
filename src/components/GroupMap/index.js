@@ -8,7 +8,10 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import Overlay from 'ol/Overlay';
 import Point from 'ol/geom/Point';
-import {toLonLat} from 'ol/proj';
+import {unByKey} from 'ol/Observable';
+import {easeOut} from 'ol/easing';
+import {toLonLat, fromLonLat} from 'ol/proj';
+import {getVectorContext} from 'ol/render';
 import {defaults as defaultControls, ScaleLine, ZoomSlider} from 'ol/control';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {OSM, Vector as VectorSource} from 'ol/source';
@@ -63,6 +66,8 @@ const overlayPopup = {
 	contentElement: null,
 	closerElement: null,
 	reset: () => {
+		overlayPopup.contentElement = document.getElementById('map-popup-content');
+		overlayPopup.closerElement = document.getElementById('map-popup-closer');
 		overlayPopup.olData = new Overlay({
 			element: document.getElementById('map-popup'),
 			autoPan: true,
@@ -222,6 +227,53 @@ class GroupMap extends React.Component {
 		}
 	};
 
+	selectIcon = selectEvent => {
+		if (selectEvent.selected.length === 0) {
+			overlayPopup.clickClose();
+		}
+		else {
+			overlayPopup.contentElement.textContent = selectEvent.selected[0].get('name');
+			overlayPopup.olData.setPosition(selectEvent.mapBrowserEvent.coordinate);
+		}
+		console.log(selectEvent.deselected.length, selectEvent.selected.length);
+	};
+
+	flashIconOut = e => {
+		const duration = 3000;
+		const feature = e.feature;
+		const start = new Date().getTime();
+	
+		const listenerKey = this.tileLayer.on('postrender', event => {
+			const vectorContext = getVectorContext(event);
+			const frameState = event.frameState;
+			const flashGeom = feature.getGeometry().clone();
+			const elapsed = frameState.time - start;
+			const elapsedRatio = elapsed / duration;
+			// radius will be 5 at start and 30 at end.
+			const radius = easeOut(elapsedRatio) * 25 + 5;
+			const opacity = easeOut(1 - elapsedRatio);
+	
+			const style = new Style({
+				image: new CircleStyle({
+					radius: radius,
+					stroke: new Stroke({
+						color: 'rgba(255, 0, 0, ' + opacity + ')',
+						width: opacity,
+					})
+				})
+			});
+	
+			vectorContext.setStyle(style);
+			vectorContext.drawGeometry(flashGeom);
+			if (elapsed > duration) {
+				unByKey(listenerKey);
+				return;
+			}
+			// tell OpenLayers to continue postrender animation
+			this.map.render();
+		});
+	};
+
 	queryGroupUsers = groupUUID => {
 		// if (this.featuresSource.getFeatures().length === 3) {
 			const userLocation = this.geolocation.getPosition();
@@ -242,23 +294,6 @@ class GroupMap extends React.Component {
 			if (feature.get('clickable') && feature.get('featureType') === 'person') {
 				const featureUUID = feature.get('uuid');
 				if (featureUUID in newUsersSnapshot) {
-					// (() => {
-						// const featureCopy = feature;
-						// const userCopy = {...newUsersSnapshot[featureUUID]};
-						// this.featuresLayer.once('postrender', e => {
-							// Update the feature
-							// console.log(userCopy);
-							// console.log(featureCopy);
-							// featureCopy.setGeometry(new Point(userCopy.longitude, userCopy.latitude));
-							// featureCopy.set('name', userCopy.user_name);
-							// featureCopy.set('selectedStyle', getCircleIconStyle(userCopy.color, '#f0f'));
-							// featureCopy.setStyle(getCircleIconStyle(userCopy.color));
-							// featureCopy.changed();
-
-					// 		this.map.render();
-					// 	})
-					// })();
-
 					this.featuresSource.removeFeature(feature);
 					this.featuresSource.addFeature(
 						createPersonIcon(
@@ -279,9 +314,6 @@ class GroupMap extends React.Component {
 			}
 		});
 
-		// this.featuresSource.clear();
-		// this.featuresSource.refresh({force: true});
-
 		// Now add all the remaining new snapshot users
 		for (const newUserUUID in newUsersSnapshot) {
 			this.featuresSource.addFeature(
@@ -293,8 +325,6 @@ class GroupMap extends React.Component {
 				)
 			);
 		}
-
-		this.map.render();
 	};
 
 	currentInterestPointsSnapshot = [];
@@ -343,14 +373,6 @@ class GroupMap extends React.Component {
 			selectedStyle: iconStyles.userSelected,
 		});
 		this.userIconFeature.setId('userIcon');
-
-		this.featuresSource = new VectorSource({
-			features: [this.userAccuracyFeature, this.userPositionFeature]
-		});
-		this.featuresLayer = new VectorLayer({
-			source: this.featuresSource,
-		});
-
 		this.userAccuracyFeature.setStyle(new Style({
 			stroke: new Stroke({
 				color: '#ffffff',
@@ -362,11 +384,22 @@ class GroupMap extends React.Component {
 		}));
 		this.userPositionFeature.setStyle(getCircleIconStyle());
 		this.userIconFeature.setStyle(iconStyles.userDefault);
-		this.osm = new OSM();
 		this.selectInteraction = new Select({
 			filter: feature => feature.get('clickable'),
 			style: feature => feature.get('selectedStyle'),
 		});
+
+		this.featuresSource = new VectorSource({
+			features: [this.userAccuracyFeature, this.userPositionFeature]
+		});
+		this.featuresLayer = new VectorLayer({
+			source: this.featuresSource,
+		});
+		this.osm = new OSM();
+		this.tileLayer = new TileLayer({
+			source: this.osm,
+		});
+
 		this.map = new Map({
 			controls: defaultControls().extend([
 				new ScaleLine({
@@ -382,9 +415,7 @@ class GroupMap extends React.Component {
 				this.selectInteraction,
 			]),
 			layers: [
-				new TileLayer({
-					source: this.osm,
-				}),
+				this.tileLayer,
 				this.featuresLayer,
 			],
 			overlays: [overlayPopup.olData],
@@ -408,25 +439,17 @@ class GroupMap extends React.Component {
 		this.geolocation.on('error', this.displayGeolocationError);
 		this.geolocation.on('change:accuracyGeometry', this.setAccuracyGeometry);
 		this.geolocation.on('change:position', this.setPosition);
-		this.selectInteraction.on('select', selectEvent => {
-			if (selectEvent.selected.length === 0) {
-				overlayPopup.clickClose();
-			}
-			else {
-				overlayPopup.contentElement.textContent = selectEvent.selected[0].get('name');
-				overlayPopup.olData.setPosition(selectEvent.mapBrowserEvent.coordinate);
-			}
-			console.log(selectEvent.deselected.length, selectEvent.selected.length);
-		});
-		overlayPopup.contentElement = document.getElementById('map-popup-content');
-		overlayPopup.closerElement = document.getElementById('map-popup-closer');
+		this.selectInteraction.on('select', this.selectIcon);
 		overlayPopup.attachClick();
+		this.featuresSource.on('addfeature', this.flashIconOut)
 		this.map.on('pointermove', this.updateCursor);
 	}
-
+	
 	componentWillUnmount () {
 		this.map.un('pointermove', this.updateCursor);
-		document.getElementById('map-popup-closer').removeEventListener('click', overlayPopup.clickClose);
+		this.featuresSource.un('addfeature', this.flashIconOut)
+		overlayPopup.detachClick();
+		this.selectInteraction.un('select', this.selectIcon);
 		this.geolocation.un('change:position', this.setPosition);
 		this.geolocation.un('change:accuracyGeometry', this.setAccuracyGeometry);
 		this.geolocation.un('error', this.displayGeolocationError);
@@ -434,7 +457,6 @@ class GroupMap extends React.Component {
 		this.osm.un('tileloaderror', progressBar.addLoaded);
 		this.osm.un('tileloadend', progressBar.addLoaded);
 		this.osm.un('tileloadstart', progressBar.addLoading);
-		overlayPopup.detachClick();
 		clearInterval(this.updateInterval);
 	}
 
