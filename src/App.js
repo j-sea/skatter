@@ -11,6 +11,7 @@ import Logo from './components/Logo'
 import Layout from './components/Layout'
 import ModalDelete from './components/ModalDelete'
 import GroupMgmtPage from './components/GroupMgmtPage';
+import CreateGroupPage from './components/CreateGroupPage';
 
 
 class App extends React.Component {
@@ -89,8 +90,11 @@ class App extends React.Component {
 							: <div>Not Logged In</div>
 						}
 					</Route>
-					<Route exact path="/group">
+					<Route exact path="/group-management">
 						<GroupMgmtPage/>
+					</Route>
+					<Route exact path="/create-group">
+						<CreateGroupPage/>
 					</Route>
 					
 				</Router>
