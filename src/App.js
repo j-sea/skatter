@@ -90,7 +90,7 @@ class App extends React.Component {
 						}
 					</Route>
 					<Route exact path="/group">
-						<GroupMgmtPage/>
+						<GroupMgmtPage handleLogOut={this.handleLogOut}/>
 					</Route>
 					
 				</Router>

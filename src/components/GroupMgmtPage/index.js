@@ -8,10 +8,10 @@ import ModalDelete from '../ModalDelete';
 import Banner from '../Banner'
 
 class GroupMgmtPage extends React.Component {
-    // handleSubmit = submitEvent => {
-    // 	submitEvent.preventDefault();
-    // 	this.props.handleLogOut();
-    // };
+    handleSubmit = submitEvent => {
+    	submitEvent.preventDefault();
+    	this.props.handleLogOut();
+    };
 
     render() {
         return (
@@ -39,9 +39,9 @@ class GroupMgmtPage extends React.Component {
                         <ModalDelete />
                     </div>
                 </div>
-                {/* <form onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit}>
 					<button type="submit">Log Out</button>
-				</form> */}
+				</form>
                 <Footer />
             </div>
         );
