@@ -32,7 +32,7 @@ function ModalLogin (props) {
               <Input type="email" className="form-control form-border" id="formGroupExampleInput2" placeholder="Email (ex: username@example.com)" onChange={e => setEmail(e.target.value)}/>
               Or
               <Label htmlFor="formGroupExampleInput2"></Label>
-              <Input type="phone" className="form-control form-border" id="formGroupExampleInput2" placeholder="Phone # [sms] (ex: *** ###-####)" onChange={e => setPhone(e.target.value)}/>
+              <Input type="phone" className="form-control form-border" id="formGroupExampleInput2" placeholder="Phone # [sms] (ex: ### ###-####)" onChange={e => setPhone(e.target.value)}/>
 
               <Label htmlFor="formGroupExampleInput2"></Label>
               <Input type="password" className="form-control form-border" id="formGroupExampleInput2" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
