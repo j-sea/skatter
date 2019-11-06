@@ -14,7 +14,7 @@ const ModalDelete = (props) => {
 
   return (
     <div>
-      <Button className="external-delete-button" onClick={toggle}>{buttonLabel}X</Button>
+      <Button className="external-delete-button" onClick={toggle}>X</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader className="modal-background" toggle={toggle}>Confirm Delete</ModalHeader>
         <ModalBody className="modal-background">

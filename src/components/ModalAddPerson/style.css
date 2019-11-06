@@ -1,9 +1,9 @@
-.external-delete-button {
+.add-person-button {
     background-color: #481848;
     border: solid #1890F0;
     color: #1890F0;
     border-radius: 30rem;
-    margin: 10%;
+    /* margin: 2; */
 }
 
 .modal-background {

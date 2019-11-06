@@ -21,7 +21,7 @@ const ModalAdd = (props) => {
 
   return (
     <div>
-      <Button className="external-delete-button" onClick={toggle}>+</Button>
+      <Button className="add-person-button" onClick={toggle}>+</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader className="modal-background" toggle={toggle}>Add Person</ModalHeader>
         <ModalBody className="modal-background">
