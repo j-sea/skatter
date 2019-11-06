@@ -16,12 +16,12 @@ const ModalAdd = (props) => {
 
   const handleSubmit = submitEvent => {
     submitEvent.preventDefault();
-    props.handleLogIn(email, phone);
+    // This will be calling the function to add a person
   };
 
   return (
     <div>
-      <Button className="external-delete-button" onClick={toggle}>{buttonLabel}+</Button>
+      <Button className="external-delete-button" onClick={toggle}>+</Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader className="modal-background" toggle={toggle}>Add Person</ModalHeader>
         <ModalBody className="modal-background">
