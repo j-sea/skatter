@@ -97,7 +97,7 @@ class App extends React.Component {
 								</div>
 							: <>
 									<Logo/>
-									<ModalAdd/>
+									
 									<ModalLogin handleLogIn={this.handleLogIn}/>
 								</>
 						}
