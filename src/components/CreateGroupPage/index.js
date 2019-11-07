@@ -86,19 +86,15 @@ class CreateGroupPage extends React.Component {
                     <div className="bottom-btn-container1">
                         {/* This button should take you back to the group management page */}
                 <Link to='group-management'>
-                    <SquareButton buttonTitle="Back to Groups" />
+                    <SquareButton buttonTitle="Cancel" />
                 </Link>
                     </div>
 
                     <div className="bottom-btn-container2">
-                        {/* This button should create the group and populate a new button/icon on the group management page */}
-                        <SquareButton type="submit" buttonTitle="DONE" onClick={this.handleSubmit} />
+                        {/* This button creates the group and populates a new button/icon on the group management page */}
+                        <SquareButton type="submit" buttonTitle="Create My Group" onClick={this.handleSubmit} />
                     </div>
-                </div>
-
-                <form onSubmit={this.handleSubmit}>
-                    <button type="submit">Log Out</button>
-                </form>
+                </div>               
                 <Footer />
             </div>
         );
