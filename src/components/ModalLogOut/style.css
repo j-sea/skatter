@@ -1,18 +1,23 @@
-.external-modal-button {
+.external-delete-button {
     background-color: #481848;
     border: solid #1890F0;
-    color: #1890F0;
+    color: #ff0000;
     border-radius: 30rem;
-    margin-top: 1.5%;
-    margin-bottom: 1.5%;
+    margin: 10%;
 }
 
 .modal-background {
     background-color: #F000FF33;
 }
 
-.internal-modal-button {
+.confirm-delete-button {
     color: #1890F0;
+    border: solid #1890F0;
+    background-color: #481848;
+}
+
+.cancel-delete-button {
+    color: red;
     border: solid #1890F0;
     background-color: #481848;
 }
