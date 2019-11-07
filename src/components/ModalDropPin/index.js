@@ -29,9 +29,9 @@ const ModalDropPin = (props) => {
 
     return (
         <div>
-            <Button className="pin-external-button" onClick={toggle}>{buttonLabel}ADD</Button>
+            <Button className="pin-external-button" onClick={toggle}>{buttonLabel}+</Button>
             <Modal isOpen={modal} toggle={toggle} className={className}>
-                <ModalHeader className="modal-background-pin" toggle={toggle}>Pin New Interest</ModalHeader>
+                <ModalHeader className="modal-background-pin" toggle={toggle}>Share a New Point of Interest!</ModalHeader>
                 <ModalBody className="modal-background-pin">
                     <Form onSubmit={handleSubmit}>
                         <div className="form-group">
