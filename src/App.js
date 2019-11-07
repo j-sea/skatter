@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import APIURL from './utils/APIURL';
 import Axios from 'axios';
 import CreateGroupPage from './components/CreateGroupPage';
@@ -16,6 +16,7 @@ import ModalLogin from './components/ModalLogin';
 import ModalSignUp from './components/ModalSignUp';
 import Quickstart from './components/QuickStartBtn'
 import React from 'react';
+
 
 
 class App extends React.Component {
@@ -132,35 +133,37 @@ class App extends React.Component {
 		return (
 			<div className="App">
 				<Router>
-					<Route exact path="/">
-						{
-							(this.state.loggedInUser)
-								? <div>
-									<LandingPage handleLogOut={this.handleLogOut} />
-								</div>
-								: <>
-									<Logo />
-									<Quickstart handleQuickstart={this.handleQuickstart} />
-									<ModalSignUp handleSignUp={this.handleSignUp} />
-									<ModalLogin handleLogIn={this.handleLogIn} />
-								</>
-						}
-					</Route>
-					<Route exact path="/map">
-						<GroupMap />
-						{/*
+					<Switch>
+						<Route exact path="/">
+							{
+								(this.state.loggedInUser)
+									? <div>
+										<GroupMgmtPage />
+										{/* <LandingPage handleLogOut={this.handleLogOut} /> */}
+									</div>
+									: <>
+										<Logo />
+										<Quickstart handleQuickstart={this.handleQuickstart} />
+										<ModalSignUp handleSignUp={this.handleSignUp} />
+										<ModalLogin handleLogIn={this.handleLogIn} />
+									</>
+							}
+						</Route>
+						<Route exact path="/map">
+							<GroupMap />
+							{/*
 							(this.state.loggedInUser)
 							? <GroupMap />
 							: <div>Not Logged In</div>
 						*/}
-					</Route>
-					<Route exact path="/group-management">
-						<GroupMgmtPage />
-					</Route>
-					<Route exact path="/create-group">
-						<CreateGroupPage />
-					</Route>
-
+						</Route>
+						<Route exact path="/group-management">
+							<GroupMgmtPage />
+						</Route>
+						<Route exact path="/create-group">
+							<CreateGroupPage />
+						</Route>
+					</Switch>
 				</Router>
 				<Footer />
 			</div>
