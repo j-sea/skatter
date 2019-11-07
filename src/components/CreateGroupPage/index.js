@@ -3,11 +3,9 @@ import './style.css';
 import Header from '../Header'
 import Footer from '../Footer'
 import SquareButton from '../SquareButton';
-import RoundedButton from '../RoundedButton';
-// import ModalDelete from '../ModalDelete';
-import ModalAddPerson from '../ModalAddPerson'
 import Banner from '../Banner'
 import ModalAdd from '../ModalAddPerson';
+import ModalDropPin from '../ModalDropPin';
 
 class CreateGroupPage extends React.Component {
     // handleSubmit = submitEvent => {
@@ -15,17 +13,25 @@ class CreateGroupPage extends React.Component {
     // 	this.props.handleLogOut();
     // };
 
+    // const handleSubmit = submitEvent => {
+    //     submitEvent.preventDefault();
+    //     // This is for submitting the form
+    // };
+
+    // onSubmit={handleSubmit}
+
     render() {
         return (
             <div>
                 <Header />
                 <br />
-                <Banner bannerTitle="" canEdit={true}/>
+
                 <br />
 
-
-                {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
-                <ModalAdd/>
+                <div className="add-person-container">
+                    {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
+                    <ModalAdd />
+                </div>
 
                 <br />
 
@@ -33,9 +39,15 @@ class CreateGroupPage extends React.Component {
                     <p className="description-title">Group Description :</p>
                     <form>
                         <div className="form-group">
+                            <label htmlFor="formGroupExampleInput2"></label>
+                            <input type="text" className="form-test1" id="" placeholder="Group name" data-length="20" />
 
-                            <textarea className="form-test" id="" rows="5"
-                                placeholder="Type your description here"></textarea>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1"></label>
+                                <textarea class="form-test2" id="" rows="3" placeholder="Description"></textarea>
+                            </div>
+
+                            <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
                         </div>
                     </form>
                 </div>
@@ -44,7 +56,7 @@ class CreateGroupPage extends React.Component {
 
                 {/* This button when clicked should prompt drop pin modal. When pin added, new icon on group page should populate. */}
                 <div className="pin-container">
-                    <SquareButton />
+                    <ModalDropPin />
 
                 </div>
 
@@ -58,7 +70,7 @@ class CreateGroupPage extends React.Component {
 
                     <div className="bottom-btn-container2">
                         {/* This button should create the group and populate a new button/icon on the group management page */}
-                        <SquareButton buttonTitle="DONE" />
+                        <SquareButton type="submit" buttonTitle="DONE" />
                     </div>
                 </div>
 
