@@ -23,10 +23,35 @@ class App extends React.Component {
 		loggedInUser: false,
 	};
 
-	// receive back response.data
+	//method that takes in params
+	handleSignUp = (email, phone, password) => {
+		console.log('Attempting to sign up...');
+
+		const signUpData = {
+			email,
+			phone,
+			password
+		}
+		//hits 'register' route on backend
+		const signUpUrl = APIURL('/auth/register');
+		//posts new user info and sends any client side cookies with request
+		Axios.post(signUpUrl, signUpData, { withCredentials: true })
+			.then(response => {
+				console.log(response);
+				//sets initial state to any data passed back from backend
+				this.setState({
+					loggedInUser: response.data.user
+				});
+			}).catch(error => {
+				this.setState({
+					loggedInUser: false,
+				});
+			});
+	};
+
 
 	handleLogIn = (email, phone, password) => {
-		console.log('logging in');
+		console.log('Attempting to log in...');
 
 		const loginData = {
 			email,
@@ -94,12 +119,11 @@ class App extends React.Component {
 						{
 							(this.state.loggedInUser)
 								? <div>
-									<Link to="/map">Group Map</Link>
 									<LandingPage handleLogOut={this.handleLogOut} />
 								</div>
 								: <>
 									<Logo />
-									<ModalAdd />
+									<ModalSignUp handleSignUp={this.handleSignUp} />
 									<ModalLogin handleLogIn={this.handleLogIn} />
 								</>
 						}

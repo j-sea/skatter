@@ -17,7 +17,7 @@ function ModalSignUp(props) {
 
     const handleSubmit = submitEvent => {
         submitEvent.preventDefault();
-        props.handleLogIn(email, phone, password);
+        props.handleSignUp(email, phone, password);
     };
 
     return (
