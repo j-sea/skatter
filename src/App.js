@@ -1,20 +1,21 @@
-import React from 'react';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import './App.css';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import APIURL from './utils/APIURL';
 import Axios from 'axios';
-import LandingPage from './components/LandingPage';
-import LoginForm from './components/LoginForm';
+import CreateGroupPage from './components/CreateGroupPage';
 import Footer from './components/Footer';
 import GroupMap from './components/GroupMap';
-import './App.css';
-import ModalLogin from './components/ModalLogin';
-import Logo from './components/Logo'
-import Layout from './components/Layout'
-import ModalDelete from './components/ModalDelete'
 import GroupMgmtPage from './components/GroupMgmtPage';
-import CreateGroupPage from './components/CreateGroupPage';
+import LandingPage from './components/LandingPage';
+import Layout from './components/Layout'
+import LoginForm from './components/LoginForm';
+import Logo from './components/Logo'
 import ModalAdd from './components/ModalAddPerson';
-
-import APIURL from './utils/APIURL';
+import ModalDelete from './components/ModalDelete'
+import ModalLogin from './components/ModalLogin';
+import ModalSignUp from './components/ModalSignUp';
+import Quickstart from './components/QuickStartBtn'
+import React from 'react';
 
 
 class App extends React.Component {
@@ -23,8 +24,51 @@ class App extends React.Component {
 		loggedInUser: false,
 	};
 
+	handleQuickstart = () => {
+		console.log('Starting Quick Start session');
+
+		const quickStartUrl = APIURL('/auth/register');
+		Axios.post({ withCredentials: true })
+			.then(response => {
+				console.log(response);
+				this.setState({
+					loggedInUser: response.data.user
+				});
+			}).catch(error => {
+				this.setState({
+					loggedInUser: false,
+				});
+			});
+	};
+
+	handleSignUp = (email, phone, password) => {
+		console.log('Attempting to sign up...');
+
+		const signUpData = {
+			email,
+			phone,
+			password
+		}
+		//hits 'register' route on backend
+		const signUpUrl = APIURL('/auth/register');
+		//posts new user info and sends any client side cookies with request
+		Axios.post(signUpUrl, signUpData, { withCredentials: true })
+			.then(response => {
+				console.log(response);
+				//sets initial state to any data passed back from backend
+				this.setState({
+					loggedInUser: response.data.user
+				});
+			}).catch(error => {
+				this.setState({
+					loggedInUser: false,
+				});
+			});
+	};
+
+
 	handleLogIn = (email, phone, password) => {
-		console.log('logging in');
+		console.log('Attempting to log in...');
 
 		const loginData = {
 			email,
@@ -33,72 +77,72 @@ class App extends React.Component {
 		};
 
 		const loginUrl = APIURL('/auth/login');
-		Axios.post(loginUrl, loginData, {withCredentials: true})
-		.then(response => {
-			console.log(response);
+		Axios.post(loginUrl, loginData, { withCredentials: true })
+			.then(response => {
+				console.log(response);
 
-			this.setState({
-				loggedInUser: response.data.user,
+				this.setState({
+					loggedInUser: response.data.user,
+				});
+			})
+			.catch(error => {
+				this.setState({
+					loggedInUser: false,
+				});
 			});
-		})
-		.catch(error => {
-			this.setState({
-				loggedInUser: false,
-			});
-		});
 	};
 
 	handleLogOut = () => {
 
 		const logoutUrl = APIURL('/auth/logout');
-		Axios.post(logoutUrl, {}, {withCredentials: true})
-		.then(response => {
-			console.log(response);
+		Axios.post(logoutUrl, {}, { withCredentials: true })
+			.then(response => {
+				console.log(response);
 
-			this.setState({
-				loggedInUser: false,
+				this.setState({
+					loggedInUser: false,
+				});
+			})
+			.catch(error => {
+				console.log(error);
 			});
-		})
-		.catch(error => {
-			console.log(error);
-		});
 	};
 
 	recoverSessionLogin = () => {
 
 		const recoverSessionUrl = APIURL('/auth/recover-session');
-		Axios.get(recoverSessionUrl, {withCredentials: true})
-		.then(response => {
-			this.setState({
-				loggedInUser: response.data,
+		Axios.get(recoverSessionUrl, { withCredentials: true })
+			.then(response => {
+				this.setState({
+					loggedInUser: response.data,
+				})
 			})
-		})
-		.catch(error => {
-			this.setState({
-				loggedInUser: false,
-			})
-		});
+			.catch(error => {
+				this.setState({
+					loggedInUser: false,
+				})
+			});
 	};
 
-	componentDidMount () {
+	componentDidMount() {
 		this.recoverSessionLogin();
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="App">
 				<Router>
 					<Route exact path="/">
 						{
 							(this.state.loggedInUser)
-							? <div>
-									<Link to="/map">Group Map</Link>
+								? <div>
 									<LandingPage handleLogOut={this.handleLogOut} />
 								</div>
-							: <>
-									<Logo/>
-									<ModalAdd/>
-									<ModalLogin handleLogIn={this.handleLogIn}/>
+								: <>
+									<Logo />
+									<Quickstart handleQuickstart={this.handleQuickstart} />
+									<ModalSignUp handleSignUp={this.handleSignUp} />
+									<ModalLogin handleLogIn={this.handleLogIn} />
 								</>
 						}
 					</Route>
@@ -110,20 +154,23 @@ class App extends React.Component {
 							: <div>Not Logged In</div>
 						*/}
 					</Route>
-<<<<<<< HEAD
+
 					<Route exact path="/group">
-						<GroupMgmtPage handleLogOut={this.handleLogOut}/>
-=======
-					<Route exact path="/group-management">
-						<GroupMgmtPage/>
->>>>>>> 55b21ee373a45826d9708289584b0bbcd46c0fe0
-					</Route>
-					<Route exact path="/create-group">
-						<CreateGroupPage/>
+						<GroupMgmtPage handleLogOut={this.handleLogOut} />
+
+						<Route exact path="/group-management">
+
+							<GroupMgmtPage />
+
+							<GroupMgmtPage />
+						</Route>
+						<Route exact path="/create-group">
+							<CreateGroupPage />
+						</Route>
 					</Route>
 
 				</Router>
-				<Footer/>
+				<Footer />
 			</div>
 		);
 	}
