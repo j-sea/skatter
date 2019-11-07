@@ -22,7 +22,7 @@ class App extends React.Component {
 
 	state = {
 		loggedInUser: false,
-	};
+	}; 
 
 	handleQuickstart = () => {
 		console.log('Starting Quick Start session');
