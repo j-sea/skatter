@@ -3,11 +3,9 @@ import './style.css';
 import Header from '../Header'
 import Footer from '../Footer'
 import SquareButton from '../SquareButton';
-import RoundedButton from '../RoundedButton';
-// import ModalDelete from '../ModalDelete';
-import ModalAddPerson from '../ModalAddPerson'
 import Banner from '../Banner'
 import ModalAdd from '../ModalAddPerson';
+import ModalDropPin from '../ModalDropPin';
 
 class CreateGroupPage extends React.Component {
     // handleSubmit = submitEvent => {
@@ -44,7 +42,7 @@ class CreateGroupPage extends React.Component {
 
                 {/* This button when clicked should prompt drop pin modal. When pin added, new icon on group page should populate. */}
                 <div className="pin-container">
-                    <SquareButton />
+                    <ModalDropPin/>
 
                 </div>
 

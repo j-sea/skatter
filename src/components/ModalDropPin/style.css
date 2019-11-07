@@ -1,0 +1,11 @@
+.pin-external-button {
+    color: #1890F0;
+    border: solid #1890F0;
+    background-color: #481848;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.modal-background-pin {
+    background-color: #F000FF33;
+}
