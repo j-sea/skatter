@@ -1,20 +1,20 @@
-import React from 'react';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import './App.css';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import APIURL from './utils/APIURL';
 import Axios from 'axios';
-import LandingPage from './components/LandingPage';
-import LoginForm from './components/LoginForm';
+import CreateGroupPage from './components/CreateGroupPage';
 import Footer from './components/Footer';
 import GroupMap from './components/GroupMap';
-import './App.css';
-import ModalLogin from './components/ModalLogin';
-import Logo from './components/Logo'
-import Layout from './components/Layout'
-import ModalDelete from './components/ModalDelete'
 import GroupMgmtPage from './components/GroupMgmtPage';
-import CreateGroupPage from './components/CreateGroupPage';
+import LandingPage from './components/LandingPage';
+import Layout from './components/Layout'
+import LoginForm from './components/LoginForm';
+import Logo from './components/Logo'
 import ModalAdd from './components/ModalAddPerson';
-
-import APIURL from './utils/APIURL';
+import ModalDelete from './components/ModalDelete'
+import ModalLogin from './components/ModalLogin';
+import ModalSignUp from './components/ModalSignUp';
+import React from 'react';
 
 
 class App extends React.Component {
@@ -22,6 +22,8 @@ class App extends React.Component {
 	state = {
 		loggedInUser: false,
 	};
+
+	// receive back response.data
 
 	handleLogIn = (email, phone, password) => {
 		console.log('logging in');
@@ -33,72 +35,72 @@ class App extends React.Component {
 		};
 
 		const loginUrl = APIURL('/auth/login');
-		Axios.post(loginUrl, loginData, {withCredentials: true})
-		.then(response => {
-			console.log(response);
+		Axios.post(loginUrl, loginData, { withCredentials: true })
+			.then(response => {
+				console.log(response);
 
-			this.setState({
-				loggedInUser: response.data.user,
+				this.setState({
+					loggedInUser: response.data.user,
+				});
+			})
+			.catch(error => {
+				this.setState({
+					loggedInUser: false,
+				});
 			});
-		})
-		.catch(error => {
-			this.setState({
-				loggedInUser: false,
-			});
-		});
 	};
 
 	handleLogOut = () => {
 
 		const logoutUrl = APIURL('/auth/logout');
-		Axios.post(logoutUrl, {}, {withCredentials: true})
-		.then(response => {
-			console.log(response);
+		Axios.post(logoutUrl, {}, { withCredentials: true })
+			.then(response => {
+				console.log(response);
 
-			this.setState({
-				loggedInUser: false,
+				this.setState({
+					loggedInUser: false,
+				});
+			})
+			.catch(error => {
+				console.log(error);
 			});
-		})
-		.catch(error => {
-			console.log(error);
-		});
 	};
 
 	recoverSessionLogin = () => {
 
 		const recoverSessionUrl = APIURL('/auth/recover-session');
-		Axios.get(recoverSessionUrl, {withCredentials: true})
-		.then(response => {
-			this.setState({
-				loggedInUser: response.data,
+		Axios.get(recoverSessionUrl, { withCredentials: true })
+			.then(response => {
+				this.setState({
+					loggedInUser: response.data,
+				})
 			})
-		})
-		.catch(error => {
-			this.setState({
-				loggedInUser: false,
-			})
-		});
+			.catch(error => {
+				this.setState({
+					loggedInUser: false,
+				})
+			});
 	};
 
-	componentDidMount () {
+	componentDidMount() {
 		this.recoverSessionLogin();
 	}
 
-	render () {
+	render() {
 		return (
 			<div className="App">
 				<Router>
 					<Route exact path="/">
 						{
 							(this.state.loggedInUser)
-							? <div>
+								? <div>
 									<Link to="/map">Group Map</Link>
 									<LandingPage handleLogOut={this.handleLogOut} />
 								</div>
-							: <>
-									<Logo/>
-									<ModalAdd/>
-									<ModalLogin handleLogIn={this.handleLogIn}/>
+								: <>
+									<Logo />
+									<ModalAdd />
+									<ModalLogin handleLogIn={this.handleLogIn} />
 								</>
 						}
 					</Route>
@@ -111,14 +113,14 @@ class App extends React.Component {
 						*/}
 					</Route>
 					<Route exact path="/group-management">
-						<GroupMgmtPage/>
+						<GroupMgmtPage />
 					</Route>
 					<Route exact path="/create-group">
-						<CreateGroupPage/>
+						<CreateGroupPage />
 					</Route>
 
 				</Router>
-				<Footer/>
+				<Footer />
 			</div>
 		);
 	}
