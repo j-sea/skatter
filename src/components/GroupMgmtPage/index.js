@@ -23,7 +23,11 @@ class GroupMgmtPage extends React.Component {
 
     //on page load, axios call to DB, then convert to json, then update state
     componentDidMount() {
-        Axios.get('http://localhost:8080/api/user/2/group')
+        //made const variable that allows to switch from localhost to heroku
+        const viewExistingGroupsUrl = APIURL(`/api/user/group`);
+        Axios.get(
+            //withCredentials specifies to axios to send cookies along with request since request is not coming from browser
+            viewExistingGroupsUrl, { withCredentials: true })
             .then(res => {
                 return res.data
             })
