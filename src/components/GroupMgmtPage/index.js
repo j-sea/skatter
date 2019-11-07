@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.css';
+import {Link} from "react-router-dom";
 import Header from '../Header'
 import Footer from '../Footer'
 import SquareButton from '../SquareButton';
@@ -53,7 +54,10 @@ class GroupMgmtPage extends React.Component {
             <div>
                 <Header />
                 <br />
+                <Link to='/create-group'>
+
                 <SquareButton buttonTitle="Create Group" />
+                </Link>
                 <br /> <br />
                 <Banner bannerTitle="Existing Groups" />
                 <div className="content-box-style">
