@@ -22,20 +22,24 @@ function ModalSignUp(props) {
 
     return (
         <div>
+            {/* Landing page 'Create Acct' button */}
             <Button className="external-modal-button" onClick={toggle}>{buttonLabel}Create an account</Button>
+            {/* When 'Create Acct' btn clicked, toggles modal */}
             <Modal isOpen={modal} toggle={toggle} className={className}>
                 <ModalHeader className="modal-background" toggle={toggle}>Create an account</ModalHeader>
                 <ModalBody id="SignUpForm" className="modal-background">
                     <Form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <Label htmlFor="formGroupExampleInput2"></Label>
-                            <Input type="email" className="form-control form-border" id="formGroupExampleInput2" placeholder="Email (ex: username@example.com)" onChange={e => setEmail(e.target.value)} />
+                            <Input name="email" type="email" className="form-control form-border" id="formGroupExampleInput2" placeholder="Email (ex: username@example.com)" onChange={e => setEmail(e.target.value)} />
+                            <br />
                             Or
-              <Label htmlFor="formGroupExampleInput2"></Label>
-                            <Input type="phone" className="form-control form-border" id="formGroupExampleInput2" placeholder="Phone # [sms] (ex: ### ###-####)" onChange={e => setPhone(e.target.value)} />
+                            <br />
+                            <Label htmlFor="formGroupExampleInput2"></Label>
+                            <Input name="phone" type="phone" className="form-control form-border" id="formGroupExampleInput2" placeholder="Phone # [sms] (ex: ###-###-####)" onChange={e => setPhone(e.target.value)} />
 
                             <Label htmlFor="formGroupExampleInput2"></Label>
-                            <Input type="password" className="form-control form-border" id="formGroupExampleInput2" placeholder="Password" onChange={e => setPassword(e.target.value)} />
+                            <Input name="password" type="password" className="form-control form-border" id="formGroupExampleInput2" placeholder="Password" onChange={e => setPassword(e.target.value)} />
 
                             <Input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
                         </div>
