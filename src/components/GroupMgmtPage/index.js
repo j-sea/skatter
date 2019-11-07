@@ -6,6 +6,7 @@ import SquareButton from '../SquareButton';
 import RoundedButton from '../RoundedButton';
 import ModalDelete from '../ModalDelete';
 import Banner from '../Banner'
+import Axios from 'axios';
 
 class GroupMgmtPage extends React.Component {
     // handleSubmit = submitEvent => {
@@ -13,16 +14,40 @@ class GroupMgmtPage extends React.Component {
     // 	this.props.handleLogOut();
     // };
 
+    //set initial state of page 
+    state = {
+        existingGroups: []
+    }
+
+    //on page load, axios call to DB, then convert to json, then update state
+    componentDidMount() {
+        Axios.get('http://localhost:8080/api/user/2/group')
+            .then(res => {
+                return res.data
+            })
+            .then(json => this.setState({ existingGroups: json }));
+    }
+
     render() {
         return (
             <div>
                 <Header />
                 <br />
-                <SquareButton buttonTitle="Create Group"/>
+                <SquareButton buttonTitle="Create Group" />
                 <br /> <br />
-                <Banner bannerTitle="Existing Groups"/>
+                <Banner bannerTitle="Existing Groups" />
                 <div className="content-box-style">
-                    <div className="level1-btns">
+                    {this.state.existingGroups.map(function (fartponies) {
+                        return <div className="level1-btns" key=
+                            //"key" needed to identify order of objects. Also, annoying react warning that Joe talked about
+                            {fartponies.id}>
+                            <RoundedButton buttonTitle=
+                                //fartponies = group
+                                {fartponies.group_name} />
+                            <ModalDelete />
+                        </div>
+                    })}
+                    {/* <div className="level1-btns">
                         <RoundedButton buttonTitle="Bite of Seattle" />
                         <ModalDelete />
                     </div>
@@ -37,7 +62,7 @@ class GroupMgmtPage extends React.Component {
                     <div className="level1-btns">
                         <RoundedButton buttonTitle="Fair Day!" />
                         <ModalDelete />
-                    </div>
+                    </div> */}
                 </div>
                 {/* <form onSubmit={this.handleSubmit}>
 					<button type="submit">Log Out</button>
