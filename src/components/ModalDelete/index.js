@@ -18,7 +18,7 @@ const ModalDelete = (props) => {
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader className="modal-background" toggle={toggle}>Confirm Delete</ModalHeader>
         <ModalBody className="modal-background">
-            Are you sure you want to delete this?
+          Are you sure you want to delete this?
         </ModalBody>
         <ModalFooter className="modal-background">
           <Button className="confirm-delete-button" onClick={toggle}>Yes</Button>{' '}

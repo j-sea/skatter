@@ -7,6 +7,8 @@ import RoundedButton from '../RoundedButton';
 import ModalDelete from '../ModalDelete';
 import Banner from '../Banner'
 import Axios from 'axios';
+import APIURL from '../../utils/APIURL';
+import { Button } from 'reactstrap'
 
 class GroupMgmtPage extends React.Component {
     // handleSubmit = submitEvent => {
@@ -28,6 +30,20 @@ class GroupMgmtPage extends React.Component {
             .then(json => this.setState({ existingGroups: json }));
     }
 
+
+    handleDeleteGroup = (group_uuid) => {
+        const deleteGroupUrl = APIURL(`/api/group/${group_uuid}`);
+        Axios.delete(deleteGroupUrl)
+            .then(response => {
+                console.log(response);
+                this.setState({
+                    existingGroups: this.state.existingGroups.filter((fartponies) => {
+                        return fartponies.group_uuid !== group_uuid
+                    })
+                })
+            })
+    }
+
     render() {
         return (
             <div>
@@ -37,14 +53,19 @@ class GroupMgmtPage extends React.Component {
                 <br /> <br />
                 <Banner bannerTitle="Existing Groups" />
                 <div className="content-box-style">
-                    {this.state.existingGroups.map(function (fartponies) {
+                    {this.state.existingGroups.map(fartponies => {
                         return <div className="level1-btns" key=
                             //"key" needed to identify order of objects. Also, annoying react warning that Joe talked about
                             {fartponies.id}>
                             <RoundedButton buttonTitle=
                                 //fartponies = group
                                 {fartponies.group_name} />
-                            <ModalDelete />
+                            <div>
+                                <Button className="external-delete-button" onClick={() => {
+                                    this.handleDeleteGroup(fartponies.group_uuid)
+                                }}>X</Button>
+                            </div>
+                            {/* <ModalDelete /> */}
                         </div>
                     })}
                     {/* <div className="level1-btns">
