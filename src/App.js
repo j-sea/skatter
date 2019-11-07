@@ -14,6 +14,7 @@ import ModalAdd from './components/ModalAddPerson';
 import ModalDelete from './components/ModalDelete'
 import ModalLogin from './components/ModalLogin';
 import ModalSignUp from './components/ModalSignUp';
+import Quickstart from './components/QuickStartBtn'
 import React from 'react';
 
 
@@ -23,7 +24,23 @@ class App extends React.Component {
 		loggedInUser: false,
 	};
 
-	//method that takes in params
+	handleQuickstart = () => {
+		console.log('Starting Quick Start session');
+
+		const quickStartUrl = APIURL('/auth/register');
+		Axios.post({ withCredentials: true })
+			.then(response => {
+				console.log(response);
+				this.setState({
+					loggedInUser: response.data.user
+				});
+			}).catch(error => {
+				this.setState({
+					loggedInUser: false,
+				});
+			});
+	};
+
 	handleSignUp = (email, phone, password) => {
 		console.log('Attempting to sign up...');
 
@@ -123,6 +140,7 @@ class App extends React.Component {
 								</div>
 								: <>
 									<Logo />
+									<Quickstart handleQuickstart={this.handleQuickstart} />
 									<ModalSignUp handleSignUp={this.handleSignUp} />
 									<ModalLogin handleLogIn={this.handleLogIn} />
 								</>
