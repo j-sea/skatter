@@ -1,9 +1,9 @@
 import React from 'react';
 import './style.css';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from '../Header'
 import Footer from '../Footer'
-import SquareButton from '../SquareButton';
+import SquareButton from '../buttonSquare';
 import Banner from '../Banner'
 import ModalAdd from '../ModalAddPerson';
 import ModalDropPin from '../ModalDropPin';
@@ -85,16 +85,16 @@ class CreateGroupPage extends React.Component {
                 <div className="bottom-container-test">
                     <div className="bottom-btn-container1">
                         {/* This button should take you back to the group management page */}
-                <Link to='group-management'>
-                    <SquareButton buttonTitle="Cancel" />
-                </Link>
+                        <Link to='group-management'>
+                            <SquareButton buttonTitle="Cancel" />
+                        </Link>
                     </div>
 
                     <div className="bottom-btn-container2">
                         {/* This button creates the group and populates a new button/icon on the group management page */}
                         <SquareButton type="submit" buttonTitle="Create My Group" onClick={this.handleSubmit} />
                     </div>
-                </div>               
+                </div>
                 <Footer />
             </div>
         );
