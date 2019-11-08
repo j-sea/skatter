@@ -1,11 +1,11 @@
 import React from 'react';
 import './style.css';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from '../Header'
 import Footer from '../Footer'
-import SquareButton from '../SquareButton';
-import RoundedButton from '../RoundedButton';
-import ModalDelete from '../ModalDelete';
+import SquareButton from '../buttonSquare';
+import RoundedButton from '../buttonRounded';
+// import ModalDelete from '../ModalDelete';
 import Banner from '../Banner'
 import Axios from 'axios';
 import APIURL from '../../utils/APIURL';
@@ -56,7 +56,7 @@ class GroupMgmtPage extends React.Component {
                 <br />
                 <Link to='/create-group'>
 
-                <SquareButton buttonTitle="Create Group" />
+                    <SquareButton buttonTitle="Create Group" />
                 </Link>
                 <br /> <br />
                 <Banner bannerTitle="Existing Groups" />
