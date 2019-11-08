@@ -1,11 +1,11 @@
 import React from 'react';
 import './style.css';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from '../Header'
 import Footer from '../Footer'
-import SquareButton from '../SquareButton';
-import RoundedButton from '../RoundedButton';
-import ModalDelete from '../ModalDelete';
+import SquareButton from '../buttonSquare';
+import RoundedButton from '../buttonRounded';
+// import ModalDelete from '../ModalDelete';
 import Banner from '../Banner'
 import Axios from 'axios';
 import APIURL from '../../utils/APIURL';
@@ -38,7 +38,7 @@ class GroupMgmtPage extends React.Component {
 
     handleDeleteGroup = (group_uuid) => {
         const deleteGroupUrl = APIURL(`/api/group/${group_uuid}`);
-        Axios.delete(deleteGroupUrl)
+        Axios.delete(deleteGroupUrl, { withCredentials: true })
             .then(response => {
                 console.log(response);
                 this.setState({
@@ -56,14 +56,14 @@ class GroupMgmtPage extends React.Component {
                 <br />
                 <Link to='/create-group'>
 
-                <SquareButton buttonTitle="Create Group" />
+                    <SquareButton buttonTitle="Create Group" />
                 </Link>
                 <br /> <br />
                 <Banner bannerTitle="Existing Groups" />
                 <div className="content-box-style">
                     {this.state.existingGroups.map(fartponies => {
                         return <div className="level1-btns" key=
-                            //"key" needed to identify order of objects. Also, annoying react warning that Joe talked about
+                            //"key" needed to identify order of objects. Also, to prevent the annoying react warning that Joe talked about
                             {fartponies.id}>
                             <RoundedButton buttonTitle=
                                 //fartponies = group
@@ -73,29 +73,9 @@ class GroupMgmtPage extends React.Component {
                                     this.handleDeleteGroup(fartponies.group_uuid)
                                 }}>X</Button>
                             </div>
-                            {/* <ModalDelete /> */}
                         </div>
                     })}
-                    {/* <div className="level1-btns">
-                        <RoundedButton buttonTitle="Bite of Seattle" />
-                        <ModalDelete />
-                    </div>
-                    <div className="level1-btns">
-                        <RoundedButton buttonTitle="Taste of Tacoma" />
-                        <ModalDelete />
-                    </div>
-                    <div className="level1-btns">
-                        <RoundedButton buttonTitle="Saturday Movie" />
-                        <ModalDelete />
-                    </div>
-                    <div className="level1-btns">
-                        <RoundedButton buttonTitle="Fair Day!" />
-                        <ModalDelete />
-                    </div> */}
                 </div>
-                {/* <form onSubmit={this.handleSubmit}>
-					<button type="submit">Log Out</button>
-				</form> */}
                 <Footer />
             </div>
         );

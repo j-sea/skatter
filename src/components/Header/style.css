@@ -1,6 +1,12 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;  
+}
+
 .custom-hd {
-    /* position:fixed; */
-    /* bottom:0; */
+    /* position: absolute;
+    top:0;  */
     width:100%;
     background-color: #F000FF;
     border: solid #F0F030;

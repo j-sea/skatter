@@ -12,7 +12,7 @@ const ModalLogOut = (props) => {
     // const name = function () { }
 
     const {
-        buttonLabel,
+        // buttonLabel,
         className
     } = props;
 

@@ -6,16 +6,17 @@ import CreateGroupPage from './components/CreateGroupPage';
 import Footer from './components/Footer';
 import GroupMap from './components/GroupMap';
 import GroupMgmtPage from './components/GroupMgmtPage';
-import LandingPage from './components/LandingPage';
-import Layout from './components/Layout'
-import LoginForm from './components/LoginForm';
+// import LandingPage from './components/LandingPage';
+// import Layout from './components/Layout'
+// import LoginForm from './components/LoginForm';
 import Logo from './components/Logo'
-import ModalAdd from './components/ModalAddPerson';
-import ModalDelete from './components/ModalDelete'
+// import ModalAdd from './components/ModalAddPerson';
+// import ModalDelete from './components/ModalDelete'
 import ModalLogin from './components/ModalLogin';
 import ModalSignUp from './components/ModalSignUp';
-import Quickstart from './components/QuickStartBtn'
+import Quickstart from './components/buttonQuickStart'
 import React from 'react';
+import Tutorial from './components/buttonTutorial'
 
 
 
@@ -23,6 +24,25 @@ class App extends React.Component {
 
 	state = {
 		loggedInUser: false,
+	};
+
+
+
+	handleTutorial = () => {
+		console.log('Starting Tutorial');
+
+		// const tutorialUrl = APIURL('/auth/register');
+		// Axios.post({ withCredentials: true })
+		// 	.then(response => {
+		// 		console.log(response);
+		// 		this.setState({
+		// 			loggedInUser: response.data.user
+		// 		});
+		// 	}).catch(error => {
+		// 		this.setState({
+		// 			loggedInUser: false,
+		// 		});
+		// 	});
 	};
 
 	handleQuickstart = () => {
@@ -145,8 +165,15 @@ class App extends React.Component {
 										<Quickstart handleQuickstart={this.handleQuickstart} />
 										<ModalSignUp handleSignUp={this.handleSignUp} />
 										<ModalLogin handleLogIn={this.handleLogIn} />
+										<Tutorial />
 									</>
 							}
+						</Route>
+						<Route exact path="/group-management">
+							<GroupMgmtPage />
+						</Route>
+						<Route exact path="/create-group">
+							<CreateGroupPage />
 						</Route>
 						<Route exact path="/map">
 							<GroupMap />
@@ -155,12 +182,6 @@ class App extends React.Component {
 							? <GroupMap />
 							: <div>Not Logged In</div>
 						*/}
-						</Route>
-						<Route exact path="/group-management">
-							<GroupMgmtPage />
-						</Route>
-						<Route exact path="/create-group">
-							<CreateGroupPage />
 						</Route>
 					</Switch>
 				</Router>

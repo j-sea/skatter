@@ -1,9 +1,9 @@
 import React from 'react';
 import './style.css';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Header from '../Header'
 import Footer from '../Footer'
-import SquareButton from '../SquareButton';
+import SquareButton from '../buttonSquare';
 import Banner from '../Banner'
 import ModalAdd from '../ModalAddPerson';
 import ModalDropPin from '../ModalDropPin';
@@ -17,14 +17,14 @@ class CreateGroupPage extends React.Component {
     }
 
     handleSubmit = submitEvent => {
-        // in order to post data we first need to create object for data to post
 
+        // in order to post data we first need to create object for data to post
         const groupData = {
             group_name: this.state.groupName,
             description: this.state.description
         }
 
-        Axios.post(APIURL("/api/group"), groupData, { withCredentials: true }).then(data => console.log(data)).catch(error => console.log(error))
+        Axios.post(APIURL("/api/user/group"), groupData, { withCredentials: true }).then(data => console.log(data)).catch(error => console.log(error))
     };
 
     handleInputChange = event => {
@@ -85,20 +85,16 @@ class CreateGroupPage extends React.Component {
                 <div className="bottom-container-test">
                     <div className="bottom-btn-container1">
                         {/* This button should take you back to the group management page */}
-                <Link to='group-management'>
-                    <SquareButton buttonTitle="Back to Groups" />
-                </Link>
+                        <Link to='group-management'>
+                            <SquareButton buttonTitle="Cancel" />
+                        </Link>
                     </div>
 
                     <div className="bottom-btn-container2">
-                        {/* This button should create the group and populate a new button/icon on the group management page */}
-                        <SquareButton type="submit" buttonTitle="DONE" onClick={this.handleSubmit} />
+                        {/* This button creates the group and populates a new button/icon on the group management page */}
+                        <SquareButton type="submit" buttonTitle="Create My Group" onClick={this.handleSubmit} />
                     </div>
                 </div>
-
-                <form onSubmit={this.handleSubmit}>
-                    <button type="submit">Log Out</button>
-                </form>
                 <Footer />
             </div>
         );
