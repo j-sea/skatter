@@ -6,7 +6,6 @@ import Footer from '../Footer'
 import SquareButton from '../buttonSquare';
 import Banner from '../Banner'
 import ModalAdd from '../ModalAddPerson';
-import ModalDropPin from '../ModalDropPin';
 import Axios from 'axios';
 import APIURL from '../../utils/APIURL';
 
@@ -31,11 +30,8 @@ class EditGroupPage extends React.Component {
                 return res.data
             })
             //convert to json and set state
-            .then(json => this.setState({ groupToEdit: json }));
+            .then(json => this.setState({ groupName: json, groupDescription: json, alarms: json, members: json, pointsOfInterest: json }));
     }
-    //TODO: how to set each item individually? Or will it auto pop form with object?
-
-    // TODO: how to display existing group in editable format?
 
     handleEditSubmit = (group_uuid) => {
         const newData = {
@@ -76,15 +72,15 @@ class EditGroupPage extends React.Component {
                 <br />
 
                 <div className="content-box-style2">
-                    <p className="description-title">Group Description :</p>
+                    {/* <p className="description-title">Group Description :</p> */}
                     <form>
                         <div className="form-group">
                             <label htmlFor="formGroupExampleInput2"></label>
-                            <input onChange={this.handleInputChange} name="groupName" type="text" className="form-test2" id="" placeholder="Group name" data-length="20" />
+                            <input onChange={this.handleInputChange} name="groupName" type="text" className="form-test2" id="" value={this.state.groupName} placeholder="Group name" data-length="20" />
 
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1"></label>
-                                <textarea onChange={this.handleInputChange} class="form-test2" id="" rows="3" name="groupDescription" placeholder="Description"></textarea>
+                                <textarea onChange={this.handleInputChange} class="form-test2" id="" value={this.state.groupDescription} rows="3" name="groupDescription" placeholder="Description"></textarea>
                             </div>
 
                             <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
@@ -93,12 +89,6 @@ class EditGroupPage extends React.Component {
                 </div>
 
                 <Banner bannerTitle="Points of Interest" />
-
-                {/* This button when clicked should prompt drop pin modal. When pin added, new icon on group page should populate. */}
-                <div className="pin-container">
-                    <ModalDropPin />
-
-                </div>
 
                 <br />
 

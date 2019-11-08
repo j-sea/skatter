@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import APIURL from './utils/APIURL';
 import Axios from 'axios';
 import CreateGroupPage from './components/CreateGroupPage';
+import EditGroupPage from './components/EditGroupPage';
 import Footer from './components/Footer';
 import GroupMap from './components/GroupMap';
 import GroupMgmtPage from './components/GroupMgmtPage';
@@ -174,6 +175,9 @@ class App extends React.Component {
 						</Route>
 						<Route exact path="/create-group">
 							<CreateGroupPage />
+						</Route>
+						<Route exact path="/edit-group">
+							<EditGroupPage />
 						</Route>
 						<Route exact path="/map">
 							<GroupMap />
