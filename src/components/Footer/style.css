@@ -1,8 +1,14 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
 .custom-ft {
-    position:fixed;
+    position: absolute;
     bottom:0;
     /* left:0; */
-    width:75%;
+    width:100%;
     background-color: #F000FF69;
     border: solid #1890F0;
     border-radius: 0.3rem;
@@ -19,7 +25,10 @@
 }
 
 footer {
+/* position: absolute; */
 display: flex;
 justify-content: center;
+/* bottom: 0;
+width: 100%; */
 }  
 
