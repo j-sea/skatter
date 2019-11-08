@@ -11,7 +11,7 @@ import GroupMgmtPage from './components/GroupMgmtPage';
 // import LoginForm from './components/LoginForm';
 import Logo from './components/Logo'
 // import ModalAdd from './components/ModalAddPerson';
-// import ModalDelete from './components/ModalDelete'
+import ModalDelete from './components/ModalDelete'
 import ModalLogin from './components/ModalLogin';
 import ModalSignUp from './components/ModalSignUp';
 import Quickstart from './components/buttonQuickStart'
@@ -114,6 +114,7 @@ class App extends React.Component {
 	};
 
 	handleLogOut = () => {
+		console.log("blah");
 
 		const logoutUrl = APIURL('/auth/logout');
 		Axios.post(logoutUrl, {}, { withCredentials: true })

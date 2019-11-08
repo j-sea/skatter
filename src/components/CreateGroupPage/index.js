@@ -24,7 +24,14 @@ class CreateGroupPage extends React.Component {
             description: this.state.description
         }
 
-        Axios.post(APIURL("/api/user/group"), groupData, { withCredentials: true }).then(data => console.log(data)).catch(error => console.log(error))
+        Axios.post(APIURL("/api/group"), groupData, { withCredentials: true })
+        .then(data => {
+            console.log(data)
+            window.location.href = "/group-management"
+        })
+        .catch(error => {
+            console.log(error)
+        })
     };
 
     handleInputChange = event => {
@@ -53,9 +60,9 @@ class CreateGroupPage extends React.Component {
                             <label htmlFor="formGroupExampleInput2"></label>
                             <input onChange={this.handleInputChange} name="groupName" type="text" className="form-test2" id="" placeholder="Group name" data-length="20" />
 
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1"></label>
-                                <textarea onChange={this.handleInputChange} class="form-test2" id="" rows="3" name="groupDescription" placeholder="Description"></textarea>
+                            <div className="form-group">
+                                <label htmlFor="exampleFormControlTextarea1"></label>
+                                <textarea onChange={this.handleInputChange} className="form-test2" id="" rows="3" name="groupDescription" placeholder="Description"></textarea>
                             </div>
                             <div className="add-person-container">
                                 {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
