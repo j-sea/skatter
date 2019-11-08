@@ -38,7 +38,7 @@ class GroupMgmtPage extends React.Component {
 
     handleDeleteGroup = (group_uuid) => {
         const deleteGroupUrl = APIURL(`/api/group/${group_uuid}`);
-        Axios.delete(deleteGroupUrl)
+        Axios.delete(deleteGroupUrl, { withCredentials: true })
             .then(response => {
                 console.log(response);
                 this.setState({
