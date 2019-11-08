@@ -12,10 +12,6 @@ import APIURL from '../../utils/APIURL';
 import { Button } from 'reactstrap'
 
 class GroupMgmtPage extends React.Component {
-    // handleSubmit = submitEvent => {
-    // 	submitEvent.preventDefault();
-    // 	this.props.handleLogOut();
-    // };
 
     //set initial state of page 
     state = {
