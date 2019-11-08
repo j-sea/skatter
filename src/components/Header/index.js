@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css';
 import ModalLogOut from '../ModalLogOut'
 
-function Header() {
+function Header(props) {
     return (
 
         <header className="container">
@@ -17,7 +17,7 @@ function Header() {
                 </div>
                 <div className="header-div col-3">
                     {/* <button type="button" className="btn btn-primary btn-sm header-test" > <i className="material-icons">dehaze</i></button> */}
-                    <ModalLogOut />
+                    <ModalLogOut handleLogOut={props.handleLogOut }/>
                 </div>
             </nav>
         </header>

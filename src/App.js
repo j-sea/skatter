@@ -138,8 +138,7 @@ class App extends React.Component {
 							{
 								(this.state.loggedInUser)
 									? <div>
-										<GroupMgmtPage />
-										{/* <LandingPage handleLogOut={this.handleLogOut} /> */}
+										<GroupMgmtPage handleLogOut={this.handleLogOut} />
 									</div>
 									: <>
 										<Logo />
