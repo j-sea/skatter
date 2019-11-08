@@ -63,7 +63,7 @@ class GroupMgmtPage extends React.Component {
                 <div className="content-box-style">
                     {this.state.existingGroups.map(fartponies => {
                         return <div className="level1-btns" key=
-                            //"key" needed to identify order of objects. Also, annoying react warning that Joe talked about
+                            //"key" needed to identify order of objects. Also, to prevent the annoying react warning that Joe talked about
                             {fartponies.id}>
                             <RoundedButton buttonTitle=
                                 //fartponies = group
@@ -73,29 +73,9 @@ class GroupMgmtPage extends React.Component {
                                     this.handleDeleteGroup(fartponies.group_uuid)
                                 }}>X</Button>
                             </div>
-                            {/* <ModalDelete /> */}
                         </div>
                     })}
-                    {/* <div className="level1-btns">
-                        <RoundedButton buttonTitle="Bite of Seattle" />
-                        <ModalDelete />
-                    </div>
-                    <div className="level1-btns">
-                        <RoundedButton buttonTitle="Taste of Tacoma" />
-                        <ModalDelete />
-                    </div>
-                    <div className="level1-btns">
-                        <RoundedButton buttonTitle="Saturday Movie" />
-                        <ModalDelete />
-                    </div>
-                    <div className="level1-btns">
-                        <RoundedButton buttonTitle="Fair Day!" />
-                        <ModalDelete />
-                    </div> */}
                 </div>
-                {/* <form onSubmit={this.handleSubmit}>
-					<button type="submit">Log Out</button>
-				</form> */}
                 <Footer />
             </div>
         );

@@ -17,14 +17,14 @@ class CreateGroupPage extends React.Component {
     }
 
     handleSubmit = submitEvent => {
-        // in order to post data we first need to create object for data to post
 
+        // in order to post data we first need to create object for data to post
         const groupData = {
             group_name: this.state.groupName,
             description: this.state.description
         }
 
-        Axios.post(APIURL("/api/group"), groupData, { withCredentials: true }).then(data => console.log(data)).catch(error => console.log(error))
+        Axios.post(APIURL("/api/user/group"), groupData, { withCredentials: true }).then(data => console.log(data)).catch(error => console.log(error))
     };
 
     handleInputChange = event => {
