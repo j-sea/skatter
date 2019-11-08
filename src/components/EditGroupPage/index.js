@@ -10,21 +10,44 @@ import ModalDropPin from '../ModalDropPin';
 import Axios from 'axios';
 import APIURL from '../../utils/APIURL';
 
-class CreateGroupPage extends React.Component {
+class EditGroupPage extends React.Component {
     state = {
+        //set initial state of page
         groupName: "",
-        groupDescription: ""
+        groupDescription: "",
+        alarms: "",
+        members: "",
+        pointsOfInterest: ""
     }
 
-    handleSubmit = submitEvent => {
+    //on page load...
+    componentDidMount(group_uuid) {
+        //create const variable that allows to switch from localhost to heroku
+        const viewGroupToEditUrl = APIURL(`/api/group/${group_uuid}`);
+        //axios call to DB to get specific group (passes session through cookie)
+        Axios.get(
+            viewGroupToEditUrl, { withCredentials: true })
+            .then(res => {
+                return res.data
+            })
+            //convert to json and set state
+            .then(json => this.setState({ groupToEdit: json }));
+    }
+    //TODO: how to set each item individually? Or will it auto pop form with object?
 
-        // in order to post data we first need to create object for data to post
-        const groupData = {
+    // TODO: how to display existing group in editable format?
+
+    handleEditSubmit = (group_uuid) => {
+        const newData = {
+            //grab new info from form 
             group_name: this.state.groupName,
-            description: this.state.description
+            groupDescription: this.state.description,
+            alarms: this.state.alarms,
+            members: this.state.members,
+            pointsOfInterest: this.state.pointsOfInterest
         }
-
-        Axios.post(APIURL("/api/user/group"), groupData, { withCredentials: true }).then(data => console.log(data)).catch(error => console.log(error))
+        //update info for specific group - passing in uuid, new info, & session
+        Axios.post(APIURL(`/api/user/${group_uuid}`), newData, { withCredentials: true }).then(data => console.log(data)).catch(error => console.log(error))
     };
 
     handleInputChange = event => {
@@ -40,11 +63,17 @@ class CreateGroupPage extends React.Component {
     }
 
 
-
     render() {
         return (
             <div>
                 <Header />
+                <br />
+                <br />
+
+                <div className="add-person-container">
+                </div>
+
+                <br />
 
                 <div className="content-box-style2">
                     <p className="description-title">Group Description :</p>
@@ -57,10 +86,7 @@ class CreateGroupPage extends React.Component {
                                 <label for="exampleFormControlTextarea1"></label>
                                 <textarea onChange={this.handleInputChange} class="form-test2" id="" rows="3" name="groupDescription" placeholder="Description"></textarea>
                             </div>
-                            <div className="add-person-container">
-                                {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
-                                <ModalAdd />
-                            </div>
+
                             <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
                         </div>
                     </form>
@@ -86,7 +112,7 @@ class CreateGroupPage extends React.Component {
 
                     <div className="bottom-btn-container2">
                         {/* This button creates the group and populates a new button/icon on the group management page */}
-                        <SquareButton type="submit" buttonTitle="Create My Group" onClick={this.handleSubmit} />
+                        <SquareButton type="submit" buttonTitle="Create My Group" onClick={this.handleEditSubmit} />
                     </div>
                 </div>
                 <Footer />
@@ -95,4 +121,4 @@ class CreateGroupPage extends React.Component {
     }
 }
 
-export default CreateGroupPage;
+export default EditGroupPage;
