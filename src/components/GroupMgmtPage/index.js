@@ -5,7 +5,7 @@ import Header from '../Header'
 import Footer from '../Footer'
 import SquareButton from '../buttonSquare';
 import RoundedButton from '../buttonRounded';
-import ModalDelete from '../ModalDelete';
+// import ModalDelete from '../ModalDelete';
 import Banner from '../Banner'
 import Axios from 'axios';
 import APIURL from '../../utils/APIURL';

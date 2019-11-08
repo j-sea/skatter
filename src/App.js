@@ -6,12 +6,12 @@ import CreateGroupPage from './components/CreateGroupPage';
 import Footer from './components/Footer';
 import GroupMap from './components/GroupMap';
 import GroupMgmtPage from './components/GroupMgmtPage';
-import LandingPage from './components/LandingPage';
-import Layout from './components/Layout'
-import LoginForm from './components/LoginForm';
+// import LandingPage from './components/LandingPage';
+// import Layout from './components/Layout'
+// import LoginForm from './components/LoginForm';
 import Logo from './components/Logo'
-import ModalAdd from './components/ModalAddPerson';
-import ModalDelete from './components/ModalDelete'
+// import ModalAdd from './components/ModalAddPerson';
+// import ModalDelete from './components/ModalDelete'
 import ModalLogin from './components/ModalLogin';
 import ModalSignUp from './components/ModalSignUp';
 import Quickstart from './components/buttonQuickStart'
@@ -165,6 +165,7 @@ class App extends React.Component {
 										<Quickstart handleQuickstart={this.handleQuickstart} />
 										<ModalSignUp handleSignUp={this.handleSignUp} />
 										<ModalLogin handleLogIn={this.handleLogIn} />
+										<Tutorial />
 									</>
 							}
 						</Route>

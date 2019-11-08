@@ -4,7 +4,7 @@ import './style.css'
 
 const ModalLogOut = (props) => {
     const {
-        buttonLabel,
+        // buttonLabel,
         className
     } = props;
 
