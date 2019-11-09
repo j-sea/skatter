@@ -12,8 +12,8 @@ import APIURL from '../../utils/APIURL';
 class EditGroupPage extends React.Component {
     state = {
         //set initial state of page
-        groupName: "",
-        groupDescription: "",
+        group_name: "",
+        description: "",
         // alarms: "",
         // members: "",
         // pointsOfInterest: ""
@@ -35,7 +35,7 @@ class EditGroupPage extends React.Component {
             })
             //convert to json and set state
             .then(json => this.setState({
-                groupName: json.group_name, groupDescription: json.description,
+                group_name: json.group_name, description: json.description,
                 // alarms: json, members: json, pointsOfInterest: json 
             }));
     }
@@ -44,8 +44,8 @@ class EditGroupPage extends React.Component {
         const group_uuid = this.props.match.params.uuid;
         const newData = {
             //grab new info from form 
-            group_name: this.state.groupName,
-            description: this.state.groupDescription,
+            group_name: this.state.group_name,
+            description: this.state.description,
             // alarms: this.state.alarms,
             // members: this.state.members,
             // pointsOfInterest: this.state.pointsOfInterest
@@ -58,7 +58,6 @@ class EditGroupPage extends React.Component {
             window.location.href = "/group-management"
         }).catch(error => console.log(error))
     };
-
     handleInputChange = event => {
         // console.log(event.target.name)
         // console.log(event.target.value)
@@ -89,12 +88,12 @@ class EditGroupPage extends React.Component {
                     <form>
                         <div className="form-group">
                             <label htmlFor="formGroupExampleInput2"></label>
-                            <input onChange={this.handleInputChange} name="groupName" type="text" className="form-test2" id="" value={this.state.groupName} placeholder="Group name" data-length="20" />
+                            <input onChange={this.handleInputChange} name="group_name" type="text" className="form-test2" id="" value={this.state.group_name} placeholder="Group name" data-length="20" />
                             <br></br>
                             <br></br>
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1"></label>
-                                <textarea onChange={this.handleInputChange} class="form-test2" id="" value={this.state.groupDescription} rows="3" name="groupDescription" placeholder="Description"></textarea>
+                                <textarea onChange={this.handleInputChange} class="form-test2" id="" value={this.state.description} rows="3" name="description" placeholder="Description"></textarea>
                             </div>
 
                             <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
