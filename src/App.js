@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-ro
 import APIURL from './utils/APIURL';
 import Axios from 'axios';
 import CreateGroupPage from './components/CreateGroupPage';
+import EditGroupPage from './components/EditGroupPage';
 import Footer from './components/Footer';
 import GroupMap from './components/GroupMap';
 import GroupMgmtPage from './components/GroupMgmtPage';
@@ -11,13 +12,12 @@ import GroupMgmtPage from './components/GroupMgmtPage';
 // import LoginForm from './components/LoginForm';
 import Logo from './components/Logo'
 // import ModalAdd from './components/ModalAddPerson';
-import ModalDelete from './components/ModalDelete'
+// import ModalDelete from './components/ModalDelete'
 import ModalLogin from './components/ModalLogin';
 import ModalSignUp from './components/ModalSignUp';
 import Quickstart from './components/buttonQuickStart'
 import React from 'react';
 import Tutorial from './components/buttonTutorial'
-import EditGroupPage from './components/EditGroupPage';
 import ViewGroupPage from './components/ViewGroupPage';
 import ProtectedRoute from './utils/ProtectedRoute';
 
