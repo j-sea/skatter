@@ -3,13 +3,13 @@ import { Route, Redirect } from 'react-router-dom';
 
 class ProtectedRoute extends Component {
     render() {
-        const { component: Component, loggedInUser: loggedInUser, ...props } = this.props
+        const { component: Component, loggedInUser, ...props } = this.props
 
         return (
             <Route 
                 {...props} 
                 render = {
-                    props => (
+                    () => (
                         loggedInUser ?
                         <Component {...props} /> :
                         <Redirect to='/' />

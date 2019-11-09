@@ -105,7 +105,7 @@ class ViewGroupPage extends React.Component {
                 <div className="bottom-container-test">
                     <div className="bottom-btn-container1">
                         {/* This button should take you back to the group management page */}
-                        <Link to='group-management'>
+                        <Link to='/group-management'>
                             <SquareButton buttonTitle="Cancel" />
                         </Link>
                     </div>

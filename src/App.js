@@ -102,9 +102,7 @@ class App extends React.Component {
 		const loginUrl = APIURL('/auth/login');
 		Axios.post(loginUrl, loginData, { withCredentials: true })
 			.then(response => {
-				console.log(response);
-
-				this.setState({
+ 				this.setState({
 					loggedInUser: response.data.user,
 				});
 			})
@@ -116,8 +114,6 @@ class App extends React.Component {
 	};
 
 	handleLogOut = () => {
-		console.log("blah");
-
 		const logoutUrl = APIURL('/auth/logout');
 		Axios.post(logoutUrl, {}, { withCredentials: true })
 			.then(response => {
@@ -171,7 +167,7 @@ class App extends React.Component {
 							}
 						</Route>
 
-						<ProtectedRoute exact path="/group-management" component={GroupMgmtPage} handleLogOut={this.handleLogOut} loggedInUser={this.state.loggedInUser} />
+						<ProtectedRoute exact path="/group-management" component={GroupMgmtPage} loggedInUser={this.state.loggedInUser} handleLogOut={this.handleLogOut} />
 						{/* <Route exact path="/group-management">
 							<GroupMgmtPage handleLogOut={this.handleLogOut} />
 						</Route> */}

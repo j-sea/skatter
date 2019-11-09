@@ -92,7 +92,7 @@ class EditGroupPage extends React.Component {
                             <br></br>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlTextarea1"></label>
-                                <textarea onChange={this.handleInputChange} className="form-test2" id="" value={this.state.description} rows="3" name="description" placeholder="Description"></textarea>
+                                <textarea onChange={this.handleInputChange} className="form-test2" id="" rows="3" name="description" placeholder="Description">{this.state.description}</textarea>
                             </div>
 
                             <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
