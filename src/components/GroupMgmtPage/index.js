@@ -61,7 +61,7 @@ class GroupMgmtPage extends React.Component {
                         return <div className="level1-btns" key=
                             //"key" needed to identify order of objects. Also, to prevent the annoying react warning that Joe talked about
                             {fartponies.id}>
-                            <Link to="/edit-group"><RoundedButton buttonTitle=
+                            <Link to={`/edit-group/${fartponies.group_uuid}`}><RoundedButton buttonTitle=
                                 //fartponies = group
                                 {fartponies.group_name} /></Link>
                             <div>

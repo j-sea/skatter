@@ -14,13 +14,17 @@ class EditGroupPage extends React.Component {
         //set initial state of page
         groupName: "",
         groupDescription: "",
-        alarms: "",
-        members: "",
-        pointsOfInterest: ""
+        // alarms: "",
+        // members: "",
+        // pointsOfInterest: ""
+        //TODO:uncomment once Groups schema updated
     }
 
     //on page load...
-    componentDidMount(group_uuid) {
+    componentDidMount() {
+        //pulling specific group uuid from params (possible bc server route reconfig'd to allow optional uuid)
+        const group_uuid = this.props.match.params.uuid;
+
         //create const variable that allows to switch from localhost to heroku
         const viewGroupToEditUrl = APIURL(`/api/group/${group_uuid}`);
         //axios call to DB to get specific group (passes session through cookie)
@@ -30,25 +34,34 @@ class EditGroupPage extends React.Component {
                 return res.data
             })
             //convert to json and set state
-            .then(json => this.setState({ groupName: json, groupDescription: json, alarms: json, members: json, pointsOfInterest: json }));
+            .then(json => this.setState({
+                groupName: json.group_name, groupDescription: json.description,
+                // alarms: json, members: json, pointsOfInterest: json 
+            }));
     }
 
-    handleEditSubmit = (group_uuid) => {
+    handleEditSubmit = () => {
+        const group_uuid = this.props.match.params.uuid;
         const newData = {
             //grab new info from form 
             group_name: this.state.groupName,
-            groupDescription: this.state.description,
-            alarms: this.state.alarms,
-            members: this.state.members,
-            pointsOfInterest: this.state.pointsOfInterest
+            description: this.state.groupDescription,
+            // alarms: this.state.alarms,
+            // members: this.state.members,
+            // pointsOfInterest: this.state.pointsOfInterest
+            //TODO:uncomment once Groups schema updated
+
         }
         //update info for specific group - passing in uuid, new info, & session
-        Axios.post(APIURL(`/api/user/${group_uuid}`), newData, { withCredentials: true }).then(data => console.log(data)).catch(error => console.log(error))
+        Axios.put(APIURL(`/api/group/${group_uuid}`), newData, { withCredentials: true }).then(data => {
+            console.log(data);
+            window.location.href = "/group-management"
+        }).catch(error => console.log(error))
     };
 
     handleInputChange = event => {
-        console.log(event.target.name)
-        console.log(event.target.value)
+        // console.log(event.target.name)
+        // console.log(event.target.value)
         const value = event.target.value
         const name = event.target.name
         this.setState(
@@ -96,14 +109,15 @@ class EditGroupPage extends React.Component {
                 <div className="bottom-container-test">
                     <div className="bottom-btn-container1">
                         {/* This button should take you back to the group management page */}
-                        <Link to='group-management'>
+                        <Link to='/group-management'>
                             <SquareButton buttonTitle="Cancel" />
                         </Link>
                     </div>
 
                     <div className="bottom-btn-container2">
-                        {/* This button creates the group and populates a new button/icon on the group management page */}
-                        <SquareButton type="submit" buttonTitle="Create My Group" onClick={this.handleEditSubmit} />
+
+                        <SquareButton type="submit" buttonTitle="Update" onClick={this.handleEditSubmit} />
+
                     </div>
                 </div>
                 <Footer />

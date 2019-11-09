@@ -176,8 +176,7 @@ class App extends React.Component {
 						<Route exact path="/create-group">
 							<CreateGroupPage />
 						</Route>
-						<Route exact path="/edit-group">
-							<EditGroupPage />
+						<Route component={EditGroupPage} exact path="/edit-group/:uuid">
 						</Route>
 						<Route exact path="/map">
 							<GroupMap />
