@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 import APIURL from './utils/APIURL';
 import Axios from 'axios';
 import CreateGroupPage from './components/CreateGroupPage';
@@ -19,7 +19,7 @@ import React from 'react';
 import Tutorial from './components/buttonTutorial'
 import EditGroupPage from './components/EditGroupPage';
 import ViewGroupPage from './components/ViewGroupPage';
-
+import ProtectedRoute from './utils/ProtectedRoute';
 
 
 class App extends React.Component {
@@ -160,9 +160,7 @@ class App extends React.Component {
 						<Route exact path="/">
 							{
 								(this.state.loggedInUser)
-									? <div>
-										<GroupMgmtPage handleLogOut={this.handleLogOut} />
-									</div>
+									? <Redirect to="/group-management" />
 									: <>
 										<Logo />
 										<Quickstart handleQuickstart={this.handleQuickstart} />
@@ -173,26 +171,26 @@ class App extends React.Component {
 							}
 						</Route>
 
-						<Route exact path="/group-management">
-							<GroupMgmtPage />
-						</Route>
+						<ProtectedRoute exact path="/group-management" component={GroupMgmtPage} handleLogOut={this.handleLogOut} loggedInUser={this.state.loggedInUser} />
+						{/* <Route exact path="/group-management">
+							<GroupMgmtPage handleLogOut={this.handleLogOut} />
+						</Route> */}
 
-						<Route exact path="/edit-group/:uuid" component={EditGroupPage} />
+						<ProtectedRoute exact path="/edit-group/:uuid" component={EditGroupPage} loggedInUser={this.state.loggedInUser} />
+						{/* <Route exact path="/edit-group/:uuid" component={EditGroupPage} /> */}
 
-						<Route exact path="/view-group/:uuid" component={ViewGroupPage} />
+						<ProtectedRoute exact path="/view-group/:uuid" component={ViewGroupPage} loggedInUser={this.state.loggedInUser} />
+						{/* <Route exact path="/view-group/:uuid" component={ViewGroupPage} /> */}
 
-						<Route exact path="/create-group">
+						<ProtectedRoute exact path="/create-group" component={CreateGroupPage} loggedInUser={this.state.loggedInUser} />
+						{/* <Route exact path="/create-group">
 							<CreateGroupPage />
-						</Route>
+						</Route> */}
 
-						<Route exact path="/map">
+						<ProtectedRoute exact path="/map" component={GroupMap} loggedInUser={this.state.loggedInUser} />
+						{/* <Route exact path="/map">
 							<GroupMap />
-							{/*
-							(this.state.loggedInUser)
-							? <GroupMap />
-							: <div>Not Logged In</div>
-						*/}
-						</Route>
+						</Route> */}
 					</Switch>
 				</Router>
 				<Footer />
