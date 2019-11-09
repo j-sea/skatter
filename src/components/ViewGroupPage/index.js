@@ -76,7 +76,6 @@ class ViewGroupPage extends React.Component {
                 <br />
 
                 <div className="content-box-style2">
-                    <p className="description-title">Group Description :</p>
                     <form>
                         <div className="form-group">
                             <label htmlFor="formGroupExampleInput2"></label>
@@ -86,6 +85,7 @@ class ViewGroupPage extends React.Component {
                                 <label htmlFor="exampleFormControlTextarea1"></label>
                                 <textarea onChange={this.handleInputChange} className="form-test2" id="" rows="3" name="groupDescription" placeholder="Description"></textarea>
                             </div>
+                    <p className="description-title">Group Description</p>
 
                             <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
                         </div>
