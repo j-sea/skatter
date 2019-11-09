@@ -19,13 +19,13 @@ import Quickstart from './components/buttonQuickStart'
 import React from 'react';
 import Tutorial from './components/buttonTutorial'
 import ViewGroupPage from './components/ViewGroupPage';
-import ProtectedRoute from './utils/ProtectedRoute';
 
 
 class App extends React.Component {
 
 	state = {
 		loggedInUser: false,
+		attemptedRecover: false,
 	};
 
 
@@ -117,8 +117,6 @@ class App extends React.Component {
 		const logoutUrl = APIURL('/auth/logout');
 		Axios.post(logoutUrl, {}, { withCredentials: true })
 			.then(response => {
-				console.log(response);
-
 				this.setState({
 					loggedInUser: false,
 				});
@@ -135,11 +133,13 @@ class App extends React.Component {
 			.then(response => {
 				this.setState({
 					loggedInUser: response.data,
+					attemptedRecover: true,
 				})
 			})
 			.catch(error => {
 				this.setState({
 					loggedInUser: false,
+					attemptedRecover: true,
 				})
 			});
 	};
@@ -150,43 +150,65 @@ class App extends React.Component {
 
 	render() {
 		return (
-			<div className="App">
+			(!this.state.attemptedRecover)
+			? <div />
+			: <div className="App">
 				<Router>
 					<Switch>
 						<Route exact path="/">
-							{
-								(this.state.loggedInUser)
-									? <Redirect to="/group-management" />
-									: <>
-										<Logo />
-										<Quickstart handleQuickstart={this.handleQuickstart} />
-										<ModalSignUp handleSignUp={this.handleSignUp} />
-										<ModalLogin handleLogIn={this.handleLogIn} />
-										<Tutorial />
-									</>
-							}
+						{
+							(!this.state.loggedInUser)
+								? <>
+									<Logo />
+									<Quickstart handleQuickstart={this.handleQuickstart} />
+									<ModalSignUp handleSignUp={this.handleSignUp} />
+									<ModalLogin handleLogIn={this.handleLogIn} />
+									<Tutorial />
+								</>
+								: <Redirect to="/group-management" />
+						}
 						</Route>
-
-						<ProtectedRoute exact path="/group-management" component={GroupMgmtPage} loggedInUser={this.state.loggedInUser} handleLogOut={this.handleLogOut} />
-						{/* <Route exact path="/group-management">
-							<GroupMgmtPage handleLogOut={this.handleLogOut} />
-						</Route> */}
-
-						<ProtectedRoute exact path="/edit-group/:uuid" component={EditGroupPage} loggedInUser={this.state.loggedInUser} />
-						{/* <Route exact path="/edit-group/:uuid" component={EditGroupPage} /> */}
-
-						<ProtectedRoute exact path="/view-group/:uuid" component={ViewGroupPage} loggedInUser={this.state.loggedInUser} />
-						{/* <Route exact path="/view-group/:uuid" component={ViewGroupPage} /> */}
-
-						<ProtectedRoute exact path="/create-group" component={CreateGroupPage} loggedInUser={this.state.loggedInUser} />
-						{/* <Route exact path="/create-group">
-							<CreateGroupPage />
-						</Route> */}
-
-						<ProtectedRoute exact path="/map" component={GroupMap} loggedInUser={this.state.loggedInUser} />
-						{/* <Route exact path="/map">
-							<GroupMap />
-						</Route> */}
+						<Route exact path="/group-management">
+						{
+							(!this.state.loggedInUser)
+								? <Redirect to="/" />
+								: <GroupMgmtPage handleLogOut={this.handleLogOut} />
+						}
+						</Route>
+						<Route exact path="/edit-group/:uuid" render={
+							(props) =>{
+								if (!this.state.loggedInUser) {
+									return <Redirect to="/" />;
+								}
+								else {
+									return <EditGroupPage handleLogOut={this.handleLogOut} {...props} />;
+								}
+							}
+						} />
+						<Route exact path="/view-group/:uuid" render={
+							(props) =>{
+								if (!this.state.loggedInUser) {
+									return <Redirect to="/" />;
+								}
+								else {
+									return <ViewGroupPage handleLogOut={this.handleLogOut} {...props} />;
+								}
+							}
+						} />
+						<Route exact path="/create-group">
+						{
+							(!this.state.loggedInUser)
+								? <Redirect to="/" />
+								: <CreateGroupPage handleLogOut={this.handleLogOut} />
+						}
+						</Route>
+						<Route exact path="/map">
+						{
+							(!this.state.loggedInUser)
+								? <Redirect to="/" />
+								: <GroupMap />
+						}
+						</Route>
 					</Switch>
 				</Router>
 				<Footer />

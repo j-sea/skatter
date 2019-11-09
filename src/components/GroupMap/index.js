@@ -517,7 +517,7 @@ class GroupMap extends React.Component {
 
 	render () {
 		return (
-			<>
+			<div>
 				<div id="map-wrapper">
 					<div id="map" className="map"></div>
 					<div id="map-progress"></div>
@@ -538,7 +538,7 @@ class GroupMap extends React.Component {
 					heading : <code id="heading"></code>&nbsp;&nbsp;
 					speed : <code id="speed"></code>
 				</p>
-			</>
+			</div>
 		);
 	}
 }

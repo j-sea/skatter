@@ -73,7 +73,7 @@ class EditGroupPage extends React.Component {
     render() {
         return (
             <div>
-                <Header />
+                <Header handleLogOut={this.props.handleLogOut} />
                 <br />
                 <br />
 
@@ -92,7 +92,7 @@ class EditGroupPage extends React.Component {
                             <br></br>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlTextarea1"></label>
-                                <textarea onChange={this.handleInputChange} className="form-test2" id="" rows="3" name="description" placeholder="Description">{this.state.description}</textarea>
+                                <textarea onChange={this.handleInputChange} className="form-test2" id="" rows="3" value={this.state.description} name="description" placeholder="Description"></textarea>
                             </div>
 
                             <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
