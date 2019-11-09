@@ -48,7 +48,7 @@ class GroupMgmtPage extends React.Component {
     render() {
         return (
             <div>
-                <Header handleLogOut={this.props.handleLogOut }/>
+                <Header handleLogOut={this.props.handleLogOut} />
                 <br />
                 <Link to='/create-group'>
                     <SquareButton buttonTitle="Create Group" />
@@ -60,19 +60,24 @@ class GroupMgmtPage extends React.Component {
                         return <div className="level1-btns" key=
                             //"key" needed to identify order of objects. Also, to prevent the annoying react warning that Joe talked about
                             {fartponies.id}>
+
+                            <Link to={"/view-group/" + fartponies.group_uuid}>
                             <RoundedButton buttonTitle=
                                 //fartponies = group
                                 {fartponies.group_name} />
+                                </Link>
+
+
                             <div>
                                 <Button className="external-delete-button" onClick={() => {
                                     this.handleDeleteGroup(fartponies.group_uuid)
                                 }}>X</Button>
                             </div>
                         </div>
-                    })}
+                })}
                 </div>
-                <Footer />
-            </div>
+            <Footer />
+            </div >
         );
     }
 }

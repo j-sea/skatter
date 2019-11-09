@@ -17,6 +17,8 @@ import ModalSignUp from './components/ModalSignUp';
 import Quickstart from './components/buttonQuickStart'
 import React from 'react';
 import Tutorial from './components/buttonTutorial'
+import EditGroupPage from './components/EditGroupPage';
+import ViewGroupPage from './components/ViewGroupPage';
 
 
 
@@ -170,12 +172,19 @@ class App extends React.Component {
 									</>
 							}
 						</Route>
+
 						<Route exact path="/group-management">
 							<GroupMgmtPage />
 						</Route>
+
+						<Route exact path="/edit-group/:uuid" component={EditGroupPage} />
+
+						<Route exact path="/view-group/:uuid" component={ViewGroupPage} />
+
 						<Route exact path="/create-group">
 							<CreateGroupPage />
 						</Route>
+
 						<Route exact path="/map">
 							<GroupMap />
 							{/*
