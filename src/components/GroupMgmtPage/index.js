@@ -51,7 +51,6 @@ class GroupMgmtPage extends React.Component {
                 <Header handleLogOut={this.props.handleLogOut} />
                 <br />
                 <Link to='/create-group'>
-
                     <SquareButton buttonTitle="Create Group" />
                 </Link>
                 <br /> <br />
@@ -73,7 +72,7 @@ class GroupMgmtPage extends React.Component {
                     })}
                 </div>
                 <Footer />
-            </div>
+            </div >
         );
     }
 }

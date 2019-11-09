@@ -21,17 +21,6 @@ const ModalLogOut = (props) => {
     }
 
 
-    // const logoutConfirm = () => {
-    //     //made const variable that allows to switch from localhost to heroku
-    //     const viewExistingGroupsUrl = APIURL(`/auth/logout`);
-    //     Axios.post(
-    //         //withCredentials specifies to axios to send cookies along with request since request is not coming from browser
-    //         viewExistingGroupsUrl, { withCredentials: true })
-    //         .then(res => {
-    //           toggle ()
-    //         })
-    // }
-
     return (
         <div>
             <Button className="external-log-out-button" onClick={toggle}>Logout</Button>
