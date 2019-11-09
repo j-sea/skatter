@@ -35,7 +35,7 @@ function CreateGroupPage (props) {
 
     return (
         <div>
-            <Header />
+            <Header handleLogOut={props.handleLogOut} />
 
             <div className="content-box-style2">
                 <p className="description-title">Group Description :</p>

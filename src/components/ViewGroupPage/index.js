@@ -22,7 +22,7 @@ class ViewGroupPage extends React.Component {
 
     //on page load...
     componentDidMount() {
-    
+				console.log(this.props);
         //create const variable that allows to switch from localhost to heroku
         const viewGroupToEditUrl = APIURL(`/api/group/${this.props.match.params.uuid}`);
         //axios call to DB to get specific group (passes session through cookie)
@@ -66,7 +66,7 @@ class ViewGroupPage extends React.Component {
     render() {
         return (
             <div>
-                <Header />
+                <Header handleLogOut={this.props.handleLogOut} />
                 <br />
                 <br />
 
@@ -105,7 +105,7 @@ class ViewGroupPage extends React.Component {
                 <div className="bottom-container-test">
                     <div className="bottom-btn-container1">
                         {/* This button should take you back to the group management page */}
-                        <Link to='group-management'>
+                        <Link to='/group-management'>
                             <SquareButton buttonTitle="Cancel" />
                         </Link>
                     </div>
