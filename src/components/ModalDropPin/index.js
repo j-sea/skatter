@@ -37,7 +37,7 @@ const ModalDropPin = (props) => {
                         <div className="form-group">
                             <Label htmlFor="formGroupExampleInput2"></Label>
                             <Input type="text" className="form-control form-border" id="formGroupExampleInput2" placeholder="Label" />
-                            <Label for="exampleText"></Label>
+                            <Label htmlFor="exampleText"></Label>
                             <Input type="textarea" name="text" id="exampleText" placeholder="Description" data-length="50" />
 
                             <Input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />

@@ -10,7 +10,7 @@ import ModalDropPin from '../ModalDropPin';
 import Axios from 'axios';
 import APIURL from '../../utils/APIURL';
 
-class EditGroupPage extends React.Component {
+class ViewGroupPage extends React.Component {
     state = {
         //set initial state of page
         groupName: "",
@@ -22,6 +22,7 @@ class EditGroupPage extends React.Component {
 
     //on page load...
     componentDidMount() {
+    
         //create const variable that allows to switch from localhost to heroku
         const viewGroupToEditUrl = APIURL(`/api/group/${this.props.match.params.uuid}`);
         //axios call to DB to get specific group (passes session through cookie)
@@ -120,4 +121,4 @@ class EditGroupPage extends React.Component {
     }
 }
 
-export default EditGroupPage;
+export default ViewGroupPage;

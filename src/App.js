@@ -11,12 +11,14 @@ import GroupMgmtPage from './components/GroupMgmtPage';
 // import LoginForm from './components/LoginForm';
 import Logo from './components/Logo'
 // import ModalAdd from './components/ModalAddPerson';
-// import ModalDelete from './components/ModalDelete'
+import ModalDelete from './components/ModalDelete'
 import ModalLogin from './components/ModalLogin';
 import ModalSignUp from './components/ModalSignUp';
 import Quickstart from './components/buttonQuickStart'
 import React from 'react';
 import Tutorial from './components/buttonTutorial'
+import EditGroupPage from './components/EditGroupPage';
+import ViewGroupPage from './components/ViewGroupPage';
 
 
 
@@ -114,6 +116,7 @@ class App extends React.Component {
 	};
 
 	handleLogOut = () => {
+		console.log("blah");
 
 		const logoutUrl = APIURL('/auth/logout');
 		Axios.post(logoutUrl, {}, { withCredentials: true })
@@ -169,12 +172,19 @@ class App extends React.Component {
 									</>
 							}
 						</Route>
+
 						<Route exact path="/group-management">
 							<GroupMgmtPage />
 						</Route>
+
+						<Route exact path="/edit-group/:uuid" component={EditGroupPage} />
+
+						<Route exact path="/view-group/:uuid" component={ViewGroupPage} />
+
 						<Route exact path="/create-group">
 							<CreateGroupPage />
 						</Route>
+
 						<Route exact path="/map">
 							<GroupMap />
 							{/*
