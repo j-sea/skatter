@@ -22,7 +22,7 @@ class ViewGroupPage extends React.Component {
 
     //on page load...
     componentDidMount() {
-				console.log(this.props);
+        console.log(this.props);
         //create const variable that allows to switch from localhost to heroku
         const viewGroupToEditUrl = APIURL(`/api/group/${this.props.match.params.uuid}`);
         //axios call to DB to get specific group (passes session through cookie)
@@ -85,7 +85,7 @@ class ViewGroupPage extends React.Component {
                                 <label htmlFor="exampleFormControlTextarea1"></label>
                                 <textarea onChange={this.handleInputChange} className="form-test2" id="" rows="3" name="groupDescription" placeholder="Description"></textarea>
                             </div>
-                    <p className="description-title">Group Description</p>
+                            <p className="description-title">Group Description</p>
 
                             <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
                         </div>
@@ -96,7 +96,6 @@ class ViewGroupPage extends React.Component {
 
                 {/* This button when clicked should prompt drop pin modal. When pin added, new icon on group page should populate. */}
                 <div className="pin-container">
-                    <ModalDropPin />
 
                 </div>
 
