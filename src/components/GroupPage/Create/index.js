@@ -10,7 +10,7 @@ import APIURL from '../../../utils/APIURL';
 import { Link, useHistory } from "react-router-dom";
 import '../style.css';
 
-function CreateGroupPage (props) {
+function CreateGroupPage(props) {
     const [groupName, setGroupName] = useState('');
     const [groupDescription, setGroupDescription] = useState('');
     const history = useHistory();
@@ -24,39 +24,42 @@ function CreateGroupPage (props) {
         }
 
         Axios.post(APIURL("/api/group"), groupData, { withCredentials: true })
-        .then(data => {
-            console.log(data)
-            history.push("/group-management")
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .then(data => {
+                console.log(data)
+                history.push("/group-management")
+            })
+            .catch(error => {
+                console.log(error)
+            })
     };
 
     return (
         <div>
             <Header handleLogOut={props.handleLogOut} />
 
-            <div className="content-box-style2">
-                <p className="description-title">Group Description :</p>
+            <div className="2">
                 <form>
                     <div className="form-group">
                         <label htmlFor="formGroupExampleInput2"></label>
                         <input onChange={e => setGroupName(e.target.value)} name="groupName" type="text" className="form-test2" id="" placeholder="Group name" data-length="20" />
-
+                        <br></br>
+                        <br></br>
                         <div className="form-group">
                             <label htmlFor="exampleFormControlTextarea1"></label>
                             <textarea onChange={e => setGroupDescription(e.target.value)} className="form-test2" id="" rows="3" name="groupDescription" placeholder="Description"></textarea>
-                        </div>
-                        <div className="add-person-container">
-                            {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
-                            <ModalAdd />
                         </div>
                         <input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
                     </div>
                 </form>
             </div>
+            <br></br>
 
+            <Banner bannerTitle="Members" />
+            <div className="add-person-container">
+                {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
+                <ModalAdd />
+            </div>
+            <br></br>
             <Banner bannerTitle="Points of Interest" />
 
             {/* This button when clicked should prompt drop pin modal. When pin added, new icon on group page should populate. */}

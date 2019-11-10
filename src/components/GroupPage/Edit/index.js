@@ -33,11 +33,8 @@ class EditGroupPage extends React.Component {
             .then(res => {
                 return res.data
             })
-            //convert to json and set state
-            .then(json => this.setState({
-                group_name: json.group_name, description: json.description,
-                // alarms: json, members: json, pointsOfInterest: json 
-            }));
+            //convert to json and set state with spread operator
+            .then(json => this.setState({ ...json }));
     }
 
     handleEditSubmit = () => {

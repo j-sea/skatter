@@ -14,11 +14,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #09d3ac;
+  color: whitesmoke;
 }
 
 body {
@@ -26,6 +22,18 @@ body {
   /* background-color: #481848; */
   background-size: auto;
   background-position: center;
+}
+
+.form-group {
+  padding: 0 10px;
+}
+
+input[type=text], textarea {
+  border: thin solid orange;
+  border-radius: 3px;
+  max-width: 500px;
+  box-sizing: border-box;
+  /* margin: 0px 10px; */
 }
 
 .main-page-container {
