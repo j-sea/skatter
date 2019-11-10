@@ -34,23 +34,12 @@ class GuestLoginPage extends React.Component {
 
 	render () {
 		return (
-			// If the user is logged in, give them a warning and let them continue with confirmation
-			(this.props.loggedInUser)
-			? <div>
+			<div>
 				<h2>This is your guest login page!</h2>
 				<p>In order to be able to log back into this guest user account later, you'll need to <strong>bookmark</strong> this page!</p>
 				<p>If you lose this page after you log out, <strong>you will lose access to any groups you've created or joined!</strong> You will need to create a new account at that point!</p>
 				<form onSubmit={this.handleSubmit}>
 					<button type="submit">I understand I need to bookmark this page!</button>
-				</form>
-			</div>
-			// If the user is not logged in, let them log in and continue to their groups
-			: <div>
-				<h2>Welcome back!</h2>
-				<p>If you lose this page after you log out, <strong>you will lose access to any groups you've created or joined!</strong> You will need to create a new account at that point!</p>
-				<p>Consider converting your account into a full one using a password and e-mail / phone number. You'll also receive alarms straight to your e-mail or phone number for relevant group meet ups!</p>
-				<form onSubmit={this.handleSubmit}>
-					<button type="submit">Continue to your groups!</button>
 				</form>
 			</div>
 		);
