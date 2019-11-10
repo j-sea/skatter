@@ -6,7 +6,7 @@ import './style.css'
 function Quickstart(props) {
     const handleSubmit = submitEvent => {
         submitEvent.preventDefault();
-        props.handleQuickstart();
+        props.handleQuickstartSignUp();
     };
     return (
         <div>
