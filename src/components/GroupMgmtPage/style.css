@@ -8,7 +8,8 @@
     width: 90%;
     height: 75%;
     margin: 0 auto;
-    border: solid thin #1890F0;
-    background-color: #F03090E6;
+    border: solid thin orange;
+    background-color: rgba(99, 53, 99, 0.377);
     padding: 1%;
+    border-radius: 15px;
 }

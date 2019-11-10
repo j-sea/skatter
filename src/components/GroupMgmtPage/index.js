@@ -61,18 +61,18 @@ class GroupMgmtPage extends React.Component {
                             //"key" needed to identify order of objects. Also, to prevent the annoying react warning that Joe talked about
                             {fartponies.id}>
                             <Link to={`/view-group/${fartponies.group_uuid}`}><RoundedButton buttonTitle={fartponies.group_name} /></Link>
-														{
-															(fartponies.UserId === this.props.loggedInUser.id)
-															? <>
-																<Link to={`/edit-group/${fartponies.group_uuid}`}><RoundedButton buttonTitle="Edit" /></Link>
-																<div>
-																		<Button className="external-delete-button" onClick={() => {
-																				this.handleDeleteGroup(fartponies.group_uuid)
-																		}}>X</Button>
-																</div>
-																</>
-															: <div />
-														}
+                            {
+                                (fartponies.UserId === this.props.loggedInUser.id)
+                                    ? <>
+                                        <Link to={`/edit-group/${fartponies.group_uuid}`}><RoundedButton buttonTitle="Edit" /></Link>
+                                        <div>
+                                            <Button className="external-delete-button" onClick={() => {
+                                                this.handleDeleteGroup(fartponies.group_uuid)
+                                            }}>X</Button>
+                                        </div>
+                                    </>
+                                    : <div />
+                            }
                         </div>
                     })}
                 </div>

@@ -2,12 +2,16 @@
     width: 90%;
     height: 50%;
     margin: 0 auto;
-    border: solid thin #1890F0;
-    background-color: #F03090E6;
+    border: solid thin orange;
+    background-color: rgb(72, 24, 72);
+    color: whitesmoke;
     /* display: flex; */
     /* justify-content: center; */
-    margin-bottom: 6%;
-    margin-top: 5%;
+    margin-bottom: 10%;
+    /* margin-top: 5%; */
+    text-align: left;
+    padding: 25px;
+    border-radius: 15px;
 }
 
 .description-title {
@@ -18,13 +22,13 @@
 }
 
 .form-test1 {
-    background-color: #F0309003;
+    background-color:rgb(72, 24, 72);;
     color: white;
     width: 50%;
     margin: 2%;
 }
 .form-test2 {
-    background-color: #F0309003;
+    background-color: rgb(72, 24, 72);
     color: white;
     width: 99%;
     height: 75%
