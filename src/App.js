@@ -218,6 +218,9 @@ class App extends React.Component {
 									if (!this.state.loggedInUser) {
 										return <Redirect to="/" />;
 									}
+									else {
+										return <EditGroupPage handleLogOut={this.handleLogOut} {...props} />;
+									}
 								}} />
 							<Route exact path="/view-group/:uuid" render={
 								(props) => {
