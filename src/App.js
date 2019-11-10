@@ -50,14 +50,15 @@ class App extends React.Component {
 	handleQuickstart = () => {
 		console.log('Starting Quick Start session');
 
-		const quickStartUrl = APIURL('/auth/register');
-		Axios.post({ withCredentials: true })
+		const quickStartUrl = APIURL('/auth/quickstart/register');
+		Axios.post(quickStartUrl, {}, { withCredentials: true })
 			.then(response => {
 				console.log(response);
 				this.setState({
 					loggedInUser: response.data.user
 				});
 			}).catch(error => {
+				console.log(error);
 				this.setState({
 					loggedInUser: false,
 				});
