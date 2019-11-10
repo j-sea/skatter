@@ -31,7 +31,7 @@ const Tutorial = (props) => {
                     Meditation butcher selfies sriracha pok pok green juice man braid vegan yr tilde whatever banh mi. Echo park health goth godard gastropub 90's DIY occupy. Thundercats copper mug green juice man braid hashtag vexillologist. Kombucha schlitz VHS, asymmetrical skateboard dreamcatcher migas chillwave offal kitsch small batch four loko. Meggings cliche normcore, seitan actually coloring book tousled distillery. Pop-up vegan XOXO man bun vape palo santo meditation single-origin coffee mustache selfies wayfarers iceland cliche.
             </ModalBody>
                 <ModalFooter className="modal-background">
-                    <Button className="skip-button" onClick={toggle}>Skip</Button>{' '}
+                    <Button className="skip-button" onClick={toggle}>Close</Button>{' '}
                 </ModalFooter>
             </Modal>
         </div >

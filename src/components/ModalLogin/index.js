@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, Input, Label } from 'reactstrap';
 import './style.css'
 
-function ModalLogin (props) {
+function ModalLogin(props) {
   const {
     buttonLabel,
     className
@@ -29,15 +29,17 @@ function ModalLogin (props) {
           <Form onSubmit={handleSubmit}>
             <div className="form-group">
               <Label htmlFor="formGroupExampleInput2"></Label>
-              <Input type="email" className="form-control form-border" id="formGroupExampleInput2" placeholder="Email (ex: username@example.com)" onChange={e => setEmail(e.target.value)}/>
+              <Input type="email" className="form-control form-border" id="formGroupExampleInput2" placeholder="Email (ex: username@example.com)" onChange={e => setEmail(e.target.value)} />
+              <br />
               Or
+				      <br />
               <Label htmlFor="formGroupExampleInput2"></Label>
-              <Input type="phone" className="form-control form-border" id="formGroupExampleInput2" placeholder="Phone # [sms] (ex: ### ###-####)" onChange={e => setPhone(e.target.value)}/>
+              <Input type="phone" className="form-control form-border" id="formGroupExampleInput2" placeholder="Phone # [sms] (ex: ### ###-####)" onChange={e => setPhone(e.target.value)} />
 
               <Label htmlFor="formGroupExampleInput2"></Label>
-              <Input type="password" className="form-control form-border" id="formGroupExampleInput2" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
+              <Input type="password" className="form-control form-border" id="formGroupExampleInput2" placeholder="Password" onChange={e => setPassword(e.target.value)} />
 
-              <Input type="submit" style={{position: 'absolute', left: -1000, top: -1000, visibility: 'hidden'}}/>
+              <Input type="submit" style={{ position: 'absolute', left: -1000, top: -1000, visibility: 'hidden' }} />
             </div>
           </Form>
         </ModalBody>
