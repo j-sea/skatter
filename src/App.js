@@ -198,10 +198,10 @@ class App extends React.Component {
 									: <GuestLoginPage loggedInUser={this.state.loggedInUser} updateLoggedInUser={this.updateLoggedInUser} {...props} />
 							)} />
 							<Route exact path="/group-invite/accept/:uuid" render={props => (
-								<GroupInvite accepted={true} loggedInUser={this.state.loggedInUser} />
+								<GroupInvite accepted={true} loggedInUser={this.state.loggedInUser} {...props} />
 							)} />
 							<Route exact path="/group-invite/reject/:uuid" render={props => (
-								<GroupInvite accepted={false} loggedInUser={this.state.loggedInUser} />
+								<GroupInvite accepted={false} loggedInUser={this.state.loggedInUser} {...props} />
 							)} />
 							<Route exact path="/group-invite/rejection-confirmation">
 								<GroupInviteRejection />
@@ -239,14 +239,11 @@ class App extends React.Component {
 										: <CreateGroupPage handleLogOut={this.handleLogOut} />
 								}
 							</Route>
-							<Route exact path="/map">
-								{
-									(!this.state.loggedInUser)
-										? <Redirect to="/" />
-										: <GroupMap />
-								}
-
-							</Route>
+							<Route exact path="/map/:uuid" render={props => (
+								(!this.state.loggedInUser)
+									? <Redirect to="/" />
+									: <GroupMap loggedInUser={this.state.loggedInUser} {...props} />
+							)} />
 							<Route exact path="/create-group">
 								{
 									(!this.state.loggedInUser)
@@ -263,8 +260,12 @@ class App extends React.Component {
 							</Route>
 							<Route component={PageNotFound} />
 						</Switch>
+						<Route render={props => (
+							(props.location.pathname.indexOf('/map') === -1)
+							? <Footer />
+							: null
+						)} />
 					</Router>
-					<Footer />
 				</div>
 		);
 	}

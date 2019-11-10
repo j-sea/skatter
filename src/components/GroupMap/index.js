@@ -17,6 +17,10 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import {OSM, Vector as VectorSource} from 'ol/source';
 import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from 'ol/style';
 import {defaults as defaultInteractions, Select} from 'ol/interaction';
+import ViewGroupPageControl from './ViewGroupPageControl';
+import LocationControl from './LocationControl';
+import Axios from 'axios';
+import APIURL from '../../utils/APIURL';
 
 const progressBar = {
 	htmlElement: null,
@@ -191,14 +195,67 @@ class GroupMap extends React.Component {
 	maxZoomLevel = 20;
 	minZoomLevel = 1;
 
-	setTracker = e => this.geolocation.setTracking(e.target.checked);
+	setTracker = checked => this.geolocation.setTracking(checked);
+
+	storedUserLocation = {
+		longitude: null,
+		latitude: null,
+		accuracy: null,
+		altitude: null,
+		altitudeAccuracy: null,
+		heading: null,
+		speed: null,
+	};
 
 	displayGeolocationUpdate = () => {
-		document.getElementById('accuracy').innerText = this.geolocation.getAccuracy() + ' [m]';
-		document.getElementById('altitude').innerText = this.geolocation.getAltitude() + ' [m]';
-		document.getElementById('altitudeAccuracy').innerText = this.geolocation.getAltitudeAccuracy() + ' [m]';
-		document.getElementById('heading').innerText = this.geolocation.getHeading() + ' [rad]';
-		document.getElementById('speed').innerText = this.geolocation.getSpeed() + ' [m/s]';
+		// document.getElementById('accuracy').innerText = this.geolocation.getAccuracy() + ' [m]';
+		// document.getElementById('altitude').innerText = this.geolocation.getAltitude() + ' [m]';
+		// document.getElementById('altitudeAccuracy').innerText = this.geolocation.getAltitudeAccuracy() + ' [m]';
+		// document.getElementById('heading').innerText = this.geolocation.getHeading() + ' [rad]';
+		// document.getElementById('speed').innerText = this.geolocation.getSpeed() + ' [m/s]';
+
+		let locationDataChanged = false;
+
+		// Store the new locaiton data
+		const newPosition = this.geolocation.getPosition();
+		const newLocationData = {
+			longitude: newPosition[0],
+			latitude: newPosition[1],
+			accuracy: this.geolocation.getAccuracy() || null,
+			altitude: this.geolocation.getAltitude() || null,
+			altitudeAccuracy: this.geolocation.getAltitudeAccuracy() || null,
+			heading: this.geolocation.getHeading() || null,
+			speed: this.geolocation.getSpeed() || null,
+		}
+
+		// Check to see if there are any new changes warranting updating the database
+		if ((this.storedUserLocation.longitude !== newLocationData.longitude)
+				|| (this.storedUserLocation.latitude !== newLocationData.latitude)
+				|| (this.storedUserLocation.accuracy !== newLocationData.accuracy)
+				|| (this.storedUserLocation.altitude !== newLocationData.altitude)
+				|| (this.storedUserLocation.altitudeAccuracy !== newLocationData.altitudeAccuracy)
+				|| (this.storedUserLocation.heading !== newLocationData.heading)
+				|| (this.storedUserLocation.speed !== newLocationData.speed)) {
+
+			// Mark changes requiring updating the database
+			locationDataChanged = true;
+
+			// Replace the stored user location with the new location
+			this.storedUserLocation = newLocationData;
+		}
+
+		if (locationDataChanged) {
+			// Update the user's location
+			Axios.put(APIURL('/api/user-location/' + this.props.match.params.uuid),
+				newLocationData,
+				{ withCredentials: true })
+			.then(function () {
+				console.log('Updated');
+			})
+			.catch(function (error) {
+				console.error(error);
+			});
+		}
 	};
 
 	displayGeolocationError = error => {
@@ -284,15 +341,28 @@ class GroupMap extends React.Component {
 		});
 	};
 
+	
 	queryGroupUsers = groupUUID => {
 		const userLocation = this.geolocation.getPosition();
 		if (typeof userLocation !== 'undefined') {
-			this.updateGroupUsers({
-				'a': { user_name: 'Joe', description: 'I like spinach. It\'s the best lunch snack.', user_uuid: 'a', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#00f'},
-				'b': { user_name: 'Samantha', description: 'You know me.', user_uuid: 'b', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#f00'},
-				'c': { user_name: 'Barbara', description: 'I\'m here to make sure Jeb stays sober. I also would like to go see the live band happening at 3pm if anyone wants to join me.', user_uuid: 'c', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#0ff'},
-				'd': { user_name: 'Jeb', description: 'I\'m the designated driver for this outing! (I gladly accept bribes for front passenger seat!)', user_uuid: 'd', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#ff0'},
-				'e': { user_name: 'Marley', description: 'Shhh. I\'m hiding!', user_uuid: 'e', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#c48'},
+			// Grab all the user locations in this group not including the current user
+			Axios.get(APIURL('/api/user-locations/' + this.props.match.params.uuid), { withCredentials: true })
+			.then(groupUserDetails => {
+				console.log(groupUserDetails.data);
+				this.updateGroupUsers(groupUserDetails.data.reduce(function (accumulator, current) {
+					accumulator[current.user_uuid] = {
+						user_name: current.name,
+						description: current.description,
+						user_uuid: current.user_uuid,
+						longitude: current.longitude,
+						latitude: current.latitude,
+						color: current.color,
+					}
+					return accumulator;
+				}, {}));
+			})
+			.catch(function (error) {
+				console.error(error);
 			});
 		}
 	};
@@ -340,23 +410,25 @@ class GroupMap extends React.Component {
 	queryGroupInterestPoints = groupUUID => {
 		const userLocation = this.geolocation.getPosition();
 		if (typeof userLocation !== 'undefined') {
-			const newInterestPointData = {};
-			if (Math.floor(Math.random() * 2)) {
-				newInterestPointData['a'] = { name: 'Hot Dog Stand', description: 'Really good hot dogs. Free condiments. Cheap lemonade.', id: 'a', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#c0c'};
-			}
-			if (Math.floor(Math.random() * 2)) {
-				newInterestPointData['b'] = { name: 'Bathroom', description: 'Not great, but also a family bathroom available.', id: 'b', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#cd8'};
-			}
-			if (Math.floor(Math.random() * 2)) {
-				newInterestPointData['c'] = { name: 'Cool Bags!', description: 'We found some really cool handmade backpacks and messenger bags here! Decent price! Nice staff!', id: 'c', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#1a0'};
-			}
-			if (Math.floor(Math.random() * 2)) {
-				newInterestPointData['d'] = { name: 'Jeb\'s Truck', description: 'This is where Jeb parked.', id: 'd', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#f06'};
-			}
-			if (Math.floor(Math.random() * 2)) {
-				newInterestPointData['e'] = { name: 'Petting Zoo', description: 'We saw goats!', id: 'e', longitude: userLocation[0] + Math.random() * 400 - 200, latitude: userLocation[1] + Math.random() * 400 - 200, color: '#692'};
-			}
-			this.updateGroupInterestPoints(newInterestPointData);
+			// Grab all the interest points in this group
+			Axios.get(APIURL('/api/interest-points/' + this.props.match.params.uuid), { withCredentials: true })
+			.then(interestPoints => {
+				console.log(interestPoints.data);
+				this.updateGroupInterestPoints(interestPoints.data.reduce(function (accumulator, current) {
+					accumulator[current.id] = {
+						name: current.name,
+						description: current.description,
+						id: current.id,
+						longitude: current.longitude,
+						latitude: current.latitude,
+						color: current.color,
+					}
+					return accumulator;
+				}, {}));
+			})
+			.catch(function (error) {
+				console.error(error);
+			});
 		}
 	};
 
@@ -455,6 +527,8 @@ class GroupMap extends React.Component {
 			source: this.osm,
 		});
 
+		this.locationControl = new LocationControl({setTracker: this.setTracker, group_uuid: this.props.match.params.uuid});
+
 		this.map = new Map({
 			controls: defaultControls().extend([
 				new ScaleLine({
@@ -465,6 +539,8 @@ class GroupMap extends React.Component {
 					minWidth: 140
 				}),
 				new ZoomSlider(),
+				new ViewGroupPageControl({history: this.props.history, newURL: '/view-group/' + this.props.match.params.uuid}),
+				this.locationControl,
 			]),
 			interactions: defaultInteractions().extend([
 				this.selectInteraction,
@@ -486,7 +562,14 @@ class GroupMap extends React.Component {
 			projection: this.view.getProjection()
 		});
 
-		document.getElementById('track').addEventListener('change', this.setTracker);
+		Axios.get(APIURL('/api/user-locating-enabled/' + this.props.match.params.uuid), { withCredentials: true })
+		.then(groupUserDetail => {
+			this.locationControl.setTracker(groupUserDetail.data.locatingEnabled);
+		})
+		.catch(function (error) {
+			console.error(error);
+		})
+
 		this.osm.on('tileloadstart', progressBar.addLoading);
 		this.osm.on('tileloadend', progressBar.addLoaded);
 		this.osm.on('tileloaderror', progressBar.addLoaded);
@@ -527,17 +610,6 @@ class GroupMap extends React.Component {
 						<div id="map-popup-content"></div>
 					</div>
 				</div>
-				<label htmlFor="track">
-					track position
-					<input id="track" type="checkbox"/>
-				</label>
-				<p>
-					position accuracy : <code id="accuracy"></code>&nbsp;&nbsp;
-					altitude : <code id="altitude"></code>&nbsp;&nbsp;
-					altitude accuracy : <code id="altitudeAccuracy"></code>&nbsp;&nbsp;
-					heading : <code id="heading"></code>&nbsp;&nbsp;
-					speed : <code id="speed"></code>
-				</p>
 			</div>
 		);
 	}

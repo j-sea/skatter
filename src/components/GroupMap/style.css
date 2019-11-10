@@ -56,3 +56,13 @@
 	top: 2px;
 	right: 8px;
 }
+
+#map-view-group-page-control {
+	bottom: 40px;
+	left: .5em;
+}
+
+#map-location-control {
+	top: 294px;
+	left: .5em;
+}
