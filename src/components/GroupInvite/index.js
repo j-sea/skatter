@@ -9,54 +9,59 @@ class GroupInvite extends React.Component {
 		redirectUrl: false,
 	};
 
-	acceptInvite = () => {
-		console.log('Accepting invite...');
-
-		// Create a new guest user
-		Axios.post(APIURL('/auth/guest/register'), {},
-			{ withCredentials: true })
-		.then(userResponse => {
-			// Update the group invite with our new guest account
-			Axios.put(APIURL('/api/group-invite'), {
-				invite_uuid: this.props.match.params.uuid,
-				guest_user_uuid: userResponse.data.user_uuid,
-				accepted: true,
-				rejected: false,
-			}, { withCredentials: true })
-			.then(inviteResponse => {
-			// Redirect to the guest login page
+	updateInvite = (user_id, user_uuid, accepted) => {
+		// Update the group invite with our new guest account
+		Axios.put(APIURL('/api/group-invite'), {
+			invite_uuid: this.props.match.params.uuid,
+			guest_user_uuid: user_uuid,
+			user_id: user_id,
+			accepted: accepted,
+			rejected: !accepted,
+		}, { withCredentials: true })
+		.then(inviteResponse => {
+			// If we accepted the invite
+			if (accepted) {
+				// Redirect to the guest login page
 				this.setState({
 					redirectUrl: '/guest/' + inviteResponse.data.invite_uuid
 				});
+			}
+			// If we rejected the invite
+			else {
+				// Redirect to the group invite rejection page
+				this.setState({
+					redirectUrl: '/group-invite/rejection-confirmation'
+				});
+			}
+		})
+		.catch(error => {
+			console.error(error);
+		});
+	}
+
+	acceptInvite = () => {
+		console.log('Accepting invite...');
+
+		if (this.props.loggedInUser) {
+			this.updateInvite(this.props.loggedInUser.id, this.props.loggedInUser.user_uuid, true);
+		}
+		else {
+			// Create a new guest user
+			Axios.post(APIURL('/auth/guest/register'), {},
+				{ withCredentials: true })
+			.then(userResponse => {
+				this.updateInvite(userResponse.data.id, userResponse.data.user_uuid, true);
 			})
 			.catch(error => {
 				console.error(error);
 			});
-		})
-		.catch(error => {
-			console.error(error);
-		});
+		}
 	};
 
 	rejectInvite = () => {
-		console.log('Accepting invite...');
+		console.log('Rejecting invite...');
 
-		// Update the group invite with a rejection
-		Axios.put(APIURL('/api/group-invite'), {
-			invite_uuid: this.props.match.params.uuid,
-			guest_user_uuid: null,
-			accepted: false,
-			rejected: true,
-		}, { withCredentials: true })
-		.then(inviteResponse => {
-			// Redirect to the group invite rejection page
-			this.setState({
-				redirectUrl: '/group-invite/rejection-confirmation'
-			});
-		})
-		.catch(error => {
-			console.error(error);
-		});
+		this.updateInvite(null, false);
 	};
 
 	componentDidMount () {

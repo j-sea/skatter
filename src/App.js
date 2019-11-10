@@ -17,6 +17,7 @@ import ViewGroupPage from './components/ViewGroupPage';
 import GuestLoginPage from './components/GuestLoginPage';
 import GroupInvite from './components/GroupInvite';
 import GroupInviteRejection from './components/GroupInviteRejection';
+import PageNotFound from './components/PageNotFound';
 
 class App extends React.Component {
 
@@ -191,13 +192,16 @@ class App extends React.Component {
 						}
 						</Route>
 						<Route exact path="/guest/:uuid" render={props => (
-							<GuestLoginPage loggedInUser={this.state.loggedInUser} updateLoggedInUser={this.updateLoggedInUser} {...props} />
+							(Object.prototype.hasOwnProperty.call(this.state.loggedInUser, 'email')
+							|| Object.prototype.hasOwnProperty.call(this.state.loggedInUser, 'phone'))
+							? <Redirect to="/group-management" />
+							: <GuestLoginPage loggedInUser={this.state.loggedInUser} updateLoggedInUser={this.updateLoggedInUser} {...props} />
 						)} />
 						<Route exact path="/group-invite/accept/:uuid" render={props => (
-							<GroupInvite accepted={true} />
+							<GroupInvite accepted={true} loggedInUser={this.state.loggedInUser} />
 						)} />
 						<Route exact path="/group-invite/reject/:uuid" render={props => (
-							<GroupInvite accepted={false} />
+							<GroupInvite accepted={false} loggedInUser={this.state.loggedInUser} />
 						)} />
 						<Route exact path="/group-invite/rejection-confirmation">
 							<GroupInviteRejection />
@@ -206,7 +210,7 @@ class App extends React.Component {
 						{
 							(!this.state.loggedInUser)
 								? <Redirect to="/" />
-								: <GroupMgmtPage handleLogOut={this.handleLogOut} />
+								: <GroupMgmtPage handleLogOut={this.handleLogOut} loggedInUser={this.state.loggedInUser} />
 						}
 						</Route>
 						<Route exact path="/edit-group/:uuid" render={
@@ -243,6 +247,7 @@ class App extends React.Component {
 								: <GroupMap />
 						}
 						</Route>
+						<Route component={PageNotFound} />
 					</Switch>
 				</Router>
 				<Footer />
