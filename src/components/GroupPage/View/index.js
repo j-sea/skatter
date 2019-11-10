@@ -1,14 +1,14 @@
 import React from 'react';
-import './style.css';
-import { Link } from "react-router-dom";
-import Header from '../Header'
-import Footer from '../Footer'
-import SquareButton from '../buttonSquare';
-import Banner from '../Banner'
-import ModalAdd from '../ModalAddPerson';
-import ModalDropPin from '../ModalDropPin';
 import Axios from 'axios';
-import APIURL from '../../utils/APIURL';
+import { Link } from "react-router-dom";
+import Header from '../../Header'
+import Footer from '../../Footer'
+import SquareButton from '../../buttonSquare';
+import Banner from '../../Banner'
+import ModalAdd from '../../ModalAddPerson';
+import ModalDropPin from '../../ModalDropPin';
+import APIURL from '../../../utils/APIURL';
+import '../style.css';
 
 class ViewGroupPage extends React.Component {
     state = {
