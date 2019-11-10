@@ -4,7 +4,7 @@ import ModalLogOut from '../ModalLogOut'
 
 function Header(props) {
     return (
-        <header className="container">
+        <header>
             <nav className="navbar-light custom-hd row">
                 <div className="col-6">
                     <img className="header-logo" src="/images/p3-logo3.png" alt="scatter" />
@@ -14,7 +14,7 @@ function Header(props) {
                 </div>
                 <div className="header-div col-3">
                     {/* <button type="button" className="btn btn-primary btn-sm header-test" > <i className="material-icons">dehaze</i></button> */}
-                    <ModalLogOut handleLogOut={props.handleLogOut}/>
+                    <ModalLogOut handleLogOut={props.handleLogOut} />
                 </div>
             </nav>
         </header>
