@@ -22,7 +22,15 @@
 }
 
 body {
-  background-image: url("/images/splat-dark.jpg");
+  background-image: url("/images/color-dots-cropped.jpg");
+  /* background-color: #481848; */
   background-size: auto;
   background-position: center;
+}
+
+.main-page-container {
+  display:flex;
+flex-direction: column;
+justify-content: center;
+height: 100vh;
 }

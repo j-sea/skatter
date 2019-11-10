@@ -5,17 +5,17 @@ body, html {
 }
 
 .custom-hd {
-    /* position: absolute;
-    top:0;  */
-    width:100%;
-    background-color: #F000FF;
+    /* position: absolute; */
+    top:0; 
+    width:100vw;
+    background-color: #265df0;
     border: solid #F0F030;
     border-radius: 0.3rem;
     margin-bottom: 3.5%;
     margin-top: 2%;
     height: 65px;
-    /* justify-content: center; */
-    /* display: flex; */
+    justify-content: center;
+    display: flex;
     align-items: center;
 }
 

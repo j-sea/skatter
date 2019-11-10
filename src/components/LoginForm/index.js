@@ -14,18 +14,21 @@ class LoginForm extends React.Component {
 	};
 
 	handleFormChange = changeEvent => {
-		const {name, value} = changeEvent.target;
+		const { name, value } = changeEvent.target;
 
 		this.setState({
 			[name]: value,
 		})
 	};
 
-	render () {
+	render() {
 		return (
 			<form onSubmit={this.handleSubmit}>
 				<h2>Log In</h2>
-				<input name="email" type="email" placeholder="E-mail Address" onChange={this.handleFormChange} /> or
+				<input name="email" type="email" placeholder="E-mail Address" onChange={this.handleFormChange} />
+				<br />
+				Or
+				<br />
 				<input name="phone" type="phone" placeholder="Phone Number (SMS)" onChange={this.handleFormChange} /> <br />
 				<input name="password" type="password" placeholder="Password" onChange={this.handleFormChange} /> <br />
 				<button type="submit">Log In</button>
