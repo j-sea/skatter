@@ -15,6 +15,8 @@ import React from 'react';
 import Tutorial from './components/buttonTutorial'
 import ViewGroupPage from './components/ViewGroupPage';
 import GuestLoginPage from './components/GuestLoginPage';
+import GroupInvite from './components/GroupInvite';
+import GroupInviteRejection from './components/GroupInviteRejection';
 
 class App extends React.Component {
 
@@ -191,6 +193,15 @@ class App extends React.Component {
 						<Route exact path="/guest/:uuid" render={props => (
 							<GuestLoginPage loggedInUser={this.state.loggedInUser} updateLoggedInUser={this.updateLoggedInUser} {...props} />
 						)} />
+						<Route exact path="/group-invite/accept/:uuid" render={props => (
+							<GroupInvite accepted={true} />
+						)} />
+						<Route exact path="/group-invite/reject/:uuid" render={props => (
+							<GroupInvite accepted={false} />
+						)} />
+						<Route exact path="/group-invite/rejection-confirmation">
+							<GroupInviteRejection />
+						</Route>
 						<Route exact path="/group-management">
 						{
 							(!this.state.loggedInUser)
