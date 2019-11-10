@@ -2,8 +2,9 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import APIURL from './utils/APIURL';
 import Axios from 'axios';
-import CreateGroupPage from './components/CreateGroupPage';
-import EditGroupPage from './components/EditGroupPage';
+import CreateGroupPage from './components/GroupPage/Create';
+import EditGroupPage from './components/GroupPage/Edit';
+import ViewGroupPage from './components/GroupPage/View';
 import Footer from './components/Footer';
 import GroupMap from './components/GroupMap';
 import GroupMgmtPage from './components/GroupMgmtPage';
@@ -13,7 +14,6 @@ import ModalSignUp from './components/ModalSignUp';
 import Quickstart from './components/buttonQuickStart'
 import React from 'react';
 import Tutorial from './components/buttonTutorial'
-import ViewGroupPage from './components/ViewGroupPage';
 import GuestLoginPage from './components/GuestLoginPage';
 import GroupInvite from './components/GroupInvite';
 import GroupInviteRejection from './components/GroupInviteRejection';
