@@ -27,3 +27,10 @@ body {
   background-size: auto;
   background-position: center;
 }
+
+.main-page-container {
+  display:flex;
+flex-direction: column;
+justify-content: center;
+height: 100vh;
+}

@@ -102,7 +102,7 @@ class App extends React.Component {
 		const loginUrl = APIURL('/auth/login');
 		Axios.post(loginUrl, loginData, { withCredentials: true })
 			.then(response => {
- 				this.setState({
+				this.setState({
 					loggedInUser: response.data.user,
 				});
 			})
@@ -151,68 +151,68 @@ class App extends React.Component {
 	render() {
 		return (
 			(!this.state.attemptedRecover)
-			? <div />
-			: <div className="App">
-				<Router>
-					<Switch>
-						<Route exact path="/">
-						{
-							(!this.state.loggedInUser)
-								? <>
-									<Logo />
-									<Quickstart handleQuickstart={this.handleQuickstart} />
-									<ModalSignUp handleSignUp={this.handleSignUp} />
-									<ModalLogin handleLogIn={this.handleLogIn} />
-									<Tutorial />
-								</>
-								: <Redirect to="/group-management" />
-						}
-						</Route>
-						<Route exact path="/group-management">
-						{
-							(!this.state.loggedInUser)
-								? <Redirect to="/" />
-								: <GroupMgmtPage handleLogOut={this.handleLogOut} />
-						}
-						</Route>
-						<Route exact path="/edit-group/:uuid" render={
-							(props) =>{
-								if (!this.state.loggedInUser) {
-									return <Redirect to="/" />;
+				? <div />
+				: <div className="App">
+					<Router>
+						<Switch>
+							<Route exact path="/">
+								{
+									(!this.state.loggedInUser)
+										? <div className='main-page-container'>
+											<Logo />
+											<Quickstart handleQuickstart={this.handleQuickstart} />
+											<ModalSignUp handleSignUp={this.handleSignUp} />
+											<ModalLogin handleLogIn={this.handleLogIn} />
+											<Tutorial />
+										</div>
+										: <Redirect to="/group-management" />
 								}
-								else {
-									return <EditGroupPage handleLogOut={this.handleLogOut} {...props} />;
+							</Route>
+							<Route exact path="/group-management">
+								{
+									(!this.state.loggedInUser)
+										? <Redirect to="/" />
+										: <GroupMgmtPage handleLogOut={this.handleLogOut} />
 								}
-							}
-						} />
-						<Route exact path="/view-group/:uuid" render={
-							(props) =>{
-								if (!this.state.loggedInUser) {
-									return <Redirect to="/" />;
+							</Route>
+							<Route exact path="/edit-group/:uuid" render={
+								(props) => {
+									if (!this.state.loggedInUser) {
+										return <Redirect to="/" />;
+									}
+									else {
+										return <EditGroupPage handleLogOut={this.handleLogOut} {...props} />;
+									}
 								}
-								else {
-									return <ViewGroupPage handleLogOut={this.handleLogOut} {...props} />;
+							} />
+							<Route exact path="/view-group/:uuid" render={
+								(props) => {
+									if (!this.state.loggedInUser) {
+										return <Redirect to="/" />;
+									}
+									else {
+										return <ViewGroupPage handleLogOut={this.handleLogOut} {...props} />;
+									}
 								}
-							}
-						} />
-						<Route exact path="/create-group">
-						{
-							(!this.state.loggedInUser)
-								? <Redirect to="/" />
-								: <CreateGroupPage handleLogOut={this.handleLogOut} />
-						}
-						</Route>
-						<Route exact path="/map">
-						{
-							(!this.state.loggedInUser)
-								? <Redirect to="/" />
-								: <GroupMap />
-						}
-						</Route>
-					</Switch>
-				</Router>
-				<Footer />
-			</div>
+							} />
+							<Route exact path="/create-group">
+								{
+									(!this.state.loggedInUser)
+										? <Redirect to="/" />
+										: <CreateGroupPage handleLogOut={this.handleLogOut} />
+								}
+							</Route>
+							<Route exact path="/map">
+								{
+									(!this.state.loggedInUser)
+										? <Redirect to="/" />
+										: <GroupMap />
+								}
+							</Route>
+						</Switch>
+					</Router>
+					<Footer />
+				</div>
 		);
 	}
 }
