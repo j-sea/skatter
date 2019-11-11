@@ -4,9 +4,11 @@ import Header from '../../Header'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
+import ModalDropPin from '../../ModalDropPin'
 import APIURL from '../../../utils/APIURL';
 import { Link, withRouter } from "react-router-dom";
 import '../style.css';
+import { thisExpression } from '@babel/types';
 
 class EditGroupPage extends React.Component {
     state = {
@@ -54,6 +56,7 @@ class EditGroupPage extends React.Component {
             this.props.history.push('/group-management');
         }).catch(error => console.log(error))
     };
+
     handleInputChange = event => {
         // console.log(event.target.name)
         // console.log(event.target.value)
@@ -64,6 +67,10 @@ class EditGroupPage extends React.Component {
                 [name]: value
             }
         )
+    }
+
+    addEmailPhone = (email, phone) => {
+        // TODO:
     }
 
     render() {
@@ -96,9 +103,21 @@ class EditGroupPage extends React.Component {
                     </form>
                 </div>
 
+                <Banner bannerTitle="Members" />
+
+                <div className="add-person-container">
+                    {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
+                    <ModalAdd addEmailPhone={this.addEmailPhone} />
+                </div>
+                <br></br>
                 <Banner bannerTitle="Points of Interest" />
 
-                <br />
+                {/* This button when clicked should prompt drop pin modal. When pin added, new icon on group page should populate. */}
+                <div className="pin-container">
+                    <ModalDropPin />
+
+                </div>
+
 
                 <div className="bottom-container-test">
                     <div className="bottom-btn-container1">
