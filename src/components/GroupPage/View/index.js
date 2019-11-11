@@ -79,6 +79,13 @@ class ViewGroupPage extends React.Component {
                             <SquareButton buttonTitle="Back" />
                         </Link>
                     </div>
+
+                    <div className="bottom-btn-container2">
+                        {/* This button takes you to the related group map page */}
+                        <Link to={'/map/' + this.props.match.params.uuid}>
+                            <SquareButton buttonTitle="Go to the Map!" />
+                        </Link>
+                    </div>
                 </div>
             </div >
         );
