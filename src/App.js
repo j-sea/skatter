@@ -248,20 +248,6 @@ class App extends React.Component {
 									}
 
 								</Route>
-								<Route exact path="/create-group">
-									{
-										(!this.state.loggedInUser)
-											? <Redirect to="/" />
-											: <CreateGroupPage handleLogOut={this.handleLogOut} />
-									}
-								</Route>
-								<Route exact path="/map">
-									{
-										(!this.state.loggedInUser)
-											? <Redirect to="/" />
-											: <GroupMap />
-									}
-								</Route>
 								<Route component={PageNotFound} />
 							</Switch>
 						</Router>
