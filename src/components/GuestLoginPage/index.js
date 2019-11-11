@@ -34,11 +34,12 @@ class GuestLoginPage extends React.Component {
 
 	render() {
 		return (
-			<container name='main-page-container'>
-				<div class='guest-login-pg'>
-					<h2>Welcome to your guest login page!</h2>
-					<p>In order to be able to log back into this guest user account later, you'll need to <strong>bookmark</strong> this page!</p>
-					<p>If you lose this page after you log out, <strong>you will lose access to any groups you've created or joined.</strong> You will need to create a new account at that point!</p>
+			<container className='main-page-container'>
+				<div className='guest-login-pg'>
+					<h2>Welcome to your Guest account</h2>
+					<br></br>
+					<p>Please make sure to <strong>bookmark</strong> this page!</p>
+					<p>If you lose this page after you log out, <strong>you will lose access to any groups you've created or joined</strong> and you will need to create a new account at that point!</p>
 					<form onSubmit={this.handleSubmit}>
 						<button type="submit">I understand I need to bookmark this page</button>
 					</form>
