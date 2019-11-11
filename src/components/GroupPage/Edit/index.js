@@ -1,7 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
 import Header from '../../Header'
-import Footer from '../../Footer'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
@@ -115,7 +114,6 @@ class EditGroupPage extends React.Component {
 
                     </div>
                 </div>
-                <Footer />
             </div>
         );
     }

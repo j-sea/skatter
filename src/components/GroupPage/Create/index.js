@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import Header from '../../Header'
-import Footer from '../../Footer'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
@@ -83,7 +82,6 @@ function CreateGroupPage(props) {
                     <SquareButton type="submit" buttonTitle="Create My Group" onClick={handleSubmit} />
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }

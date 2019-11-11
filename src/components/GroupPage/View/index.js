@@ -2,7 +2,6 @@ import React from 'react';
 import Axios from 'axios';
 import { Link } from "react-router-dom";
 import Header from '../../Header'
-import Footer from '../../Footer'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
@@ -80,9 +79,7 @@ class ViewGroupPage extends React.Component {
                             <SquareButton buttonTitle="Back" />
                         </Link>
                     </div>
-
                 </div>
-                <Footer />
             </div >
         );
     }
