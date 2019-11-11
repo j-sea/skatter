@@ -1,7 +1,8 @@
 .banner-style {
-    border: solid thin #F0F030;
-    background-color: #F000FFE6;
-    width: 75%;
+    border: solid thin orange;
+    background-color: rgb(72, 24, 72);
+    /* width: 90%; */
+    max-width: 500px;
     height: 30px;
     margin: 0 auto;
     border-radius: 0.3rem;
@@ -9,5 +10,5 @@
 }
 
 .banner-text {
-    color: white;
+    color: whitesmoke;
 }

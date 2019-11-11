@@ -1,9 +1,10 @@
 .pin-external-button {
-    color: #1890F0;
-    border: solid #1890F0;
+    color: whitesmoke;
+    border: solid orange;
     background-color: #481848;
     margin-top: 1%;
     margin-bottom: 1%;
+    border-radius: 15px;
 }
 
 .modal-background-pin {

@@ -26,18 +26,15 @@ class EditGroupPage extends React.Component {
         const group_uuid = this.props.match.params.uuid;
 
         //create const variable that allows to switch from localhost to heroku
-        const viewGroupToEditUrl = APIURL(`/api/group/${this.props.match.params.uuid}`);
+        const viewGroupToEditUrl = APIURL(`/api/group/${group_uuid}`);
         //axios call to DB to get specific group (passes session through cookie)
         Axios.get(
             viewGroupToEditUrl, { withCredentials: true })
             .then(res => {
                 return res.data
             })
-            //convert to json and set state
-            .then(json => this.setState({
-                group_name: json.group_name, description: json.description,
-                // alarms: json, members: json, pointsOfInterest: json 
-            }));
+            //convert to json and set state with spread operator
+            .then(json => this.setState({ ...json }));
     }
 
     handleEditSubmit = () => {

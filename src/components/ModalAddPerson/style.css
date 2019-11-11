@@ -1,7 +1,7 @@
 .add-person-button {
     background-color: #481848;
-    border: solid #1890F0;
-    color: #1890F0;
+    border: solid orange;
+    color: whitesmoke;
     border-radius: 30rem;
     /* margin: 2; */
 }
@@ -11,7 +11,7 @@
 }
 
 .confirm-delete-button {
-    color: #1890F0;
-    border: solid #1890F0;
+    color: whitesmoke;
+    border: solid orange;
     background-color: #481848;
 }
