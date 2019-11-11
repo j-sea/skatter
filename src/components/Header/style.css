@@ -11,8 +11,8 @@ body, html {
     background-color: #180517c9;
     border: solid #481848;
     border-radius: 0.3rem;
-    margin-bottom: 3.5%;
-    margin-top: 2%;
+    margin-bottom: 16px;
+    margin-top: 8px;
     height: 85px;
     justify-content: center;
     display: flex;
