@@ -17,6 +17,7 @@ const ModalAdd = (props) => {
   const handleSubmit = submitEvent => {
     submitEvent.preventDefault();
     // This will be calling the function to add a person
+    props.addEmailPhone(email, phone);
   };
 
   return (
