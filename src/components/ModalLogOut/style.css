@@ -7,7 +7,7 @@
 }
 
 .modal-background {
-    background-color: #F000FF33;
+    background-color: rgba(0, 0, 139, 0.596);
 }
 
 .confirm-delete-button {

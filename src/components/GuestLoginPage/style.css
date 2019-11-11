@@ -1,0 +1,7 @@
+.guest-login-pg {
+    color: whitesmoke;
+    background-color: rgba(0, 0, 0, 0.76);
+    border-radius: 15px;
+    padding: 5%;
+    border: solid thin #481848;
+}
