@@ -4,9 +4,9 @@ import RoundedButton from '../buttonRounded';
 import './style.css';
 
 function PageNotFound() {
-	return <div>
+	return <div className='pg-not-found'>
 		<h1>The thing you wanted doesn't exist!</h1>
-		<p>Sorry for the inconvenience!</p>
+		<p>Sorry for the inconvenience</p>
 		<Link to="/">
 			<RoundedButton buttonTitle="Check out ScATTeR!" />
 		</Link>
