@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Axios from 'axios';
-import APIURL from '../../utils/APIURL'; 
+import APIURL from '../../utils/APIURL';
 import './style.css';
 
 class GuestLoginPage extends React.Component {
@@ -19,29 +19,32 @@ class GuestLoginPage extends React.Component {
 			Axios.post(APIURL('/auth/login/guest'), {
 				invite_uuid: this.props.match.params.uuid
 			}, { withCredentials: true })
-			.then(response => {
-				// Update the logged in user in the app
-				this.props.updateLoggedInUser(response.data.user);
+				.then(response => {
+					// Update the logged in user in the app
+					this.props.updateLoggedInUser(response.data.user);
 
-				// Redirect to the group management page
-				this.props.history.push('/group-management');
-			})
-			.catch(function (err) {
-				console.error(err);
-			})
+					// Redirect to the group management page
+					this.props.history.push('/group-management');
+				})
+				.catch(function (err) {
+					console.error(err);
+				})
 		}
 	};
 
-	render () {
+	render() {
 		return (
-			<div>
-				<h2>This is your guest login page!</h2>
-				<p>In order to be able to log back into this guest user account later, you'll need to <strong>bookmark</strong> this page!</p>
-				<p>If you lose this page after you log out, <strong>you will lose access to any groups you've created or joined!</strong> You will need to create a new account at that point!</p>
-				<form onSubmit={this.handleSubmit}>
-					<button type="submit">I understand I need to bookmark this page!</button>
-				</form>
-			</div>
+			<container className='main-page-container'>
+				<div className='guest-login-pg'>
+					<h2>Welcome to your Guest account</h2>
+					<br></br>
+					<p>Please make sure to <strong>bookmark</strong> this page!</p>
+					<p>If you lose this page after you log out, <strong>you will lose access to any groups you've created or joined</strong> and you will need to create a new account at that point!</p>
+					<form onSubmit={this.handleSubmit}>
+						<button type="submit">I understand I need to bookmark this page</button>
+					</form>
+				</div>
+			</container>
 		);
 	}
 }

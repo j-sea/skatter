@@ -2,7 +2,6 @@ import React from 'react';
 import Axios from 'axios';
 import { Link } from "react-router-dom";
 import Header from '../../Header'
-import Footer from '../../Footer'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
@@ -53,10 +52,10 @@ class ViewGroupPage extends React.Component {
                 <br />
 
                 <div className="content-box-style2">
-                    <h5>Group Name:</h5>
+                    <h5 class="ind-group-title">Group name:</h5>
                     <h3>{this.state.group_name}</h3>
                     <br />
-                    <h5>Description:</h5>
+                    <h5 class="ind-group-title">Description:</h5>
                     <h3>{this.state.description}</h3>
                 </div>
 
@@ -88,7 +87,6 @@ class ViewGroupPage extends React.Component {
                         </Link>
                     </div>
                 </div>
-                <Footer />
             </div >
         );
     }

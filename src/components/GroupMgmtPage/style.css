@@ -10,6 +10,6 @@
     margin: 0 auto;
     border: solid thin orange;
     background-color: rgba(99, 53, 99, 0.377);
-    padding: 1%;
+    padding: 8px;
     border-radius: 15px;
 }

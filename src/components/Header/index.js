@@ -7,7 +7,7 @@ function Header(props) {
         <header>
             <nav className="navbar-light custom-hd row">
                 <div className="col-6">
-                    <img className="header-logo" src="/images/p3-logo3.png" alt="scatter" />
+                    <img className="header-logo" src="/images/p3-logo3.png" alt="ScATTeR" />
                 </div>
                 <div className="header-div col-3 test1">
                     <i className="material-icons">person</i>
