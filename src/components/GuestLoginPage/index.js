@@ -34,7 +34,7 @@ class GuestLoginPage extends React.Component {
 
 	render() {
 		return (
-			<container className='main-page-container'>
+			<div className='main-page-container'>
 				<div className='guest-login-pg'>
 					<h2>Welcome to your Guest account</h2>
 					<br></br>
@@ -44,7 +44,7 @@ class GuestLoginPage extends React.Component {
 						<button type="submit">I understand I need to bookmark this page</button>
 					</form>
 				</div>
-			</container>
+			</div>
 		);
 	}
 }

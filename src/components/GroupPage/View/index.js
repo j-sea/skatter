@@ -1,6 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Header from '../../Header'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
@@ -26,13 +26,16 @@ class ViewGroupPage extends React.Component {
         //create const variable that allows to switch from localhost to heroku
         const viewSpecificGroupUrl = APIURL(`/api/group/${this.props.match.params.uuid}`);
         //axios call to DB to get specific group (passes session through cookie)
-        Axios.get(
-            viewSpecificGroupUrl, { withCredentials: true })
-            .then(res => {
-                return res.data
-            })
-            //convert to json and set state with spread operator
-            .then(json => this.setState({ ...json }));
+        Axios.get(viewSpecificGroupUrl, { withCredentials: true })
+        .then(res => {
+            return res.data
+        })
+        //convert to json and set state with spread operator
+        .then(json => this.setState({ ...json }))
+        //on error, go back to group-management page
+        .catch(error => {
+            this.props.history.push('/group-management');
+        });
     }
     //TODO: how to set each item individually? Or will it auto pop form with object?
 
@@ -52,10 +55,10 @@ class ViewGroupPage extends React.Component {
                 <br />
 
                 <div className="content-box-style2">
-                    <h5 class="ind-group-title">Group name:</h5>
+                    <h5 className="ind-group-title">Group name:</h5>
                     <h3>{this.state.group_name}</h3>
                     <br />
-                    <h5 class="ind-group-title">Description:</h5>
+                    <h5 className="ind-group-title">Description:</h5>
                     <h3>{this.state.description}</h3>
                 </div>
 
@@ -92,4 +95,4 @@ class ViewGroupPage extends React.Component {
     }
 }
 
-export default ViewGroupPage;
+export default withRouter(ViewGroupPage);
