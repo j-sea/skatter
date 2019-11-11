@@ -40,7 +40,7 @@ const ModalAdd = (props) => {
 
         </ModalBody>
         <ModalFooter className="modal-background">
-          <Button className="confirm-delete-button" onClick={handleSubmit}>Add</Button>{' '}
+          <Button className="confirm-add-button" onClick={handleSubmit}>Add</Button>{' '}
         </ModalFooter>
       </Modal>
     </div>

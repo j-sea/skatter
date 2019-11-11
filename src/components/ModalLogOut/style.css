@@ -21,3 +21,13 @@
     border: solid orange;
     background-color: #481848;
 }
+.confirm-log-out-button {
+    color: whitesmoke;
+    border-color: #481848;
+    background-color: #481848;
+}
+.cancel-log-out-button {
+    color: whitesmoke;
+    border-color: #481848;
+    background-color: #481848;
+}

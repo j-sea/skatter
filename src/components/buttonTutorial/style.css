@@ -11,6 +11,12 @@
     background-color: #F000FF33;
 }
 
+.close-button {
+    color: whitesmoke;
+    border-color: #481848;
+    background-color: #481848;
+}
+
 .internal-modal-button {
     color: #1890F0;
     border: solid #1890F0;
