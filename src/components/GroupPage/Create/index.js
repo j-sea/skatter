@@ -14,8 +14,8 @@ function CreateGroupPage(props) {
     const [groupDescription, setGroupDescription] = useState('');
     const history = useHistory();
 
-    const handleSubmit = submitEvent => {
-
+    const handleSubmit = (submitEvent) => {
+        submitEvent.preventDefault();
         // in order to post data we first need to create object for data to post
         const groupData = {
             group_name: groupName,
@@ -31,6 +31,10 @@ function CreateGroupPage(props) {
                 console.log(error)
             })
     };
+
+    const addEmailPhone = (email, phone) => {
+       console.log(email, phone) 
+    }
 
     return (
         <div>
@@ -56,7 +60,7 @@ function CreateGroupPage(props) {
             <Banner bannerTitle="Members" />
             <div className="add-person-container">
                 {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
-                <ModalAdd />
+                <ModalAdd addEmailPhone = {addEmailPhone} />
             </div>
             <br></br>
             <Banner bannerTitle="Points of Interest" />

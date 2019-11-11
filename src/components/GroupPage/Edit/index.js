@@ -5,7 +5,7 @@ import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
 import APIURL from '../../../utils/APIURL';
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import '../style.css';
 
 class EditGroupPage extends React.Component {
@@ -51,7 +51,7 @@ class EditGroupPage extends React.Component {
         //update info for specific group - passing in uuid, new info, & session
         Axios.put(APIURL(`/api/group/${group_uuid}`), newData, { withCredentials: true }).then(data => {
             console.log(data);
-            window.location.href = "/group-management"
+            this.props.history.push('/group-management');
         }).catch(error => console.log(error))
     };
     handleInputChange = event => {
@@ -119,4 +119,4 @@ class EditGroupPage extends React.Component {
     }
 }
 
-export default EditGroupPage;
+export default withRouter(EditGroupPage);
