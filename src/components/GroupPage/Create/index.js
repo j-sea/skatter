@@ -13,6 +13,7 @@ function CreateGroupPage(props) {
     const [groupName, setGroupName] = useState('');
     const [groupDescription, setGroupDescription] = useState('');
     const history = useHistory();
+    const [addedPeople, setAddedPeople] = useState([])
 
     const handleSubmit = (submitEvent) => {
         submitEvent.preventDefault();
@@ -31,9 +32,15 @@ function CreateGroupPage(props) {
                 console.log(error)
             })
     };
-
+    //when function called
     const addEmailPhone = (email, phone) => {
-       console.log(email, phone) 
+        //make new array with same info as addedPeople
+        setAddedPeople([...addedPeople, {
+            //check to see if type is phone or email
+            type: phone ? 'phone' : 'email',
+            //assign phone value if avail, otherwise assign value to email
+            value: phone ? phone : email
+        }])
     }
 
     return (
@@ -60,7 +67,7 @@ function CreateGroupPage(props) {
             <Banner bannerTitle="Members" />
             <div className="add-person-container">
                 {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
-                <ModalAdd addEmailPhone = {addEmailPhone} />
+                <ModalAdd addEmailPhone={addEmailPhone} />
             </div>
             <br></br>
             <Banner bannerTitle="Points of Interest" />
