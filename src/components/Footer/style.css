@@ -1,11 +1,10 @@
-html, body {
+/* html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-}
+} */
 
 .custom-ft {
-    position: absolute;
     bottom:0;
     /* left:0; */
     width:100%;
@@ -15,9 +14,10 @@ background-color: #180517a8;
     margin-bottom: 8px;
     height: 35px;
     justify-content: center;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     color: rgba(245, 245, 245, 0.527);
+    margin-top: 50px;
 }
 
 .footer-text {

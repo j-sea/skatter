@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .App-logo {
@@ -24,6 +29,14 @@ body {
   background-position: center;
 }
 
+.content-wrap {
+  padding-bottom: 35px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .form-group {
   padding: 0 10px;
 }
@@ -40,5 +53,4 @@ input[type=text], textarea {
   display:flex;
 flex-direction: column;
 justify-content: center;
-height: 100vh;
 }
