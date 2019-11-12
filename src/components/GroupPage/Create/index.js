@@ -4,7 +4,7 @@ import Header from '../../Header'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
-import ModalDropPin from '../../ModalDropPin';
+// import ModalDropPin from '../../ModalDropPin';
 import APIURL from '../../../utils/APIURL';
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "reactstrap";
