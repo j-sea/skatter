@@ -15,7 +15,7 @@ class ViewGroupPage extends React.Component {
         //set initial state of page
         group_name: '',
         description: '',
-        addedPeople: [],
+        existingPeople: [],
         // alarms: "",
         // members: "",
         // pointsOfInterest: ""
@@ -62,8 +62,8 @@ class ViewGroupPage extends React.Component {
                 <Banner bannerTitle="Members" />
                 <div className="add-person-container">
                     {
-                        this.state.addedPeople.map(person => (
-                            <Button key={person.name} className="add-person-button">{person.name}
+                        this.state.existingPeople.map((person, index) => (
+                            <Button key={index} className="add-person-button">{person.name}
                             </Button>
                         ))
                     }

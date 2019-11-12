@@ -7,8 +7,8 @@ import ModalAdd from '../../ModalAddPerson';
 import ModalDropPin from '../../ModalDropPin'
 import APIURL from '../../../utils/APIURL';
 import { Link, withRouter } from "react-router-dom";
+import { Button } from 'reactstrap';
 import '../style.css';
-import { Button } from "reactstrap";
 
 class EditGroupPage extends React.Component {
     state = {
@@ -17,6 +17,8 @@ class EditGroupPage extends React.Component {
         description: "",
         addedPeople: [],
         removedPeople: [],
+        startingPeople: [],
+        existingPeople: [],
 
         // alarms: "",
         // members: "",
@@ -24,16 +26,43 @@ class EditGroupPage extends React.Component {
         //TODO:uncomment once Groups schema updated
     };
 
-    startingPeople = [];
-
     //on page load...
     componentDidMount() {
         //pulling specific group uuid from params (possible bc server route reconfig'd to allow optional uuid)
         const group_uuid = this.props.match.params.uuid;
 
-        // // grab all of the existing group invites related to this group
-        // Axios.get(APIURL(`/api/group/${group_uuid}/invites`), { withCredentials: true })
-        // .then();
+        // grab all of the existing group invites related to this group
+        Axios.get(APIURL(`/api/group/${group_uuid}/invites`), { withCredentials: true })
+        .then(groupInvites => {
+            console.log(groupInvites);
+            const newPeople = [];
+            groupInvites.data.forEach(groupInvite => {
+                if (!groupInvite.accepted) {
+                    if (groupInvite.email && groupInvite.email !== '') {
+                        newPeople.push({
+                            type: 'email',
+                            value: groupInvite.email,
+                            rejected: groupInvite.rejected,
+                            inviteUUID: groupInvite.invite_uuid,
+                        })
+                    }
+                    else if (groupInvite.phone) {
+                        newPeople.push({
+                            type: 'phone',
+                            value: groupInvite.phone,
+                            rejected: groupInvite.rejected,
+                            inviteUUID: groupInvite.invite_uuid,
+                        })
+                    }
+                }
+            });
+
+            this.setState({
+                startingPeople: newPeople,
+            })
+
+            console.log(this.state.addedPeople);
+        });
 
         //create const variable that allows to switch from localhost to heroku
         const viewGroupToEditUrl = APIURL(`/api/group/${group_uuid}`);
@@ -41,6 +70,7 @@ class EditGroupPage extends React.Component {
         Axios.get(
             viewGroupToEditUrl, { withCredentials: true })
             .then(res => {
+                console.log(res.data);
                 return res.data
             })
             //convert to json and set state with spread operator
@@ -57,7 +87,8 @@ class EditGroupPage extends React.Component {
             // members: this.state.members,
             // pointsOfInterest: this.state.pointsOfInterest
             //TODO:uncomment once Groups schema updated
-
+            addedPeople: this.state.addedPeople,
+            removedPeople: this.state.removedPeople,
         }
         //update info for specific group - passing in uuid, new info, & session
         Axios.put(APIURL(`/api/group/${group_uuid}`), newData, { withCredentials: true }).then(data => {
@@ -103,15 +134,35 @@ class EditGroupPage extends React.Component {
         }
     }
 
-    removePerson = (person) => {
-        let newPeople;
-        const personIndex = this.state.addedPeople.indexOf(person);
-        if (personIndex !== -1) {
-            newPeople = [
-                ...this.state.addedPeople,
-            ];
-            newPeople.splice(personIndex, 1);
-            this.setState(newPeople);
+    removePerson = (person, isStartingPerson) => {
+        if (!isStartingPerson) {
+            const personIndex = this.state.addedPeople.indexOf(person);
+            if (personIndex !== -1) {
+                const newPeople = [
+                    ...this.state.addedPeople,
+                ];
+                newPeople.splice(personIndex, 1);
+                this.setState({
+                    addedPeople: newPeople,
+                });
+            }
+        }
+        else {
+            const personIndex = this.state.startingPeople.indexOf(person);
+            if (personIndex !== -1) {
+                const newStartingPeople = [
+                    ...this.state.startingPeople,
+                ];
+                const removedPerson = newStartingPeople.splice(personIndex, 1);
+                const newRemovedPeople = [
+                    ...this.state.removedPeople,
+                    ...removedPerson,
+                ];
+                this.setState({
+                    startingPeople: newStartingPeople,
+                    removedPeople: newRemovedPeople,
+                });
+            }
         }
     }
 
@@ -144,27 +195,41 @@ class EditGroupPage extends React.Component {
                     </form>
                 </div>
 
-                <Banner bannerTitle="Members" />
+                <Banner bannerTitle="Member Invites" />
 
                 <div className="add-person-container">
                     {
-                        this.state.addedPeople.map(person => (
-                            <Button key={person.name} className="add-person-button">{person.name}
-                            </Button>
+                        this.state.startingPeople.map((person, index) => (
+                            <Button key={index} className="add-person-button" onClick={e => this.removePerson(person, true)}>{person.value} ✖</Button>
+                        ))
+                    }
+                    {
+                        this.state.addedPeople.map((person, index) => (
+                            <Button key={index} className="add-person-button" onClick={e => this.removePerson(person, false)}>{person.value} ✖</Button>
                         ))
                     }
                     {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
                     <ModalAdd addEmailPhone={this.addEmailPhone} />
                 </div>
                 <br></br>
+
+                <Banner bannerTitle="Members" />
+
+                <div className="add-person-container">
+                    {
+                        this.state.existingPeople.map((person, index) => (
+                            <Button key={index} className="add-person-button">{person.name}
+                            </Button>
+                        ))
+                    }
+                </div>
+                <br></br>
                 <Banner bannerTitle="Points of Interest" />
 
                 {/* This button when clicked should prompt drop pin modal. When pin added, new icon on group page should populate. */}
                 <div className="pin-container">
-                    <ModalDropPin />
-
+                    {/*<ModalDropPin />*/}
                 </div>
-
 
                 <div className="bottom-container-test">
                     <div className="bottom-btn-container1">
