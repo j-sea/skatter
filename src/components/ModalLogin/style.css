@@ -8,11 +8,12 @@
 }
 
 .modal-background {
-  background-color: rgba(0, 0, 139, 0.596);
+    background-color: #F000FF33;
+    
 }
 
 .internal-modal-button {
-      border: solid orange;
     color: whitesmoke;
+    border-color: #481848;
     background-color: #481848;
 }

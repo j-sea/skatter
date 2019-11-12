@@ -10,8 +10,14 @@
     background-color: rgba(0, 0, 139, 0.596);;
 }
 
-.confirm-delete-button {
+.internal-modal-button {
+    color: #1890F0;
+    border: solid #1890F0;
+    background-color: #481848;
+}
+
+.confirm-add-button {
     color: whitesmoke;
-    border: solid orange;
+    border-color: #481848;
     background-color: #481848;
 }
