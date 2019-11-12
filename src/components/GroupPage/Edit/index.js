@@ -18,6 +18,7 @@ class EditGroupPage extends React.Component {
         addedPeople: [],
         removedPeople: [],
         startingPeople: [],
+        existingPeople: [],
 
         // alarms: "",
         // members: "",
@@ -33,6 +34,7 @@ class EditGroupPage extends React.Component {
         // grab all of the existing group invites related to this group
         Axios.get(APIURL(`/api/group/${group_uuid}/invites`), { withCredentials: true })
         .then(groupInvites => {
+            console.log(groupInvites);
             const newPeople = [];
             groupInvites.data.forEach(groupInvite => {
                 if (!groupInvite.accepted) {
@@ -58,6 +60,8 @@ class EditGroupPage extends React.Component {
             this.setState({
                 startingPeople: newPeople,
             })
+
+            console.log(this.state.addedPeople);
         });
 
         //create const variable that allows to switch from localhost to heroku
@@ -66,6 +70,7 @@ class EditGroupPage extends React.Component {
         Axios.get(
             viewGroupToEditUrl, { withCredentials: true })
             .then(res => {
+                console.log(res.data);
                 return res.data
             })
             //convert to json and set state with spread operator
@@ -151,7 +156,7 @@ class EditGroupPage extends React.Component {
                 const removedPerson = newStartingPeople.splice(personIndex, 1);
                 const newRemovedPeople = [
                     ...this.state.removedPeople,
-                    removedPerson,
+                    ...removedPerson,
                 ];
                 this.setState({
                     startingPeople: newStartingPeople,
@@ -191,21 +196,33 @@ class EditGroupPage extends React.Component {
                     </form>
                 </div>
 
-                <Banner bannerTitle="Members" />
+                <Banner bannerTitle="Member Invites" />
 
                 <div className="add-person-container">
                     {
-                        this.state.startingPeople.map(person => (
-                            <Button key={person.value} className="add-person-button" onClick={e => this.removePerson(person, true)}>{person.value} ✖</Button>
+                        this.state.startingPeople.map((person, index) => (
+                            <Button key={index} className="add-person-button" onClick={e => this.removePerson(person, true)}>{person.value} ✖</Button>
                         ))
                     }
                     {
-                        this.state.addedPeople.map(person => (
-                            <Button key={person.value} className="add-person-button" onClick={e => this.removePerson(person, false)}>{person.value} ✖</Button>
+                        this.state.addedPeople.map((person, index) => (
+                            <Button key={index} className="add-person-button" onClick={e => this.removePerson(person, false)}>{person.value} ✖</Button>
                         ))
                     }
                     {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
                     <ModalAdd addEmailPhone={this.addEmailPhone} />
+                </div>
+                <br></br>
+
+                <Banner bannerTitle="Members" />
+
+                <div className="add-person-container">
+                    {
+                        this.state.existingPeople.map((person, index) => (
+                            <Button key={index} className="add-person-button">{person.name}
+                            </Button>
+                        ))
+                    }
                 </div>
                 <br></br>
                 <Banner bannerTitle="Points of Interest" />
