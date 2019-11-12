@@ -1,7 +1,7 @@
 import React from 'react';
 import './style.css';
 
-function Footer() {
+function Footer(props) {
     return (
         <footer>
             <nav className="navbar-light custom-ft">
