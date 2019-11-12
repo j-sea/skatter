@@ -8,9 +8,7 @@ import ModalDropPin from '../../ModalDropPin'
 import APIURL from '../../../utils/APIURL';
 import { Link, withRouter } from "react-router-dom";
 import '../style.css';
-import { thisExpression } from '@babel/types';
 import { Button } from "reactstrap";
-
 
 class EditGroupPage extends React.Component {
     state = {
@@ -18,16 +16,24 @@ class EditGroupPage extends React.Component {
         group_name: "",
         description: "",
         addedPeople: [],
+        removedPeople: [],
+
         // alarms: "",
         // members: "",
         // pointsOfInterest: ""
         //TODO:uncomment once Groups schema updated
-    }
+    };
+
+    startingPeople = [];
 
     //on page load...
     componentDidMount() {
         //pulling specific group uuid from params (possible bc server route reconfig'd to allow optional uuid)
         const group_uuid = this.props.match.params.uuid;
+
+        // // grab all of the existing group invites related to this group
+        // Axios.get(APIURL(`/api/group/${group_uuid}/invites`), { withCredentials: true })
+        // .then();
 
         //create const variable that allows to switch from localhost to heroku
         const viewGroupToEditUrl = APIURL(`/api/group/${group_uuid}`);
@@ -73,7 +79,40 @@ class EditGroupPage extends React.Component {
     }
 
     addEmailPhone = (email, phone) => {
-        // TODO:
+        if (email !== '') {
+            this.setState({
+                addedPeople: [
+                    ...this.state.addedPeople,
+                    {
+                        type: 'email',
+                        value: email,
+                    }
+                ]
+            });
+        }
+        else if (phone !== '') {
+            this.setState({
+                addedPeople: [
+                    ...this.state.addedPeople,
+                    {
+                        type: 'phone',
+                        value: phone,
+                    }
+                ]
+            });
+        }
+    }
+
+    removePerson = (person) => {
+        let newPeople;
+        const personIndex = this.state.addedPeople.indexOf(person);
+        if (personIndex !== -1) {
+            newPeople = [
+                ...this.state.addedPeople,
+            ];
+            newPeople.splice(personIndex, 1);
+            this.setState(newPeople);
+        }
     }
 
     render() {
