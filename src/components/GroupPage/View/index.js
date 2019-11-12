@@ -1,19 +1,21 @@
 import React from 'react';
 import Axios from 'axios';
+import { Button } from "reactstrap";
 import { Link, withRouter } from "react-router-dom";
 import Header from '../../Header'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
-import ModalAdd from '../../ModalAddPerson';
-import ModalDropPin from '../../ModalDropPin';
+// import ModalAdd from '../../ModalAddPerson';
+// import ModalDropPin from '../../ModalDropPin';
 import APIURL from '../../../utils/APIURL';
 import '../style.css';
 
 class ViewGroupPage extends React.Component {
     state = {
         //set initial state of page
-        group_name: "",
-        description: "",
+        group_name: '',
+        description: '',
+        addedPeople: [],
         // alarms: "",
         // members: "",
         // pointsOfInterest: ""
@@ -27,20 +29,16 @@ class ViewGroupPage extends React.Component {
         const viewSpecificGroupUrl = APIURL(`/api/group/${this.props.match.params.uuid}`);
         //axios call to DB to get specific group (passes session through cookie)
         Axios.get(viewSpecificGroupUrl, { withCredentials: true })
-        .then(res => {
-            return res.data
-        })
-        //convert to json and set state with spread operator
-        .then(json => this.setState({ ...json }))
-        //on error, go back to group-management page
-        .catch(error => {
-            this.props.history.push('/group-management');
-        });
+            .then(res => {
+                return res.data
+            })
+            //convert to json and set state with spread operator
+            .then(json => this.setState({ ...json }))
+            //on error, go back to group-management page
+            .catch(error => {
+                this.props.history.push('/group-management');
+            });
     }
-    //TODO: how to set each item individually? Or will it auto pop form with object?
-
-    // TODO: how to display existing group in editable format?
-
 
     render() {
         return (
@@ -63,6 +61,15 @@ class ViewGroupPage extends React.Component {
                 </div>
 
                 <Banner bannerTitle="Members" />
+                <div className="add-person-container">
+                    {
+                        this.state.addedPeople.map(person => (
+                            <Button key={person.name} className="add-person-button">{person.name}
+                            </Button>
+                        ))
+                    }
+                </div>
+
                 <div></div>
                 <br></br>
                 <br></br>

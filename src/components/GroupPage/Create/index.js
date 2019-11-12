@@ -4,7 +4,7 @@ import Header from '../../Header'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
-import ModalDropPin from '../../ModalDropPin';
+// import ModalDropPin from '../../ModalDropPin';
 import APIURL from '../../../utils/APIURL';
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "reactstrap";
@@ -34,7 +34,7 @@ function CreateGroupPage(props) {
                 console.log(error);
             });
     };
-
+    //when function called
     const addEmailPhone = (email, phone) => {
         if (email !== '') {
             setAddedPeople([
@@ -97,7 +97,7 @@ function CreateGroupPage(props) {
                     ))
                 }
                 {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
-                <ModalAdd addEmailPhone = {addEmailPhone} />
+                <ModalAdd addEmailPhone={addEmailPhone} />
             </div>
 
             <br />

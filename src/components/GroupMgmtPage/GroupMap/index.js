@@ -1,22 +1,21 @@
 import React from 'react';
 import "./style.css";
-
-import 'ol/ol.css';
+import './node_modules/ol/ol.css';
 import Feature from 'ol/Feature';
 import Geolocation from 'ol/Geolocation';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import Overlay from 'ol/Overlay';
 import Point from 'ol/geom/Point';
-import {unByKey} from 'ol/Observable';
-import {easeOut} from 'ol/easing';
-import {toLonLat, fromLonLat} from 'ol/proj';
-import {getVectorContext} from 'ol/render';
-import {defaults as defaultControls, ScaleLine, ZoomSlider} from 'ol/control';
-import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
-import {OSM, Vector as VectorSource} from 'ol/source';
-import {Circle as CircleStyle, Fill, Stroke, Style, Icon} from 'ol/style';
-import {defaults as defaultInteractions, Select} from 'ol/interaction';
+import { unByKey } from 'ol/Observable';
+import { easeOut } from 'ol/easing';
+import { toLonLat, fromLonLat } from 'ol/proj';
+import { getVectorContext } from 'ol/render';
+import { defaults as defaultControls, ScaleLine, ZoomSlider } from 'ol/control';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
+import { OSM, Vector as VectorSource } from 'ol/source';
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from 'ol/style';
+import { defaults as defaultInteractions, Select } from 'ol/interaction';
 import ViewGroupPageControl from './ViewGroupPageControl';
 import LocationControl from './LocationControl';
 import Axios from 'axios';
@@ -230,12 +229,12 @@ class GroupMap extends React.Component {
 
 		// Check to see if there are any new changes warranting updating the database
 		if ((this.storedUserLocation.longitude !== newLocationData.longitude)
-				|| (this.storedUserLocation.latitude !== newLocationData.latitude)
-				|| (this.storedUserLocation.accuracy !== newLocationData.accuracy)
-				|| (this.storedUserLocation.altitude !== newLocationData.altitude)
-				|| (this.storedUserLocation.altitudeAccuracy !== newLocationData.altitudeAccuracy)
-				|| (this.storedUserLocation.heading !== newLocationData.heading)
-				|| (this.storedUserLocation.speed !== newLocationData.speed)) {
+			|| (this.storedUserLocation.latitude !== newLocationData.latitude)
+			|| (this.storedUserLocation.accuracy !== newLocationData.accuracy)
+			|| (this.storedUserLocation.altitude !== newLocationData.altitude)
+			|| (this.storedUserLocation.altitudeAccuracy !== newLocationData.altitudeAccuracy)
+			|| (this.storedUserLocation.heading !== newLocationData.heading)
+			|| (this.storedUserLocation.speed !== newLocationData.speed)) {
 
 			// Mark changes requiring updating the database
 			locationDataChanged = true;
@@ -249,12 +248,12 @@ class GroupMap extends React.Component {
 			Axios.put(APIURL('/api/user-location/' + this.props.match.params.uuid),
 				newLocationData,
 				{ withCredentials: true })
-			.then(function () {
-				console.log('Updated');
-			})
-			.catch(function (error) {
-				console.error(error);
-			});
+				.then(function () {
+					console.log('Updated');
+				})
+				.catch(function (error) {
+					console.error(error);
+				});
 		}
 	};
 
@@ -272,9 +271,9 @@ class GroupMap extends React.Component {
 			this.userPositionFeature.setGeometry(new Point(coordinates));
 
 			if (this.followingUser) {
-				const animations = [{center: coordinates}];
+				const animations = [{ center: coordinates }];
 				if (!this.firstPositionSet) {
-					animations.push({zoom: this.defaultZoomLevel});
+					animations.push({ zoom: this.defaultZoomLevel });
 					this.firstPositionSet = true;
 				}
 				this.view.animate(...animations);
@@ -309,7 +308,7 @@ class GroupMap extends React.Component {
 		const duration = 3000;
 		const feature = e.feature;
 		const start = new Date().getTime();
-	
+
 		const listenerKey = this.featuresLayer.on('postrender', event => {
 			const vectorContext = getVectorContext(event);
 			const frameState = event.frameState;
@@ -319,7 +318,7 @@ class GroupMap extends React.Component {
 			// radius will be 5 at start and 30 at end.
 			const radius = easeOut(elapsedRatio) * 25 + 5;
 			const opacity = easeOut(1 - elapsedRatio);
-	
+
 			const style = new Style({
 				image: new CircleStyle({
 					radius: radius,
@@ -329,7 +328,7 @@ class GroupMap extends React.Component {
 					})
 				})
 			});
-	
+
 			vectorContext.setStyle(style);
 			vectorContext.drawGeometry(flashGeom);
 			if (elapsed > duration) {
@@ -341,29 +340,29 @@ class GroupMap extends React.Component {
 		});
 	};
 
-	
+
 	queryGroupUsers = groupUUID => {
 		const userLocation = this.geolocation.getPosition();
 		if (typeof userLocation !== 'undefined') {
 			// Grab all the user locations in this group not including the current user
 			Axios.get(APIURL('/api/user-locations/' + this.props.match.params.uuid), { withCredentials: true })
-			.then(groupUserDetails => {
-				console.log(groupUserDetails.data);
-				this.updateGroupUsers(groupUserDetails.data.reduce(function (accumulator, current) {
-					accumulator[current.user_uuid] = {
-						user_name: current.name,
-						description: current.description,
-						user_uuid: current.user_uuid,
-						longitude: current.longitude,
-						latitude: current.latitude,
-						color: current.color,
-					}
-					return accumulator;
-				}, {}));
-			})
-			.catch(function (error) {
-				console.error(error);
-			});
+				.then(groupUserDetails => {
+					console.log(groupUserDetails.data);
+					this.updateGroupUsers(groupUserDetails.data.reduce(function (accumulator, current) {
+						accumulator[current.user_uuid] = {
+							user_name: current.name,
+							description: current.description,
+							user_uuid: current.user_uuid,
+							longitude: current.longitude,
+							latitude: current.latitude,
+							color: current.color,
+						}
+						return accumulator;
+					}, {}));
+				})
+				.catch(function (error) {
+					console.error(error);
+				});
 		}
 	};
 
@@ -412,23 +411,23 @@ class GroupMap extends React.Component {
 		if (typeof userLocation !== 'undefined') {
 			// Grab all the interest points in this group
 			Axios.get(APIURL('/api/interest-points/' + this.props.match.params.uuid), { withCredentials: true })
-			.then(interestPoints => {
-				console.log(interestPoints.data);
-				this.updateGroupInterestPoints(interestPoints.data.reduce(function (accumulator, current) {
-					accumulator[current.id] = {
-						name: current.name,
-						description: current.description,
-						id: current.id,
-						longitude: current.longitude,
-						latitude: current.latitude,
-						color: current.color,
-					}
-					return accumulator;
-				}, {}));
-			})
-			.catch(function (error) {
-				console.error(error);
-			});
+				.then(interestPoints => {
+					console.log(interestPoints.data);
+					this.updateGroupInterestPoints(interestPoints.data.reduce(function (accumulator, current) {
+						accumulator[current.id] = {
+							name: current.name,
+							description: current.description,
+							id: current.id,
+							longitude: current.longitude,
+							latitude: current.latitude,
+							color: current.color,
+						}
+						return accumulator;
+					}, {}));
+				})
+				.catch(function (error) {
+					console.error(error);
+				});
 		}
 	};
 
@@ -472,7 +471,7 @@ class GroupMap extends React.Component {
 		}
 	};
 
-	componentDidMount () {
+	componentDidMount() {
 		progressBar.reset();
 		overlayPopup.reset();
 
@@ -490,7 +489,7 @@ class GroupMap extends React.Component {
 			maxZoom: this.maxZoomLevel,
 			minZoom: this.minZoomLevel,
 		});
-		
+
 		this.userAccuracyFeature = new Feature({
 			name: 'userAccuracy',
 			featureType: 'accuracy',
@@ -527,7 +526,7 @@ class GroupMap extends React.Component {
 			source: this.osm,
 		});
 
-		this.locationControl = new LocationControl({setTracker: this.setTracker, group_uuid: this.props.match.params.uuid});
+		this.locationControl = new LocationControl({ setTracker: this.setTracker, group_uuid: this.props.match.params.uuid });
 
 		this.map = new Map({
 			controls: defaultControls().extend([
@@ -539,7 +538,7 @@ class GroupMap extends React.Component {
 					minWidth: 140
 				}),
 				new ZoomSlider(),
-				new ViewGroupPageControl({history: this.props.history, newURL: '/view-group/' + this.props.match.params.uuid}),
+				new ViewGroupPageControl({ history: this.props.history, newURL: '/view-group/' + this.props.match.params.uuid }),
 				this.locationControl,
 			]),
 			interactions: defaultInteractions().extend([
@@ -563,12 +562,12 @@ class GroupMap extends React.Component {
 		});
 
 		Axios.get(APIURL('/api/user-locating-enabled/' + this.props.match.params.uuid), { withCredentials: true })
-		.then(groupUserDetail => {
-			this.locationControl.setTracker(groupUserDetail.data.locatingEnabled);
-		})
-		.catch(function (error) {
-			console.error(error);
-		})
+			.then(groupUserDetail => {
+				this.locationControl.setTracker(groupUserDetail.data.locatingEnabled);
+			})
+			.catch(function (error) {
+				console.error(error);
+			})
 
 		this.osm.on('tileloadstart', progressBar.addLoading);
 		this.osm.on('tileloadend', progressBar.addLoaded);
@@ -582,8 +581,8 @@ class GroupMap extends React.Component {
 		this.featuresSource.on('addfeature', this.flashIconOut)
 		this.map.on('pointermove', this.updateCursor);
 	}
-	
-	componentWillUnmount () {
+
+	componentWillUnmount() {
 		this.map.un('pointermove', this.updateCursor);
 		this.featuresSource.un('addfeature', this.flashIconOut)
 		overlayPopup.detachClick();
@@ -598,15 +597,17 @@ class GroupMap extends React.Component {
 		clearInterval(this.updateInterval);
 	}
 
-	render () {
+	render() {
 		return (
-			<div id="map-wrapper">
-				<div id="map" className="map"></div>
-				<div id="map-progress"></div>
-				<div id="info" style={this.infoStyle}></div>
-				<div id="map-popup">
-					<a id="map-popup-closer" href="#close">✖</a>
-					<div id="map-popup-content"></div>
+			<div>
+				<div id="map-wrapper">
+					<div id="map" className="map"></div>
+					<div id="map-progress"></div>
+					<div id="info" style={this.infoStyle}></div>
+					<div id="map-popup">
+						<a id="map-popup-closer" href="#close">✖</a>
+						<div id="map-popup-content"></div>
+					</div>
 				</div>
 			</div>
 		);
