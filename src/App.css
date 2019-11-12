@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  position: absolute;
+  position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -31,6 +31,7 @@ body {
 
 .content-wrap {
   padding-bottom: 35px;
+  position: relative;
   flex-grow: 1;
   display: flex;
   justify-content: center;

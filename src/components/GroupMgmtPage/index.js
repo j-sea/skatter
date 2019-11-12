@@ -47,7 +47,7 @@ class GroupMgmtPage extends React.Component {
     render() {
         return (
             <div>
-                <Header handleLogOut={this.props.handleLogOut} />
+               
                 <br />
                 <Link to='/create-group'>
                     <SquareButton buttonTitle="Create Group" />
