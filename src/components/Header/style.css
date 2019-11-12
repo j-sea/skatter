@@ -12,7 +12,7 @@ body, html {
     border: solid #481848;
     border-radius: 0.3rem;
     margin-bottom: 16px;
-    margin-top: 8px;
+    margin-top: 0px;
     height: 85px;
     justify-content: center;
     display: flex;
@@ -42,6 +42,8 @@ header {
     border: solid #1890F0;
     background-color: #481848;
 }
+
+/* #navbar-light{ position: sticky; top: 10px; } */
 
 @media screen and (max-width: 576px){
 
