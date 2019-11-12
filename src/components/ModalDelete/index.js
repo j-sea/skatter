@@ -21,7 +21,7 @@ const ModalDelete = (props) => {
           Are you sure you want to delete this?
         </ModalBody>
         <ModalFooter className="modal-background">
-          <Button className="confirm-delete-button" onClick={toggle}>Yes</Button>{' '}
+          <Button className="confirm-delete-button" onClick={e=>{toggle(); props.onClick();}}>Yes</Button>{' '}
           <Button className="cancel-delete-button" onClick={toggle}>No</Button>
         </ModalFooter>
       </Modal>
