@@ -8,6 +8,7 @@ import ModalDropPin from '../../ModalDropPin'
 import APIURL from '../../../utils/APIURL';
 import { Link, withRouter } from "react-router-dom";
 import '../style.css';
+import { Button } from "reactstrap";
 
 class EditGroupPage extends React.Component {
     state = {
@@ -147,6 +148,12 @@ class EditGroupPage extends React.Component {
                 <Banner bannerTitle="Members" />
 
                 <div className="add-person-container">
+                    {
+                        this.state.addedPeople.map(person => (
+                            <Button key={person.name} className="add-person-button">{person.name}
+                            </Button>
+                        ))
+                    }
                     {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
                     <ModalAdd addEmailPhone={this.addEmailPhone} />
                 </div>
