@@ -9,7 +9,11 @@
 	height: 100%;
 }
 
-.map-btns.ol-control button {
+.map-btns.ol-control button,
+.ol-zoomslider-thumb.ol-unselectable,
+.ol-zoom-out,
+.ol-zoom-in
+{
 	background-color: #481848;
 	border: solid orange;
 	color: whitesmoke;
