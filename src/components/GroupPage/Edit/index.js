@@ -9,12 +9,15 @@ import APIURL from '../../../utils/APIURL';
 import { Link, withRouter } from "react-router-dom";
 import '../style.css';
 import { thisExpression } from '@babel/types';
+import { Button } from "reactstrap";
+
 
 class EditGroupPage extends React.Component {
     state = {
         //set initial state of page
         group_name: "",
         description: "",
+        addedPeople: [],
         // alarms: "",
         // members: "",
         // pointsOfInterest: ""
@@ -106,6 +109,12 @@ class EditGroupPage extends React.Component {
                 <Banner bannerTitle="Members" />
 
                 <div className="add-person-container">
+                    {
+                        this.state.addedPeople.map(person => (
+                            <Button key={person.name} className="add-person-button">{person.name}
+                            </Button>
+                        ))
+                    }
                     {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
                     <ModalAdd addEmailPhone={this.addEmailPhone} />
                 </div>
