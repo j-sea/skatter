@@ -6,6 +6,7 @@ import CreateGroupPage from './components/GroupPage/Create';
 import EditGroupPage from './components/GroupPage/Edit';
 import ViewGroupPage from './components/GroupPage/View';
 import Footer from './components/Footer';
+import Header from './components/Header';
 import GroupMap from './components/GroupMap';
 import GroupMgmtPage from './components/GroupMgmtPage';
 import Logo from './components/Logo'
@@ -170,6 +171,7 @@ class App extends React.Component {
 			(!this.state.attemptedRecover)
 			? <div />
 			: <div className="App">
+				<Header handleLogOut={this.handleLogOut}/>
 				<Router>
 					<div className='content-wrap'>
 						<Switch>

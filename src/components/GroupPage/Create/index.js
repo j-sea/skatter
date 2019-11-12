@@ -70,8 +70,6 @@ function CreateGroupPage(props) {
 
     return (
         <div>
-            <Header handleLogOut={props.handleLogOut} />
-
             <div className="2">
                 <form>
                     <div className="form-group">
