@@ -8,12 +8,12 @@ body, html {
     /* position: absolute; */
     top:0; 
     width:100vw;
-    background-color: #265df0;
-    border: solid #F0F030;
+    background-color: #180517c9;
+    border: solid #481848;
     border-radius: 0.3rem;
-    margin-bottom: 3.5%;
-    margin-top: 2%;
-    height: 65px;
+    margin-bottom: 16px;
+    margin-top: 8px;
+    height: 85px;
     justify-content: center;
     display: flex;
     align-items: center;

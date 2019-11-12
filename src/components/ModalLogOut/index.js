@@ -23,7 +23,7 @@ const ModalLogOut = (props) => {
 
     return (
         <div>
-            <Button className="external-log-out-button" onClick={toggle}>Logout</Button>
+            <Button className="external-log-out-button logout-btn" onClick={toggle}>Logout</Button>
             <Modal isOpen={modal} toggle={toggle} className={className}>
                 <ModalHeader className="modal-background" toggle={toggle}>Confirm Logout</ModalHeader>
                 <ModalBody className="modal-background">

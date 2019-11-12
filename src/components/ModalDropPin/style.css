@@ -2,11 +2,11 @@
     color: whitesmoke;
     border: solid orange;
     background-color: #481848;
-    margin-top: 1%;
-    margin-bottom: 1%;
+    margin-top: 8px;
+    margin-bottom: 8px;
     border-radius: 15px;
 }
 
 .modal-background-pin {
-    background-color: #F000FF33;
+    background-color: rgba(0, 0, 139, 0.596);
 }

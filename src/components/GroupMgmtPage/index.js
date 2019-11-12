@@ -2,7 +2,6 @@ import React from 'react';
 import './style.css';
 import { Link } from "react-router-dom";
 import Header from '../Header'
-import Footer from '../Footer'
 import SquareButton from '../buttonSquare';
 import RoundedButton from '../buttonRounded';
 // import ModalDelete from '../ModalDelete';
@@ -76,7 +75,6 @@ class GroupMgmtPage extends React.Component {
                         </div>
                     })}
                 </div>
-                <Footer />
             </div >
         );
     }

@@ -1,37 +1,72 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import Header from '../../Header'
-import Footer from '../../Footer'
 import SquareButton from '../../buttonSquare';
 import Banner from '../../Banner'
 import ModalAdd from '../../ModalAddPerson';
 import ModalDropPin from '../../ModalDropPin';
 import APIURL from '../../../utils/APIURL';
 import { Link, useHistory } from "react-router-dom";
+import { Button } from "reactstrap";
 import '../style.css';
 
 function CreateGroupPage(props) {
     const [groupName, setGroupName] = useState('');
     const [groupDescription, setGroupDescription] = useState('');
+    const [addedPeople, setAddedPeople] = useState([]);
     const history = useHistory();
 
-    const handleSubmit = submitEvent => {
-
+    const handleSubmit = (submitEvent) => {
+        submitEvent.preventDefault();
         // in order to post data we first need to create object for data to post
         const groupData = {
             group_name: groupName,
-            description: groupDescription
-        }
+            description: groupDescription,
+            addedPeople: addedPeople,
+        };
 
         Axios.post(APIURL("/api/group"), groupData, { withCredentials: true })
             .then(data => {
-                console.log(data)
-                history.push("/group-management")
+                console.log(data);
+                history.push("/group-management");
             })
             .catch(error => {
-                console.log(error)
-            })
+                console.log(error);
+            });
     };
+
+    const addEmailPhone = (email, phone) => {
+        if (email !== '') {
+            setAddedPeople([
+                ...addedPeople,
+                {
+                    type: 'email',
+                    value: email,
+                }
+            ]);
+        }
+        else if (phone !== '') {
+            setAddedPeople([
+                ...addedPeople,
+                {
+                    type: 'phone',
+                    value: phone,
+                }
+            ]);
+        }
+    }
+
+    const removePerson = (person) => {
+        let newPeople;
+        const personIndex = addedPeople.indexOf(person);
+        if (personIndex !== -1) {
+            addedPeople.splice(personIndex, 1);
+            newPeople = [
+                ...addedPeople,
+            ];
+            setAddedPeople(newPeople);
+        }
+    }
 
     return (
         <div>
@@ -56,16 +91,13 @@ function CreateGroupPage(props) {
 
             <Banner bannerTitle="Members" />
             <div className="add-person-container">
+                {
+                    addedPeople.map(person => (
+                        <Button key={person.value} className="add-person-button" onClick={e => removePerson(person)}>{person.value} ✖</Button>
+                    ))
+                }
                 {/* This button when clicked should prompt add person modal. When person added, new icon on group page should populate. */}
-                <ModalAdd />
-            </div>
-            <br></br>
-            <Banner bannerTitle="Points of Interest" />
-
-            {/* This button when clicked should prompt drop pin modal. When pin added, new icon on group page should populate. */}
-            <div className="pin-container">
-                <ModalDropPin />
-
+                <ModalAdd addEmailPhone = {addEmailPhone} />
             </div>
 
             <br />
@@ -83,7 +115,6 @@ function CreateGroupPage(props) {
                     <SquareButton type="submit" buttonTitle="Create My Group" onClick={handleSubmit} />
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }

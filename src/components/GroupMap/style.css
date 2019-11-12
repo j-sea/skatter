@@ -19,7 +19,7 @@
 
 #map-popup {
 	position: absolute;
-	background-color: white;
+	background-color: whitesmoke;
 	-webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
 	filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
 	padding: 15px;
@@ -39,7 +39,7 @@
 	pointer-events: none;
 }
 #map-popup:after {
-	border-top-color: white;
+	border-top-color: whitesmoke;
 	border-width: 10px;
 	left: 48px;
 	margin-left: -10px;

@@ -168,9 +168,10 @@ class App extends React.Component {
 	render() {
 		return (
 			(!this.state.attemptedRecover)
-				? <div />
-				: <div className="App">
-					<Router>
+			? <div />
+			: <div className="App">
+				<Router>
+					<div className='content-wrap'>
 						<Switch>
 							<Route exact path="/">
 								{
@@ -241,32 +242,19 @@ class App extends React.Component {
 							</Route>
 							<Route exact path="/map/:uuid" render={props => (
 								(!this.state.loggedInUser)
-									? <Redirect to="/" />
-									: <GroupMap loggedInUser={this.state.loggedInUser} {...props} />
+								? <Redirect to="/" />
+								: <GroupMap loggedInUser={this.state.loggedInUser} {...props} />
 							)} />
-							<Route exact path="/create-group">
-								{
-									(!this.state.loggedInUser)
-										? <Redirect to="/" />
-										: <CreateGroupPage handleLogOut={this.handleLogOut} />
-								}
-							</Route>
-							<Route exact path="/map">
-								{
-									(!this.state.loggedInUser)
-										? <Redirect to="/" />
-										: <GroupMap />
-								}
-							</Route>
 							<Route component={PageNotFound} />
 						</Switch>
-						<Route render={props => (
-							(props.location.pathname.indexOf('/map') === -1)
-							? <Footer />
-							: null
-						)} />
-					</Router>
-				</div>
+					</div>
+					<Route render={props => (
+						(props.location.pathname.indexOf('/map') === -1)
+						? <Footer />
+						: null
+					)} />
+				</Router>
+			</div>
 		);
 	}
 }

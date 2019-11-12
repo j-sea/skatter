@@ -1,14 +1,14 @@
 .external-modal-button {
     background-color: #481848;
-    border: solid #1890F0;
-    color: #1890F0;
+   border: solid orange;
+    color: whitesmoke;
     border-radius: 30rem;
-    margin-top: 1.5%;
-    margin-bottom: 1.5%;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .modal-background {
-    background-color: #F000FF33;
+    background-color: rgba(0, 0, 139, 0.596);
 }
 
 .close-button {
@@ -18,7 +18,7 @@
 }
 
 .internal-modal-button {
-    color: #1890F0;
-    border: solid #1890F0;
+      border: solid orange;
+    color: whitesmoke;
     background-color: #481848;
 }

@@ -1,17 +1,17 @@
 .logo-wrapper {
-    margin-top: 5%;
+    margin-top: 32px;
     justify-content: center;
     display: flex;
     align-items: center;
-    margin-bottom: 3%;
+    margin-bottom: 16px;
 }
 
 .logo-circle {
     height: 150px;
     width: 265px;
-    background-color: #265df0;
+    background-color: #180517d8;
+    border: solid #481848;
     border-radius: 50%;
-    border: solid #1890F0;
     display: inline-block;
     justify-content: center;
     display: flex;
@@ -21,7 +21,7 @@
   .logo-text {
     /* justify-content: center; */
     /* display: flex; */
-    /* align-items: center; */
+    /* align-items: left; */
     height: 65px;
     width: 200px;
   }
