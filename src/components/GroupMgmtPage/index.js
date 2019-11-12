@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Header from '../Header'
 import SquareButton from '../buttonSquare';
 import RoundedButton from '../buttonRounded';
-// import ModalDelete from '../ModalDelete';
+import ModalDelete from '../ModalDelete';
 import Banner from '../Banner'
 import Axios from 'axios';
 import APIURL from '../../utils/APIURL';
@@ -65,9 +65,9 @@ class GroupMgmtPage extends React.Component {
                                     ? <>
                                         <Link to={`/edit-group/${fartponies.group_uuid}`}><RoundedButton buttonTitle="Edit" /></Link>
                                         <div>
-                                            <Button className="external-delete-button" onClick={() => {
+                                            <ModalDelete onClick={() => {
                                                 this.handleDeleteGroup(fartponies.group_uuid)
-                                            }}>X</Button>
+                                            }} />
                                         </div>
                                     </>
                                     : <div />

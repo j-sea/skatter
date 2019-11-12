@@ -1,0 +1,23 @@
+.external-delete-button {
+    background-color: #481848;
+    border: solid orange;
+    color: #ff0000;
+    border-radius: 30rem;
+    margin: 8px;
+}
+
+.modal-background {
+    background-color: rgba(0, 0, 139, 0.596);
+}
+
+.confirm-delete-button {
+    color: whitesmoke;
+    border: solid orange;
+    background-color: #481848;
+}
+
+.cancel-delete-button {
+    color: red;
+    border: solid orange;
+    background-color: #481848;
+}
