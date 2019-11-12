@@ -9,7 +9,7 @@ var ViewGroupPageControl = /*@__PURE__*/(function (Control) {
     button.innerHTML = '<i class="material-icons">arrow_back</i>';
 
     var element = document.createElement('div');
-    element.className = 'ol-unselectable ol-control';
+    element.className = 'ol-unselectable ol-control map-btns';
     element.id = 'map-view-group-page-control';
     element.appendChild(button);
 

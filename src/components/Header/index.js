@@ -13,7 +13,6 @@ function Header(props) {
                     <i className="material-icons">person</i>
                 </div>
                 <div className="header-div col-3">
-                    {/* <button type="button" className="btn btn-primary btn-sm header-test" > <i className="material-icons">dehaze</i></button> */}
                     <ModalLogOut handleLogOut={props.handleLogOut} />
                 </div>
             </nav>
