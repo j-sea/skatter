@@ -9,15 +9,20 @@
 	height: 100%;
 }
 
+/* change colors of buttons on map pg to match app colors*/
+/* affects back and deactivate buttons */
 .map-btns.ol-control button,
+/* affects slider bar */
 .ol-zoomslider-thumb.ol-unselectable,
-.ol-zoom-out,
-.ol-zoom-in
+/* affects zoom out btn */
+/* affects zoom in btn */
+.ol-control button.ol-zoom-out,
+.ol-control button.ol-zoom-in
 {
 	background-color: #481848;
 	border: solid orange;
 	color: whitesmoke;
-	font-size: large;
+	font-size: larger;
 	border-radius: 15px;
 }
 
