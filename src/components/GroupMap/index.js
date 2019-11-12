@@ -600,15 +600,13 @@ class GroupMap extends React.Component {
 
 	render () {
 		return (
-			<div>
-				<div id="map-wrapper">
-					<div id="map" className="map"></div>
-					<div id="map-progress"></div>
-					<div id="info" style={this.infoStyle}></div>
-					<div id="map-popup">
-						<a id="map-popup-closer" href="#close">✖</a>
-						<div id="map-popup-content"></div>
-					</div>
+			<div id="map-wrapper">
+				<div id="map" className="map"></div>
+				<div id="map-progress"></div>
+				<div id="info" style={this.infoStyle}></div>
+				<div id="map-popup">
+					<a id="map-popup-closer" href="#close">✖</a>
+					<div id="map-popup-content"></div>
 				</div>
 			</div>
 		);
