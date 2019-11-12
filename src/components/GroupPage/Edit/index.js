@@ -8,18 +8,22 @@ import ModalDropPin from '../../ModalDropPin'
 import APIURL from '../../../utils/APIURL';
 import { Link, withRouter } from "react-router-dom";
 import '../style.css';
-import { thisExpression } from '@babel/types';
 
 class EditGroupPage extends React.Component {
     state = {
         //set initial state of page
         group_name: "",
         description: "",
+        addedPeople: [],
+        removedPeople: [],
+
         // alarms: "",
         // members: "",
         // pointsOfInterest: ""
         //TODO:uncomment once Groups schema updated
-    }
+    };
+
+    startingPeople = [];
 
     //on page load...
     componentDidMount() {
@@ -70,7 +74,36 @@ class EditGroupPage extends React.Component {
     }
 
     addEmailPhone = (email, phone) => {
-        // TODO:
+        if (email !== '') {
+            setAddedPeople([
+                ...addedPeople,
+                {
+                    type: 'email',
+                    value: email,
+                }
+            ]);
+        }
+        else if (phone !== '') {
+            setAddedPeople([
+                ...addedPeople,
+                {
+                    type: 'phone',
+                    value: phone,
+                }
+            ]);
+        }
+    }
+
+    removePerson = (person) => {
+        let newPeople;
+        const personIndex = addedPeople.indexOf(person);
+        if (personIndex !== -1) {
+            addedPeople.splice(personIndex, 1);
+            newPeople = [
+                ...addedPeople,
+            ];
+            setAddedPeople(newPeople);
+        }
     }
 
     render() {
