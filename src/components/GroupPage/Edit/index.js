@@ -30,6 +30,10 @@ class EditGroupPage extends React.Component {
         //pulling specific group uuid from params (possible bc server route reconfig'd to allow optional uuid)
         const group_uuid = this.props.match.params.uuid;
 
+        // // grab all of the existing group invites related to this group
+        // Axios.get(APIURL(`/api/group/${group_uuid}/invites`), { withCredentials: true })
+        // .then();
+
         //create const variable that allows to switch from localhost to heroku
         const viewGroupToEditUrl = APIURL(`/api/group/${group_uuid}`);
         //axios call to DB to get specific group (passes session through cookie)
@@ -75,34 +79,38 @@ class EditGroupPage extends React.Component {
 
     addEmailPhone = (email, phone) => {
         if (email !== '') {
-            setAddedPeople([
-                ...addedPeople,
-                {
-                    type: 'email',
-                    value: email,
-                }
-            ]);
+            this.setState({
+                addedPeople: [
+                    ...this.state.addedPeople,
+                    {
+                        type: 'email',
+                        value: email,
+                    }
+                ]
+            });
         }
         else if (phone !== '') {
-            setAddedPeople([
-                ...addedPeople,
-                {
-                    type: 'phone',
-                    value: phone,
-                }
-            ]);
+            this.setState({
+                addedPeople: [
+                    ...this.state.addedPeople,
+                    {
+                        type: 'phone',
+                        value: phone,
+                    }
+                ]
+            });
         }
     }
 
     removePerson = (person) => {
         let newPeople;
-        const personIndex = addedPeople.indexOf(person);
+        const personIndex = this.state.addedPeople.indexOf(person);
         if (personIndex !== -1) {
-            addedPeople.splice(personIndex, 1);
             newPeople = [
-                ...addedPeople,
+                ...this.state.addedPeople,
             ];
-            setAddedPeople(newPeople);
+            newPeople.splice(personIndex, 1);
+            this.setState(newPeople);
         }
     }
 
