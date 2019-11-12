@@ -76,7 +76,6 @@ class EditGroupPage extends React.Component {
     render() {
         return (
             <div>
-                <Header handleLogOut={this.props.handleLogOut} />
                 <br />
                 <br />
 
