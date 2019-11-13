@@ -129,7 +129,7 @@ class App extends React.Component {
 	};
 
 	handleLogOut = () => {
-		console.log('Handling user log out...');
+		console.log('Logging user out...');
 
 		const logoutUrl = APIURL('/auth/logout');
 		Axios.post(logoutUrl, {}, { withCredentials: true })
@@ -169,94 +169,94 @@ class App extends React.Component {
 	render() {
 		return (
 			(!this.state.attemptedRecover)
-			? <div />
-			: <div className="App">
-				<Header handleLogOut={this.handleLogOut}/>
-				<Router>
-					<div className='content-wrap'>
-						<Switch>
-							<Route exact path="/">
-								{
-									(!this.state.loggedInUser)
-										? <div className='main-page-container'>
-											<Logo />
-											<Quickstart handleQuickstartSignUp={this.handleQuickstartSignUp} />
-											<ModalSignUp handleSignUp={this.handleSignUp} />
-											<ModalLogin handleLogIn={this.handleLogIn} />
-											<Tutorial />
-										</div>
-										: (this.guestLoginUUID)
-											? () => {
-												const inviteUUID = this.guestLoginUUID;
-												this.guestLoginUUID = false;
-												return <Redirect to={'/guest/' + inviteUUID} />
-											}
-											: <Redirect to="/group-management" />
-								}
-							</Route>
-							<Route exact path="/guest/:uuid" render={props => (
-								(Object.prototype.hasOwnProperty.call(this.state.loggedInUser, 'email')
-									|| Object.prototype.hasOwnProperty.call(this.state.loggedInUser, 'phone'))
-									? <Redirect to="/group-management" />
-									: <GuestLoginPage loggedInUser={this.state.loggedInUser} updateLoggedInUser={this.updateLoggedInUser} {...props} />
-							)} />
-							<Route exact path="/group-invite/accept/:uuid" render={props => (
-								<GroupInvite accepted={true} loggedInUser={this.state.loggedInUser} {...props} />
-							)} />
-							<Route exact path="/group-invite/reject/:uuid" render={props => (
-								<GroupInvite accepted={false} loggedInUser={this.state.loggedInUser} {...props} />
-							)} />
-							<Route exact path="/group-invite/rejection-confirmation">
-								<GroupInviteRejection />
-							</Route>
-							<Route exact path="/group-management">
-								{
+				? <div />
+				: <div className="App">
+					<Router>
+						<Header handleLogOut={this.handleLogOut} />
+						<div className='content-wrap'>
+							<Switch>
+								<Route exact path="/">
+									{
+										(!this.state.loggedInUser)
+											? <div className='main-page-container'>
+												<Logo />
+												<Quickstart handleQuickstartSignUp={this.handleQuickstartSignUp} />
+												<ModalSignUp handleSignUp={this.handleSignUp} />
+												<ModalLogin handleLogIn={this.handleLogIn} />
+												<Tutorial />
+											</div>
+											: (this.guestLoginUUID)
+												? () => {
+													const inviteUUID = this.guestLoginUUID;
+													this.guestLoginUUID = false;
+													return <Redirect to={'/guest/' + inviteUUID} />
+												}
+												: <Redirect to="/group-management" />
+									}
+								</Route>
+								<Route exact path="/guest/:uuid" render={props => (
+									(Object.prototype.hasOwnProperty.call(this.state.loggedInUser, 'email')
+										|| Object.prototype.hasOwnProperty.call(this.state.loggedInUser, 'phone'))
+										? <Redirect to="/group-management" />
+										: <GuestLoginPage loggedInUser={this.state.loggedInUser} updateLoggedInUser={this.updateLoggedInUser} {...props} />
+								)} />
+								<Route exact path="/group-invite/accept/:uuid" render={props => (
+									<GroupInvite accepted={true} loggedInUser={this.state.loggedInUser} {...props} />
+								)} />
+								<Route exact path="/group-invite/reject/:uuid" render={props => (
+									<GroupInvite accepted={false} loggedInUser={this.state.loggedInUser} {...props} />
+								)} />
+								<Route exact path="/group-invite/rejection-confirmation">
+									<GroupInviteRejection />
+								</Route>
+								<Route exact path="/group-management">
+									{
+										(!this.state.loggedInUser)
+											? <Redirect to="/" />
+											: <GroupMgmtPage handleLogOut={this.handleLogOut} loggedInUser={this.state.loggedInUser} />
+									}
+								</Route>
+								<Route exact path="/edit-group/:uuid" render={
+									(props) => {
+										if (!this.state.loggedInUser) {
+											return <Redirect to="/" />;
+										}
+										else {
+											return <EditGroupPage handleLogOut={this.handleLogOut} {...props} />;
+										}
+									}} />
+								<Route exact path="/view-group/:uuid" render={
+									(props) => {
+										if (!this.state.loggedInUser) {
+											return <Redirect to="/" />;
+										}
+										else {
+											return <ViewGroupPage handleLogOut={this.handleLogOut} {...props} />;
+										}
+									}
+								} />
+								<Route exact path="/create-group">
+									{
+										(!this.state.loggedInUser)
+											? <Redirect to="/" />
+											: <CreateGroupPage handleLogOut={this.handleLogOut} />
+									}
+								</Route>
+								<Route exact path="/map/:uuid" render={props => (
 									(!this.state.loggedInUser)
 										? <Redirect to="/" />
-										: <GroupMgmtPage handleLogOut={this.handleLogOut} loggedInUser={this.state.loggedInUser} />
-								}
-							</Route>
-							<Route exact path="/edit-group/:uuid" render={
-								(props) => {
-									if (!this.state.loggedInUser) {
-										return <Redirect to="/" />;
-									}
-									else {
-										return <EditGroupPage handleLogOut={this.handleLogOut} {...props} />;
-									}
-								}} />
-							<Route exact path="/view-group/:uuid" render={
-								(props) => {
-									if (!this.state.loggedInUser) {
-										return <Redirect to="/" />;
-									}
-									else {
-										return <ViewGroupPage handleLogOut={this.handleLogOut} {...props} />;
-									}
-								}
-							} />
-							<Route exact path="/create-group">
-								{
-									(!this.state.loggedInUser)
-										? <Redirect to="/" />
-										: <CreateGroupPage handleLogOut={this.handleLogOut} />
-								}
-							</Route>
-							<Route exact path="/map/:uuid" render={props => (
-								(!this.state.loggedInUser)
-								? <Redirect to="/" />
-								: <GroupMap loggedInUser={this.state.loggedInUser} {...props} />
-							)} />
-							<Route component={PageNotFound} />
-						</Switch>
-					</div>
-					<Route render={props => (
-						(props.location.pathname.indexOf('/map') === -1)
-						? <Footer />
-						: null
-					)} />
-				</Router>
-			</div>
+										: <GroupMap loggedInUser={this.state.loggedInUser} {...props} />
+								)} />
+								<Route component={PageNotFound} />
+							</Switch>
+						</div>
+						<Route render={props => (
+							(props.location.pathname.indexOf('/map') === -1)
+								? <Footer />
+								: null
+						)} />
+					</Router>
+				</div>
 		);
 	}
 }
