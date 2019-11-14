@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Axios from 'axios';
+import RoundedButton from '../buttonRounded';
 import APIURL from '../../utils/APIURL';
 import './style.css';
 
@@ -41,7 +42,7 @@ class GuestLoginPage extends React.Component {
 					<p>Please make sure to <strong>bookmark</strong> this page!</p>
 					<p>If you lose this page after you log out, <strong>you will lose access to any groups you've created or joined</strong> and you will need to create a new account at that point!</p>
 					<form onSubmit={this.handleSubmit}>
-						<button type="submit">I understand I need to bookmark this page</button>
+						<RoundedButton buttonTitle="I understand I need to bookmark this page" onClick={this.handleSubmit} />
 					</form>
 				</div>
 			</div>
