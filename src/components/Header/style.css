@@ -1,8 +1,8 @@
-/* body, html {
+body, html {
     margin: 0;
     padding: 0;
     height: 100%;  
-} */
+}
 
 .custom-hd {
     position: relative;
@@ -29,7 +29,6 @@
 header {
     display: flex;
     justify-content: center;
-    
 }  
 
 .header-div {
