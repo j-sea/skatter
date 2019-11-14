@@ -30,7 +30,7 @@ const ModalLogOut = (props) => {
                     Are you sure you want to log out?
         </ModalBody>
                 <ModalFooter className="modal-background">
-                    <Button className="confirm-log-out-button" onClick={props.handleLogOut}>Yes</Button>
+                    <Button className="confirm-log-out-button" onClick={e=>{props.handleLogOut(); toggle();}}>Yes</Button>
                     <Button className="cancel-log-out-button" onClick={toggle}>No</Button>
                 </ModalFooter>
             </Modal>
