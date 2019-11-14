@@ -173,7 +173,7 @@ class App extends React.Component {
 				? <div />
 				: <div className="App">
 					<Router>
-						<Header handleLogOut={this.handleLogOut} showLogOutBtn={this.state.loggedInUser} />
+						{this.state.loggedInUser && <Header handleLogOut={this.handleLogOut} />}
 						<div className='content-wrap'>
 							<Switch>
 								<Route exact path="/">

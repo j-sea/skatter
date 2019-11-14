@@ -3,17 +3,6 @@ import './style.css';
 import ModalLogOut from '../ModalLogOut'
 
 function Header(props) {
-    const showLogOutBtn = () => {
-        // 	return { (this.state.loggedInUser) && <ModalLogOut />
-        // }
-        if (props.showLogOutBtn) {
-            return (
-                <ModalLogOut handleLogOut={props.handleLogOut} />
-            )
-        } else {
-            return null;
-        }
-    };
 
     return (
         <header>
@@ -25,7 +14,7 @@ function Header(props) {
                     <i className="material-icons">person</i>
                 </div>
                 <div className="header-div col-3">
-                    {showLogOutBtn()}
+                    <ModalLogOut handleLogOut={props.handleLogOut} />
                 </div>
             </nav>
         </header>
