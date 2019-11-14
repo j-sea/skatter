@@ -53,6 +53,6 @@ input[type=text], textarea {
 
 .main-page-container {
   display:flex;
-flex-direction: column;
-justify-content: center;
+  flex-direction: column;
+  justify-content: center;
 }

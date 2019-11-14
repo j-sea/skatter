@@ -171,7 +171,7 @@ class App extends React.Component {
 			(!this.state.attemptedRecover)
 			? <div />
 			: <div className="App">
-				<Header handleLogOut={this.handleLogOut}/>
+			<Header handleLogOut={this.handleLogOut}/>
 				<Router>
 					<div className='content-wrap'>
 						<Switch>

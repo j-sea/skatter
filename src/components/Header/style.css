@@ -1,32 +1,35 @@
-body, html {
+/* body, html {
     margin: 0;
     padding: 0;
     height: 100%;  
-}
+} */
 
 .custom-hd {
-    /* position: absolute; */
-    top:0; 
-    width:100vw;
+    position: relative;
+    /* top:0;  */
+    width:100%;
     background-color: #180517c9;
     border: solid #481848;
     border-radius: 0.3rem;
     margin-bottom: 16px;
-    margin-top: 0px;
-    height: 85px;
+    /* margin-top: 0px; */
+    height: 56%;
     justify-content: center;
     display: flex;
     align-items: center;
+    padding: 0 1rem;
 }
 
 .header-logo {
-    height: 32px;
-    width: 125px;
+    height: 100%;
+    width: 100%;
+    padding: 15px;
 }
 
 header {
     display: flex;
     justify-content: center;
+    
 }  
 
 .header-div {
