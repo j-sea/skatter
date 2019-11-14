@@ -19,6 +19,7 @@ import GuestLoginPage from './components/GuestLoginPage';
 import GroupInvite from './components/GroupInvite';
 import GroupInviteRejection from './components/GroupInviteRejection';
 import PageNotFound from './components/PageNotFound';
+import ModalLogOut from './components/ModalLogOut';
 
 class App extends React.Component {
 
@@ -172,7 +173,7 @@ class App extends React.Component {
 				? <div />
 				: <div className="App">
 					<Router>
-						<Header handleLogOut={this.handleLogOut} />
+						{this.state.loggedInUser && <Header handleLogOut={this.handleLogOut} />}
 						<div className='content-wrap'>
 							<Switch>
 								<Route exact path="/">
