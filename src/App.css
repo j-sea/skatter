@@ -56,3 +56,14 @@ input[type=text], textarea {
 flex-direction: column;
 justify-content: center;
 }
+
+.tag-line-container {
+  background-color:  #010713bd;
+  border-radius: 15px;
+   border: solid #481848;
+
+}
+
+.tag-line {
+  color: whitesmoke;
+}

@@ -181,6 +181,11 @@ class App extends React.Component {
 										(!this.state.loggedInUser)
 											? <div className='main-page-container'>
 												<Logo />
+												<div className='tag-line-container'>
+													<h3 className='tag-line'>Real-time group locator. When you want it.</h3>
+												</div>
+												<br></br>
+												<br></br>
 												<Quickstart handleQuickstartSignUp={this.handleQuickstartSignUp} />
 												<ModalSignUp handleSignUp={this.handleSignUp} />
 												<ModalLogin handleLogIn={this.handleLogIn} />
