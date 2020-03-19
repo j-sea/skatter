@@ -1,3 +1,16 @@
+
+ScATTeR - Real-time group locator. When you want it!
+A web app that allows you to create a group and track at any event with the ability to temporarily pause the tracking portion.
+
+Try it out: https://collexion-p2.herokuapp.com/
+
+For help on this project, please email jsea@uw.edu, msantiago2222@yahoo.com, or jandy@uw.edu.
+
+A big thank you to everyone that helped us troubleshoot as we created this project: Joe, Denis, Trae, Tony, Paul, Jered, and our classmates!
+
+Tools/Language used: HTML5/CSS3, Axios, Bcrypt, Express + Express Session, MySql2, NodeMailer, OpenLayers, React + ReactStrap, Sequelize, Sequelize-CLI, Twilio, Material Icons, hosted on Heroku
+--------------------------------------------------------------------------------------------------------------------------------------
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
