@@ -2,7 +2,7 @@
 ScATTeR - Real-time group locator. When you want it!
 A web app that allows you to create a group and track at any event with the ability to temporarily pause the tracking portion.
 
-Try it out: https://collexion-p2.herokuapp.com/
+Try it out: https://scatter-web.herokuapp.com/
 
 For help on this project, please email jsea@uw.edu, msantiago2222@yahoo.com, tylerwintersdev@gmail.com, or jandy@uw.edu.
 
