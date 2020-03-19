@@ -4,7 +4,7 @@ A web app that allows you to create a group and track at any event with the abil
 
 Try it out: https://collexion-p2.herokuapp.com/
 
-For help on this project, please email jsea@uw.edu, msantiago2222@yahoo.com, or jandy@uw.edu.
+For help on this project, please email jsea@uw.edu, msantiago2222@yahoo.com, tylerwintersdev@gmail.com, or jandy@uw.edu.
 
 A big thank you to everyone that helped us troubleshoot as we created this project: Joe, Denis, Trae, Tony, Paul, Jered, and our classmates!
 
