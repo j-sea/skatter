@@ -22,7 +22,11 @@ A different feature behind the app is, if one of the group wants to split off fo
 
 ## Technologies
 Below is a list of the different technologies used in creating the web app ScATTeR -
-Axios: 0.19.0,bcrypt: 3.0.6, cors: 2.8.5, dotenv: 8.2.0, express: 4.17.1, express-session: 1.17.0, googleapis: 44.0.0, mysql2: 2.0.0, nodemailer: 6.3.1, ol (OpenLayers): 6.1.0, react: 16.11.0, react-router-dom: 5.1.2, reactstrap: 8.1.1, sequelize: 5.21.1, sequelize-cli: 5.5.1, twilio: 3.35.1
+HTML5, CSS3, Axios: 0.19.0, bcrypt: 3.0.6, cors: 2.8.5, dotenv: 8.2.0, express: 4.17.1, express-session: 1.17.0, googleapis: 44.0.0, mysql2: 2.0.0, nodemailer: 6.3.1, ol (OpenLayers): 6.1.0, react: 16.11.0, react-router-dom: 5.1.2, reactstrap: 8.1.1, sequelize: 5.21.1, sequelize-cli: 5.5.1, twilio: 3.35.1
 Along with all those, we’re working with Geolocation API and Material Icons. 
 
-	
+## Special Thanks
+A big thank you to everyone that helped us troubleshoot as we created this project: Joe, Denis, Trae, Tony, Paul, Jered, and our classmates!
+
+## Contact
+For help on this project, please email jsea@uw.edu, msantiago2222@yahoo.com, tylerwintersdev@gmail.com, or jandy@uw.edu.
